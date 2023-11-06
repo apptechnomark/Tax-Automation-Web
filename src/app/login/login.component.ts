@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -36,10 +36,15 @@ export class LoginComponent implements OnInit {
     if (this.loginform.valid) {
       this.authService.login(this.loginform.value.Username, this.loginform.value.Password).subscribe((data) => {
         console.log(this.loginform.value.Username, this.loginform.value.Password);
-        if (data) {
-          this.router.navigate(['/main']);  // If valid and route to card
+        if (data ) {
+          this.router.navigate(['/main']);  
         }
       })
     }
+  }
+
+ 
+  get f(): { [key: string]: AbstractControl } {
+    return this.loginform.controls;
   }
 }

@@ -1,5 +1,16 @@
-Email : <input type="email" placeholder="Enter Email" [(ngModel)]="login.email"><br>
-Pass : <input type="password" placeholder="Enter Password" [(ngModel)]="login.pass"><br>
-<div class="card flex justify-content-center">
-    <p-button label="Login" icon="pi pi-check" (click)="authenticate()"></p-button>
+<form [formGroup]="loginform">
+<div class="login-container">
+    <h2>Login</h2>
+    <div class="form-group">
+        <label for="Username">Username:</label>
+        <input type="email" placeholder="Enter Username" formControlName="Username" >
+    </div>
+    <div class="form-group">
+        <label for="Password">Password:</label>
+        <input type="password" placeholder="Enter Password" formControlName="Password"  >
+    </div>
+    <div class="login-button">
+        <button (click)="authenticate()">Login</button>
+    </div>
 </div>
+</form>

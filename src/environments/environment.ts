@@ -3,9 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  qbologin_url: "https://appcenter.intuit.com/connect/oauth2?",
+  qboId: "ABZGEpTGcNsIEtZbOm3DwyL0ZxOzcJ4Qykm0eZHf1pht6rj4iL",
   user_manager_api:'http://localhost:7005/api/',
   automation_api:'http://localhost:7203/api/',
-  production: false
+  production: false,
+  AuthToken : "Basic QUJaR0VwVEdjTnNJRXRaYk9tM0R3eUwwWnhPemNKNFF5a20wZVpIZjFwaHQ2cmo0aUw6WmNLdkdGRW9Tc1N6Nk1US3JtMkxPNU9ZeFNVVVJhWGxyRlN3a2FObg==" 
 };
 
 /*

@@ -16,7 +16,17 @@ const routes: Routes = [
             {
                 path: 'setting', loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),
                 canActivate: [AuthGuard]
-            }]
+            },  
+            { path: 'company', loadChildren: () => import('./company/company.module').then(m => m.CompanyModule), 
+                canActivate: [AuthGuard]
+            },
+            { path: 'company', loadChildren: () => import('./company/company.module').then(m => m.CompanyModule), 
+            canActivate: [AuthGuard]
+            },
+            { path: 'qbohome', loadChildren: () => import('./qbohome/qbohome.module').then(m => m.QbohomeModule),
+            canActivate: [AuthGuard]
+            }
+            ]
     }];
 
 @NgModule({

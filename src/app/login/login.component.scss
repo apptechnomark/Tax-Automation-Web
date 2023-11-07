@@ -2,9 +2,9 @@
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(189, 0, 0, 0.2);
+    background-color: #fdfdfd;
+    border-radius: 12px;
+    box-shadow: 5px 5px 8px rgba(55, 68, 210, 0.5);
 }
 
 h2 {
@@ -27,6 +27,7 @@ input[type="password"] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-bottom: 3px;
 }
 
 .login-button {
@@ -44,4 +45,8 @@ input[type="password"] {
 
 .login-button button:hover {
     background-color: #0056b3;
+}
+.error {
+    color: rgb(208, 41, 41);
+    margin-left: 10px;
 }

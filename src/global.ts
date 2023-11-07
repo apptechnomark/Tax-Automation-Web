@@ -26,19 +26,8 @@ export const QboParams = {
   export class ApiResponse{
     ResponseStatus : string;
     Message: string;
-    ResponseData: {
-      TwoFactorEnabled: boolean,
-      Token: {
-        Username: string;
-        Token: string;
-        TokenExpiry: string;
-      } | null;
-    } | null;
-    ErrorData: {
-      ErrorCode: string;
-      Error: string;
-      ErrorDetail: string | null;
-    } | null;
+    ResponseData: any;
+    ErrorData: any;
   }
   
   export enum Role
@@ -46,3 +35,19 @@ export const QboParams = {
       Admin = 1,
       Employee = 2
   }
+
+  export class TokenDataModel {
+    Token: {
+      Username: string
+      Token: string
+      TokenExpiry: string
+    } | null
+  }
+
+  export class QboDataModel {
+    access_token: string
+    id: number
+    qbo_accountname : string
+    token_expiry : string
+  }
+

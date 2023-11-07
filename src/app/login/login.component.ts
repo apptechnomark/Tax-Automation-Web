@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { login, ApiResponse } from 'src/global';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -17,14 +20,17 @@ export class LoginComponent implements OnInit {
     Username: new FormControl(''),
     Password: new FormControl(''),
   });
+
   constructor(
     private router: Router,
     private builder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private spinner: NgxSpinnerService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
-    this.loginform = this.builder.group(
+   this.loginform = this.builder.group(
       {
         Username: ['', [Validators.required, Validators.email]],
         Password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
@@ -34,16 +40,27 @@ export class LoginComponent implements OnInit {
 
   authenticate() {
     if (this.loginform.valid) {
-      this.authService.login(this.loginform.value.Username, this.loginform.value.Password).subscribe((data) => {
+      this.authService.login(this.loginform.value).subscribe((response: ApiResponse) => {
+        this.spinner.show();
         console.log(this.loginform.value.Username, this.loginform.value.Password);
-        if (data ) {
-          this.router.navigate(['/main']);  
+        if (response && response.ResponseStatus === 'Success') {
+          this.spinner.hide();
+          console.log(response.Message);
+          this.toastr.success("Login successful");
+          localStorage.setItem("isAuthenticate", "true");
+          const token = response.ResponseData.Token.Token;
+          localStorage.setItem('token', token);
+          this.router.navigate(['/main']);
+        }
+        else if (response.ResponseStatus === 'Failure') {
+          this.spinner.hide();
+          this.toastr.error(response.ErrorData.Error);
+          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       })
     }
   }
 
- 
   get f(): { [key: string]: AbstractControl } {
     return this.loginform.controls;
   }

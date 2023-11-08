@@ -1,0 +1,16 @@
+<form [formGroup]="SetPasswordform">
+    <div class="login-container">
+        <h2>Set Password</h2>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" placeholder="Enter password" formControlName="Password">
+            <div *ngIf="f['Password'].touched ">
+                <span class="error" *ngIf="f['password']?.errors?.['required']"> password is a required !</span>
+            </div>
+        </div>
+    
+        <div class="login-button">
+            <button class="btn btn-primary" (click)="setPassword()">set Password</button>
+        </div>
+    </div>
+</form>

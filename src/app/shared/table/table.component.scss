@@ -1,0 +1,45 @@
+/* Style the table */
+table {
+    width: 95%;
+    border-collapse: collapse;
+    margin: 10px;
+}
+
+/* Style the table header row */
+thead {
+    background-color: #333;
+    color: #fff;
+}
+
+th {
+    padding: 10px;
+    width: 20%;
+    text-align: left;
+}
+
+/* Style the table data rows */
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+td {
+    padding: 10px;
+}
+
+/* Style the "Edit" button */
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

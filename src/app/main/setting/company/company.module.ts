@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { CompanyRoutingModule } from './company-routing.module';
 import { CompanyComponent } from './company.component';
+import { TableModule } from 'src/app/shared/table/table.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { CompanyComponent } from './company.component';
   ],
   imports: [
     CommonModule,
-    CompanyRoutingModule
+    CompanyRoutingModule,
+    TableModule
   ]
 })
 export class CompanyModule { }

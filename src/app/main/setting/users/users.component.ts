@@ -12,11 +12,6 @@ import { ApiResponse, Role } from 'src/global';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-
-  FirstName!: string;
-  LastName!: string;
-  Email!: string;
-  contactNo!:number;
  
   options = [
     {label:"Admin",value: Role.Admin}, 
@@ -28,6 +23,7 @@ export class UsersComponent implements OnInit {
     LastName: new FormControl(''),
     Email: new FormControl(''),
     contactNo: new FormControl(''),
+    role:new FormControl('')
   });
   constructor(
     private router: Router,
@@ -35,7 +31,9 @@ export class UsersComponent implements OnInit {
     private authService: AuthService,
     private spinner:NgxSpinnerService,
     private toastr: ToastrService
-  ) { }
+  ) { 
+    this.GetUserDetial()
+  }
 
   ngOnInit(): void {
     
@@ -45,42 +43,28 @@ export class UsersComponent implements OnInit {
         LastName: ['', [Validators.required]],
         Email: ['', [Validators.required]],
         contactNo: ['', [Validators.required]],
-        
+        role: ['', [Validators.required]],
       },
     );
   }
 
- 
-  // addUser() {
-    
-  //   if (this.addUserform.valid) {
-  //     this.authService.saveUser(this.addUserform.value).subscribe((data) => {
-  //       this.spinner.show();
-  //       // console.log(this.loginform.value.Username, this.loginform.value.Password);
-  //       if (data ) {
-  //         this.router.navigate(['/main']);  
-  //       }
-  //     })
-  //   }
-  // }
   addUser() {
     if (this.addUserform.valid) {
+      console.log("data",this.addUserform)
       this.authService.saveUser(this.addUserform.value).subscribe((response: ApiResponse) => {
         this.spinner.show();
-        // console.log(this.addUserform.value.Username, this.addUserform.value.Password);
         if (response && response.ResponseStatus === 'Success') {
           this.spinner.hide();
           console.log(response.Message);
-          this.toastr.success("Login successful");
-          localStorage.setItem("isAuthenticate", "true");
-          const token = response.ResponseData.Token.Token;
-          localStorage.setItem('token', token);
-          this.router.navigate(['/main']);
+          this.toastr.success("User created successful");
+          this.openModal();
+          // this.router.navigate(['/user-verification']);
         }
         else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);
+          this.openModal();
         }
       })
     }
@@ -89,5 +73,27 @@ export class UsersComponent implements OnInit {
   get f(): { [key: string]: AbstractControl } {
     return this.addUserform.controls;
   }
+  
+  openModal() {
+    this.addUserform.reset(); 
+  }
 
+  GetUserDetial(){
+    this.authService.GetUserDetails().subscribe((response: ApiResponse) => {
+      this.spinner.show();
+      if (response && response.ResponseStatus === 'Success') {
+        const responseData =response.ResponseData.List;
+        const TotalCount = response.ResponseData.TotalCount;
+        console.log(responseData, TotalCount)
+        
+        this.spinner.hide();
+      }
+      else if (response.ResponseStatus === 'Failure') {
+        this.spinner.hide();
+        this.toastr.error(response.ErrorData.Error);
+        console.log("Message", response.Message, "Error", response.ErrorData.Error);
+        // this.openModal();
+      }
+    });
+  }
 }

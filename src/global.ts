@@ -30,11 +30,11 @@ export class ApiResponse {
   ErrorData: any;
 }
 
-export enum Role 
-{
+export enum Role {
   Admin = 1,
   Employee = 2
 }
+
 
 export class TokenDataModel {
   Token: {

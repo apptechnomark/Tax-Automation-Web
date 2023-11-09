@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
-import { QboParams, TokenInfo, qboDetail } from 'src/global';
-import { Token } from '@angular/compiler';
+import { CompanyFilter, QboParams, TokenInfo, qboDetail } from 'src/global';
+
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,13 @@ export class ApiService {
       companyId:Number(data.realmId)
     }
     return this.http.post(this.baseUrl + "Qbo/gettoken", data,{headers})
+  }
 
+  GetCompanyList(data: CompanyFilter){
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(this.baseUrl + "Qbo/getlist",data,{headers})
   }
 }

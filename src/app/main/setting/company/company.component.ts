@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
+import { ApiResponse, CompanyFilter} from 'src/global';
 
 @Component({
   selector: 'app-company',
@@ -8,20 +10,44 @@ import { TableColumn, TableData } from 'src/app/shared/table/table.component';
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
-  tableData: TableData[] = [{_id:"1",username: 'John',email:"john@gmail.com"}, {_id:"2",username: 'manam',email:"manam@gmail.com"}]
+  tableData: TableData[];
   tableColumns: TableColumn[] = [
-    {header: 'Id', field:'_id'},
-    { header: 'Username', field: 'username' },
-    { header: 'Email', field: 'email' }
+    { header: 'Company', field: 'CompanyName' },
+    { header: 'Status', field: 'IsActive' }
   ];
+  TotalCount: number;
   
-  constructor(private _service: ApiService) {
-    console.log(this.tableData);
+
+  constructor(private _service: ApiService,private toastr:ToastrService) {
   }
   ngOnInit(): void {
-    
+    this.companyList();
   }
   QboConnect(){
     this._service.QboConnection();
-}
+  }
+
+  companyList(){
+    const Filter:CompanyFilter = {
+      PageNo : 1,
+      PageSize: 100,
+      GlobalFilter : null,
+      SortColumn : null,
+      IsDesc : false,
+      IsActive: null
+    } 
+    this._service.GetCompanyList(Filter).subscribe((res:ApiResponse) => {
+      console.log(res);
+      if(res && res.ResponseStatus === "Success"){
+        this.tableData = res.ResponseData.List;
+        this.TotalCount = res.ResponseData.TotalCount;
+      } else if(res.ResponseStatus === "Failure"){
+        this.toastr.error(res.ErrorData.Message);
+      }
+    })
+  }
+
+  Test(event: { pageNo: number, pageSize: number }){
+    console.log("event =>",event);
+  }
 }

@@ -16,7 +16,7 @@ export class CompanyComponent implements OnInit {
   ];
   
   constructor(private _service: ApiService) {
-
+    console.log(this.tableData);
   }
   ngOnInit(): void {
     

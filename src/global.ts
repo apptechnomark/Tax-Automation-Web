@@ -73,3 +73,11 @@ export class UserDetails {
 
 }
 
+export class requestUserDetails{
+  PageNo:number;
+  PageSize:number;
+  GlobalSearch:string;
+  SortColumn:string;
+  IsDesc:boolean;
+  IsActive:boolean;
+}

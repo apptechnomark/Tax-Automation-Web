@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 
 export interface TableData {
@@ -20,19 +20,21 @@ const actionColumn: TableColumn = {
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
+ 
   @Input() data: TableData[] = [];
   @Input() columns: TableColumn[] = [];
   @Input() ActionEdit: boolean = false;
   @Input() ActionDelete: boolean = false;
   @Output() rowClick = new EventEmitter<TableData>();
-  @Output() editClick = new EventEmitter<TableData>();
-  @Output() deleteClick = new EventEmitter<TableData>();
+  @Output() editClick = new EventEmitter<any>();
+  @Output() deleteClick = new EventEmitter<any>();
 
   ngOnInit() {
     if(this.ActionDelete || this.ActionEdit)
     {
       this.columns = [...this.columns, actionColumn];
     }
+    console.log(this.columns)
     
   }
 
@@ -42,13 +44,13 @@ export class TableComponent implements OnInit {
     }
   }
 
-  onEditClick(row: TableData) {
+  onEditClick(row: any) {
     this.editClick.emit(row);
   console.log(row);
   
   }
 
-  onDeleteClick(row: TableData) {
+  onDeleteClick(row: any) {
     this.deleteClick.emit(row);
   }
 }

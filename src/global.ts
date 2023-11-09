@@ -73,7 +73,6 @@ export class UserDetails {
 
 }
 
-
 export class CompanyList {
   id: number
   CompanyName : string
@@ -87,4 +86,13 @@ export class CompanyFilter {
   SortColumn : string | null
   IsDesc : boolean | null
   IsActive: boolean | null
+}
+
+export class requestUserDetails{
+  PageNo:number;
+  PageSize:number;
+  GlobalSearch:string;
+  SortColumn:string;
+  IsDesc:boolean;
+  IsActive:boolean;
 }

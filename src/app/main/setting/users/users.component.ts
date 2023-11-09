@@ -1,4 +1,4 @@
-import { Component,OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -13,44 +13,44 @@ import { ApiResponse, Role, requestUserDetails } from 'src/global';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  TotalCount : number;
+  TotalCount: number;
 
   tableData: TableData[];
-  tableColumns: TableColumn[]=[
+  tableColumns: TableColumn[] = [
     { header: 'Name', field: 'FullName' },
     { header: 'Role', field: 'RoleName' },
     { header: 'Email', field: 'Email' },
     { header: 'Contact Number', field: 'ContactNo' }
   ];
-
+  PageNo: number;
   options = [
-    {label:"Admin",value: Role.Admin}, 
-    {label:"Employee",value: Role.Employee}
+    { label: "Admin", value: Role.Admin },
+    { label: "Employee", value: Role.Employee }
   ];
-  
+
   addUserform: FormGroup = new FormGroup({
     FirstName: new FormControl(''),
     LastName: new FormControl(''),
     Email: new FormControl(''),
     contactNo: new FormControl(''),
-    role:new FormControl('')
+    role: new FormControl('')
   });
 
-  UserDetailform : FormGroup = new FormGroup({
-    PageNo : new FormControl(1),
-    PageSize : new FormControl(100),
-    GlobalSearch : new FormControl(''),
-    SortColumn : new FormControl(''),
-    IsDesc : new FormControl(false),
-    IsActive : new FormControl(false),
+  UserDetailform: FormGroup = new FormGroup({
+    PageNo: new FormControl(1),
+    PageSize: new FormControl(5),
+    GlobalSearch: new FormControl(''),
+    SortColumn: new FormControl(''),
+    IsDesc: new FormControl(false),
+    IsActive: new FormControl(false),
   });
   constructor(
     private router: Router,
     private builder: FormBuilder,
     private authService: AuthService,
-    private spinner:NgxSpinnerService,
+    private spinner: NgxSpinnerService,
     private toastr: ToastrService
-  ) {   }
+  ) { }
   @ViewChild('closebutton') closebutton;
   ngOnInit(): void {
     this.GetUserDetial();
@@ -67,7 +67,7 @@ export class UsersComponent implements OnInit {
     this.UserDetailform = this.builder.group(
       {
         PageNo: [1],
-        PageSize: [100],
+        PageSize: [5],
         GlobalSearch: [''],
         SortColumn: [''],
         IsDesc: [false],
@@ -80,7 +80,7 @@ export class UsersComponent implements OnInit {
 
   addUser() {
     if (this.addUserform.valid) {
-      console.log("data",this.addUserform)
+      console.log("data", this.addUserform)
       this.authService.saveUser(this.addUserform.value).subscribe((response: ApiResponse) => {
         this.spinner.show();
         if (response && response.ResponseStatus === 'Success') {
@@ -100,27 +100,27 @@ export class UsersComponent implements OnInit {
       })
     }
   }
- 
+
   get f(): { [key: string]: AbstractControl } {
     return this.addUserform.controls;
   }
-  
+
   openModal() {
-    this.addUserform.reset(); 
+    this.addUserform.reset();
   }
 
   closeAddUserModal() {
     this.closebutton.nativeElement.click();
   }
-  GetUserDetial(){
-    console.log("data" , this.UserDetailform.value )
+  GetUserDetial() {
+    console.log("data", this.UserDetailform.value)
     this.authService.GetUserDetails(this.UserDetailform.value).subscribe((response: ApiResponse) => {
       this.spinner.show();
       if (response && response.ResponseStatus === 'Success') {
-        this.tableData =response.ResponseData.List;
+        this.tableData = response.ResponseData.List;
         this.TotalCount = response.ResponseData.TotalCount;
         console.log(this.tableData, this.TotalCount)
-        
+
         this.spinner.hide();
       }
       else if (response.ResponseStatus === 'Failure') {
@@ -132,15 +132,15 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  Search(){
+  Search() {
     this.GetUserDetial()
   }
-  EditUser($event : Event){
+  EditUser($event: Event) {
     console.log($event)
   }
 
-  DeleteUser($event : Event){
+  DeleteUser($event: Event) {
     console.log($event);
-    
+
   }
 }

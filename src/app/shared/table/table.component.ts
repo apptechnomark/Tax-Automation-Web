@@ -27,11 +27,11 @@ export class TableComponent implements OnInit {
   @Input() ActionDelete: boolean = false;
   @Input() TotalCount: number = 0;
   @Input() PageNo: number = 1;
-  @Output() rowClick = new EventEmitter<TableData>();
+  // @Output() rowClick = new EventEmitter<any>();
+  @Output() editClick = new EventEmitter<any>();
+  @Output() deleteClick = new EventEmitter<any>();
+  @Output() isActiveClick = new EventEmitter<any>();
 
-  @Output() editClick = new EventEmitter<TableData>();
-  @Output() deleteClick = new EventEmitter<TableData>();
-  @Output() isActiveClick = new EventEmitter<TableData>();
   @Output() nextpage = new EventEmitter<{ pageNo: number, pageSize: number }>();
   @Output() pageSizeChnage = new EventEmitter<{pageSize:number}>();
   @Output() PriviousPage = new EventEmitter<{ pageNo: number, pageSize: number }>();
@@ -46,11 +46,11 @@ export class TableComponent implements OnInit {
   }
 
   
-  onRowClick(row: TableData) {
-    if (this.columns.every(column => row[column.field] !== 'action')) {
-      this.rowClick.emit(row);
-    }
-  }
+  // onRowClick(row: TableData) {
+  //   if (this.columns.every(column => row[column.field] !== 'action')) {
+  //     this.rowClick.emit(row);
+  //   }
+  // }
 
   onEditClick(row: any) {
     this.editClick.emit(row);

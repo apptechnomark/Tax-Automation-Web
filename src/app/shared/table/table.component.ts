@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 export interface TableData {
   [key: string]: any;
@@ -21,7 +21,6 @@ const actionColumn: TableColumn = {
 })
 export class TableComponent implements OnInit {
 
-
   @Input() data: TableData[] = [];
   @Input() columns: TableColumn[] = [];
   @Input() ActionEdit: boolean = false;
@@ -32,6 +31,7 @@ export class TableComponent implements OnInit {
   @Output() editClick = new EventEmitter<any>();
   @Output() deleteClick = new EventEmitter<any>();
   @Output() isActiveClick = new EventEmitter<any>();
+
   @Output() nextpage = new EventEmitter<{ pageNo: number, pageSize: number }>();
   @Output() pageSizeChnage = new EventEmitter<{pageSize:number}>();
   @Output() PriviousPage = new EventEmitter<{ pageNo: number, pageSize: number }>();
@@ -52,13 +52,13 @@ export class TableComponent implements OnInit {
   //   }
   // }
 
-  onEditClick(row: TableData) {
+  onEditClick(row: any) {
     this.editClick.emit(row);
   console.log(row);
   
   }
 
-  onDeleteClick(row: TableData) {
+  onDeleteClick(row: any) {
     this.deleteClick.emit(row);
   }
   onIsActiveClick(row: TableData) {

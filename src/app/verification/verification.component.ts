@@ -39,11 +39,10 @@ export class VerificationComponent implements OnInit {
     });
   
     validateToken(){
+      debugger
       this.route.queryParams.subscribe((params:any) => {
         this.token = params.token;
          this.tokenType  = 3;
-        localStorage.setItem('token', this.token);
-        // localStorage.setItem('tokenType', tokenType);
         if(this.token){
           console.log(this.token);
 

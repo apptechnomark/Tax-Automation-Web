@@ -17,8 +17,8 @@ export class CompanyComponent implements OnInit {
   ];
   TotalCount: number;
   
-  constructor(private _service: ApiService,private toastr:ToastrService) {
 
+  constructor(private _service: ApiService,private toastr:ToastrService) {
   }
   ngOnInit(): void {
     this.companyList();

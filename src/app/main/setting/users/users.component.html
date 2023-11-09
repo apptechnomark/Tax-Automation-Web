@@ -1,73 +1,83 @@
-<br>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddUser">
-    Add User
-</button>
-<br><br>
+<div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addUserform">
+          <div class="login-container">
+            <div class="form-group">
+              <label for="FirstName">FirstName:</label>
+              <input type="text" placeholder="Enter FirstName" formControlName="FirstName">
+              <div *ngIf="f['FirstName'].touched ">
+                <span class="error" *ngIf="f['FirstName'].errors?.['required']">
+                  FirstName is a required ! </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="LastName">LastName:</label>
+              <input type="text" placeholder="Enter LastName" formControlName="LastName">
+              <div *ngIf="f['LastName'].touched ">
+                <span class="error" *ngIf="f['LastName'].errors?.['required']">
+                  LastName is a required ! </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="Email">Email:</label>
+              <input type="Email" placeholder="Enter Username" formControlName="Email">
+              <div *ngIf="f['Email'].touched ">
+                <span class="error" *ngIf="f['Email'].errors?.['required']">
+                  Email is a required ! </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contactNo">contactNumber:</label>
+              <input type="text" placeholder="Enter contactNumber" formControlName="contactNo">
+              <div *ngIf="f['contactNo'].touched ">
+                <span class="error" *ngIf="f['contactNo'].errors?.['required']">
+                  contactNumber is a required ! </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="FirstName">Role:</label>
+              <select class="form-select" aria-label="Role" formControlName="role">
+                <option selected>Select Role</option>
+                <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
+              </select>
+              <div *ngIf="f['role'].touched ">
+                <span class="error" *ngIf="f['role'].errors?.['required']">
+                  Role is a required ! </span>
+              </div>
+            </div>
+          </div>
+        </form>
 
-  <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Add User</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form [formGroup]="addUserform">
-                <div class="login-container">
-                    <div class="form-group">
-                        <label for="FirstName">FirstName:</label>
-                        <input type="text" placeholder="Enter FirstName" formControlName="FirstName">
-                        <div *ngIf="f['FirstName'].touched ">
-                            <span class="error" *ngIf="f['FirstName'].errors?.['required']">
-                                FirstName is a required ! </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="LastName">LastName:</label>
-                        <input type="text" placeholder="Enter LastName" formControlName="LastName">
-                        <div *ngIf="f['LastName'].touched ">
-                            <span class="error" *ngIf="f['LastName'].errors?.['required']">
-                                LastName is a required ! </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="Email">Email:</label>
-                        <input type="Email" placeholder="Enter Username" formControlName="Email">
-                        <div *ngIf="f['Email'].touched ">
-                            <span class="error" *ngIf="f['Email'].errors?.['required']">
-                                Email is a required ! </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="contactNo">contactNumber:</label>
-                        <input type="text" placeholder="Enter contactNumber" formControlName="contactNo">
-                        <div *ngIf="f['contactNo'].touched ">
-                            <span class="error" *ngIf="f['contactNo'].errors?.['required']">
-                                contactNumber is a required ! </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="FirstName">Role:</label>
-                        <select class="form-select" aria-label="Role" formControlName="role">
-                          <option selected>Select Role</option>
-                          <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
-                        </select>
-                        <div *ngIf="f['role'].touched ">
-                            <span class="error" *ngIf="f['role'].errors?.['required']">
-                                Role is a required ! </span>
-                        </div>
-                      </div>
-                </div>
-            </form>
-            
-        </div>
-        <div class="modal-footer">
-          <button type="button" (click)="openModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" (click)="addUser()" class="btn btn-primary">Add User</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="openModal()" #closebutton class="btn btn-secondary"
+          data-dismiss="modal">Close</button>
+        <button type="button" (click)="addUser()" class="btn btn-primary">Add User</button>
       </div>
     </div>
   </div>
-<app-table></app-table>
+</div>
+
+<div class="action-container">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddUser">
+    Add User
+  </button>
+
+  <form [formGroup]="UserDetailform">
+    <div class="search-container">
+      <input type="text" placeholder="Search" formControlName="GlobalSearch" class="search-input">
+      <button class="btn btn-primary search-button" type="button" (click)="Search()">Search</button>
+    </div>
+  </form>
+</div>
+
+<app-table [data]="tableData" [columns]="tableColumns" [ActionEdit]="true" (editClick)="EditUser($event)" (deleteClick)="DeleteUser($event)" [ActionDelete]="true"></app-table>

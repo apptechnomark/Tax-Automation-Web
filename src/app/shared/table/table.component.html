@@ -10,9 +10,9 @@
         <ng-container *ngIf="column.field !== 'action'">
           <!-- Check if column is 'IsActive' and display buttons accordingly -->
           <ng-container *ngIf="column.field === 'IsActive'">
-            <button *ngIf="row?.['IsActive']; else inactiveButton" (click)="onIsActiveClick(row)">Active</button>
+            <button *ngIf="row?.['IsActive']; else inactiveButton" class="active" (click)="onIsActiveClick(row)">Active</button>
             <ng-template #inactiveButton>
-              <button (click)="onIsActiveClick(row)">Inactive</button>
+              <button class="inactive" (click)="onIsActiveClick(row)">Inactive</button>
             </ng-template>
           </ng-container>
           <!-- If not 'IsActive' field, display the regular data -->

@@ -72,3 +72,30 @@ button:hover {
     font-weight: bold;
     color: #333;
 }
+
+button.active {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button.active:hover {
+    background-color: #218838;
+}
+
+/* Style the "Inactive" button */
+button.inactive {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button.inactive:hover {
+    background-color: #c82333;
+}

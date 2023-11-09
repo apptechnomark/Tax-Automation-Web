@@ -73,3 +73,18 @@ export class UserDetails {
 
 }
 
+
+export class CompanyList {
+  id: number
+  CompanyName : string
+  IsActive : boolean
+}
+
+export class CompanyFilter {
+  PageNo : number
+  PageSize : number
+  GlobalFilter : string | null
+  SortColumn : string | null
+  IsDesc : boolean | null
+  IsActive: boolean | null
+}

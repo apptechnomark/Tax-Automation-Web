@@ -3,5 +3,5 @@
 </div>
 
 <div style="margin-top: 10px;">
-    <app-table  [data]="tableData" [columns]="tableColumns" [ActionEdit]="true" [ActionDelete]="true"></app-table>
+    <app-table  [data]="tableData" [columns]="tableColumns" [TotalCount]="TotalCount" (PriviousPage)="Test($event)" [ActionEdit]="true" [ActionDelete]="true"></app-table>
 </div>

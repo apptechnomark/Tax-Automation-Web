@@ -1,51 +1,52 @@
-<div class="table-container">
-  
-<table>
-  <thead>
-    <tr>
-      <th *ngFor="let column of columns">{{ column.header }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let row of data">
-      <td *ngFor="let column of columns">
-        <ng-container *ngIf="column.field !== 'action'">
-          <!-- Check if column is 'IsActive' and display buttons accordingly -->
-          <ng-container *ngIf="column.field === 'IsActive'">
-            <button *ngIf="row?.['IsActive']; else inactiveButton" class="active" (click)="onIsActiveClick(row)">Active</button>
-            <ng-template #inactiveButton>
-              <button class="inactive" (click)="onIsActiveClick(row)">Inactive</button>
-            </ng-template>
-          </ng-container>
-          <!-- If not 'IsActive' field, display the regular data -->
-          <ng-container *ngIf="column.field !== 'IsActive'">
-            {{ row[column.field] }}
-          </ng-container>
-        </ng-container>
-        <ng-container *ngIf="column.field === 'IsConfirmed'">
-          <button *ngIf="!row?.['IsConfirmed']" (click)="onResendLinkClick(row)">Resend Link</button>
-        </ng-container>
-        <!-- Actions column -->
-        <ng-container *ngIf="column.field === 'action'">
-          <ng-container *ngIf="ActionEdit"><button (click)="onEditClick(row)">Edit</button></ng-container>
-          <ng-container *ngIf="ActionDelete"><button (click)="onDeleteClick(row)">Delete</button></ng-container>
-        </ng-container>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<div class="total-count">Total Count: {{ TotalCount }}</div>
-<div class="pagination">
 
+  <div class="table-container">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th *ngFor="let column of columns">{{ column.header }}</th>
+          </tr>
+        </thead>
+        <tbody >
+          <tr *ngFor="let row of data">
+            <td *ngFor="let column of columns">
+              <ng-container *ngIf="column.field !== 'action'">
+                <!-- Check if column is 'IsActive' and display buttons accordingly -->
+                <ng-container *ngIf="column.field === 'IsActive'">
+                  <button *ngIf="row?.['IsActive']; else inactiveButton" class="active" (click)="onIsActiveClick(row)">Active</button>
+                  <ng-template #inactiveButton>
+                    <button class="inactive" (click)="onIsActiveClick(row)">Inactive</button>
+                  </ng-template>
+                </ng-container>
+                <!-- If not 'IsActive' field, display the regular data -->
+                <ng-container *ngIf="column.field !== 'IsActive' && column.field !=='IsConfirmed'">
+                  {{ row[column.field] }}
+                </ng-container>
+              </ng-container>
+              <ng-container class="IsConfirmed" *ngIf="column.field === 'IsConfirmed'">
+                <button *ngIf="!row?.['IsConfirmed']" (click)="onResendLinkClick(row)">Resend Link</button>
+              </ng-container>
+              <!-- Actions column -->
+              <ng-container *ngIf="column.field === 'action'">
+                <ng-container *ngIf="ActionEdit"><button (click)="onEditClick(row)">Edit</button></ng-container>
+                <ng-container *ngIf="ActionDelete"><button (click)="onDeleteClick(row)">Delete</button></ng-container>
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <label for="pageSize">Page Size:</label>
-  <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-    <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
-  </select>
-  <button class="pagination-button" [disabled]="PageNo === 1" (click)="priviousPageChanage()"> &lt; </button>
-  <ng-container *ngFor="let page of getPages()">
-    <button class="pagination-button" [class.active-page]="page === PageNo" (click)="goToPage(page)">{{ page }}</button>
-  </ng-container>
-  <button class="pagination-button" [disabled]="PageNo * pageSize >= TotalCount" (click)="nextPageChanage()"> &gt;
-  </button>
-</div>
+    <div class="pagination">
+      <label for="pageSize">Page Size:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+      </select>
+      <button class="pagination-button" [disabled]="PageNo === 1" (click)="priviousPageChanage()"> &lt; </button>
+      <ng-container *ngFor="let page of getPages()">
+        <button class="pagination-button" [class.active-page]="page === PageNo" (click)="goToPage(page)">{{ page }}</button>
+      </ng-container>
+      <button class="pagination-button" [disabled]="PageNo * pageSize >= TotalCount" (click)="nextPageChanage()"> &gt; </button>
+    </div>
+  </div>
+

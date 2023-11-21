@@ -1,5 +1,5 @@
 
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 export interface TableData {
   [key: string]: any;
@@ -36,6 +36,7 @@ export class TableComponent implements OnInit {
   @Output() nextpage = new EventEmitter<{ pageNo: number, pageSize: number }>();
   @Output() pageSizeChnage = new EventEmitter<{ pageSize: number }>();
   @Output() PriviousPage = new EventEmitter<{ pageNo: number, pageSize: number }>();
+  @Output() GotoPage = new EventEmitter<{ pageNo: number, pageSize: number }>();
 
   pageSizes = [5, 10, 20];
   pageSize: number = this.pageSizes[0];
@@ -72,7 +73,6 @@ export class TableComponent implements OnInit {
 
   nextPageChanage() {
     this.nextpage.emit({ pageNo: this.PageNo + 1, pageSize: this.pageSize })
-    console.log(this.pageSize, this.PageNo);
   }
 
   priviousPageChanage() {
@@ -87,7 +87,8 @@ export class TableComponent implements OnInit {
 
   goToPage(page: number) {
     if (page !== this.PageNo) {
-      this.nextpage.emit({ pageNo: page, pageSize: this.pageSize });
+      this.GotoPage.emit({ pageNo: page, pageSize: this.pageSize });
+      console.log("goto =>",{ pageNo: page, pageSize: this.pageSize } )
     }
   }
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { SetPassword, UserDetails, UserVerification, login, requestUserDetails, saveUser } from 'src/global';
+import { ActiveInActive, SetPassword, UserDetails, UserId, UserVerification, login, requestUserDetails, saveUser } from 'src/global';
 @Injectable({
   providedIn: 'root'
 })
@@ -37,4 +37,29 @@ export class AuthService {
     });
     return this.http.post(`${environment.user_manager_api + "user/getall"}`, data, { headers })
   }
+
+  Deleteuser(UserId : UserId){
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.user_manager_api + "user/delete"}`, UserId, { headers })
+  }
+
+  ActiveInactiveUser(UserId : any){
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.user_manager_api + "user/activeinactive"}`, UserId, { headers })
+  }
+
+  ResendLink(data : any ){
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({  
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.user_manager_api + "user/ResendLink"}`,data,{headers});
+  }
+  
 }

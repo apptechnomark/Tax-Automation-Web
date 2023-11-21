@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { ApiResponse, SetPassword, UserVerification } from 'src/global';
@@ -11,98 +11,98 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
   templateUrl: './verification.component.html',
   styleUrls: ['./verification.component.scss']
 })
-export class VerificationComponent implements OnInit {
+export class VerificationComponent implements OnInit, OnChanges {
 
-   token : string;
-   tokenType :number = 3;
+  token: string;
+  tokenType: number;
   constructor(
-    private route:ActivatedRoute,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private builder: FormBuilder,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService,
-    private router: Router){
+    private router: Router) {
     this.validateToken()
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    throw new Error('Method not implemented.');
+  }
 
+  ngOnInit(): void {
+    this.SetPasswordform = this.builder.group(
+      {
+        Password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
+        ConfirmPassword: ['', Validators.required]
+      },
+    );
+  }
 
-    ngOnInit(): void {
-      this.SetPasswordform = this.builder.group(
-        {
-          Password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
-        },
-      );
-    }
+  SetPasswordform: FormGroup = new FormGroup({
+    Password: new FormControl(''),
+    ConfirmPassword: new FormControl(''),
+  });
 
-    SetPasswordform: FormGroup = new FormGroup({
-      Password: new FormControl(''),
-    });
-  
-    validateToken(){
-      debugger
-      this.route.queryParams.subscribe((params:any) => {
-        this.token = params.token;
-         this.tokenType  = 3;
-        if(this.token){
-          console.log(this.token);
-
-          const userVerificationData = new UserVerification();
-          userVerificationData.Token = this.token;
-          userVerificationData.TokenType = this.tokenType;
-          // console.log("data call",userVerificationData)
-          this.authService.UserVerification(userVerificationData).subscribe((response: ApiResponse) => {
-            this.spinner.show();
-            if (response && response.ResponseStatus === 'Success') {
-              this.spinner.hide();
-              console.log("call");
-              //  this.toastr.success("User Verfication successful");
-              // localStorage.setItem("isAuthenticate", "true");
-              // const token = response.ResponseData.Token.Token;
-              // localStorage.setItem('token', token);
-              // this.router.navigate(['/main']);
-            }
-            else if (response.ResponseStatus === 'Failure') {
-              this.spinner.hide();
-              console.log("Error");
-              this.toastr.error(response.ErrorData.Error);
-              console.log("Message", response.Message, "Error", response.ErrorData.Error);
-            }
-          });
-        }
-      });
-    }
-
-    get f(): { [key: string]: AbstractControl } {
-      return this.SetPasswordform.controls;
-    }
-
-    setPassword(){
-      if (this.SetPasswordform.valid) {
-
-        // const token = localStorage.getItem('token');
-        const setPassworddata = new SetPassword();
-        setPassworddata.Token = this.token;
-        setPassworddata.TokenType = this.tokenType;
-        
-        setPassworddata.Password = this.SetPasswordform.value.Password
-        console.log("data call",setPassworddata)
-       
-
-        this.authService.SetPassword(setPassworddata).subscribe((response: ApiResponse) => {
-          this.spinner.show();
-          console.log(this.SetPasswordform.value);
+  validateToken() {
+    this.route.queryParams.subscribe((params: any) => {
+      this.token = params.token;
+      this.tokenType = 3;
+      if (this.token) {
+        // console.log(this.token);
+        const userVerificationData = new UserVerification();
+        userVerificationData.Token = this.token;
+        userVerificationData.TokenType = this.tokenType;
+        // console.log("data call",userVerificationData)
+        this.spinner.show();
+        this.authService.UserVerification(userVerificationData).subscribe((response: ApiResponse) => {
+          this.spinner.hide();
           if (response && response.ResponseStatus === 'Success') {
             this.spinner.hide();
-            console.log(response.Message);
-            this.toastr.success("Set Password successful");
-            this.router.navigate(['/login']);
           }
           else if (response.ResponseStatus === 'Failure') {
-            this.spinner.hide();
+            // console.log("Error");
             this.toastr.error(response.ErrorData.Error);
             console.log("Message", response.Message, "Error", response.ErrorData.Error);
           }
-        })
+        });
       }
+    });
+  }
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.SetPasswordform.controls;
+  }
+
+  setPassword() {
+    if (this.SetPasswordform.valid) {
+
+      if (this.SetPasswordform.value.Password !== this.SetPasswordform.value.ConfirmPassword) {
+        this.toastr.error("Passwords do not match!");
+        return;
+      }
+
+      // const token = localStorage.getItem('token');
+      const setPassworddata = new SetPassword();
+      setPassworddata.Token = this.token;
+      setPassworddata.TokenType = this.tokenType;
+      setPassworddata.Password = this.SetPasswordform.value.Password
+      console.log("data call", setPassworddata)
+      this.spinner.show();
+      this.authService.SetPassword(setPassworddata).subscribe((response: ApiResponse) => {
+       
+      console.log(this.SetPasswordform.value);
+      if (response && response.ResponseStatus === 'Success') {
+        this.spinner.hide();
+        console.log(response.Message);
+        this.toastr.success("Set Password successful");
+        this.router.navigate(['/login']);
+      }
+      else if (response.ResponseStatus === 'Failure') {
+        this.spinner.hide();
+        this.toastr.error(response.ErrorData.Error);
+        console.log("Message", response.Message, "Error", response.ErrorData.Error);
+      }
+      })
     }
+  }
 }
+

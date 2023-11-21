@@ -33,18 +33,18 @@ export class LoginComponent implements OnInit {
    this.loginform = this.builder.group(
       {
         Username: ['', [Validators.required, Validators.email]],
-        Password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
+        Password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       },
     );
   }
 
   authenticate() {
     if (this.loginform.valid) {
+      this.spinner.show();
       this.authService.login(this.loginform.value).subscribe((response: ApiResponse) => {
-        this.spinner.show();
+      this.spinner.hide();
         console.log(this.loginform.value.Username, this.loginform.value.Password);
         if (response && response.ResponseStatus === 'Success') {
-          this.spinner.hide();
           console.log(response.Message);
           this.toastr.success("Login successful");
           localStorage.setItem("isAuthenticate", "true");
@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/main']);
         }
         else if (response.ResponseStatus === 'Failure') {
-          this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }

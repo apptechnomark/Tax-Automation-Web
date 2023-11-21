@@ -1,10 +1,10 @@
 <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
+  aria-hidden="true" #addUserModal>
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Add User</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -15,32 +15,36 @@
               <label for="FirstName">FirstName:</label>
               <input type="text" placeholder="Enter FirstName" formControlName="FirstName">
               <div *ngIf="f['FirstName'].touched ">
-                <span class="error" *ngIf="f['FirstName'].errors?.['required']">
-                  FirstName is a required ! </span>
+                  <span class="error" *ngIf="f['FirstName'].errors?.['required'] ">First Name is required!</span>
+                  <span class="error" *ngIf="f['FirstName'].errors?.['minlength'] ">First Name must be 3 characters!</span> 
+                  <span class="error" *ngIf="f['FirstName'].errors?.['maxlength'] ">First Name must be under 20 characters!</span>
               </div>
             </div>
             <div class="form-group">
               <label for="LastName">LastName:</label>
               <input type="text" placeholder="Enter LastName" formControlName="LastName">
               <div *ngIf="f['LastName'].touched ">
-                <span class="error" *ngIf="f['LastName'].errors?.['required']">
-                  LastName is a required ! </span>
-              </div>
+                <span class="error" *ngIf="f['LastName'].errors?.['required'] ">Last Name is required!</span>
+                <span class="error" *ngIf="f['LastName'].errors?.['minlength'] ">Last Name must be 3 characters!</span> 
+                <span class="error" *ngIf="f['LastName'].errors?.['maxlength'] ">Last Name must be under 20 characters!</span>
+            </div>
             </div>
             <div class="form-group">
               <label for="Email">Email:</label>
               <input type="Email" placeholder="Enter Username" formControlName="Email">
               <div *ngIf="f['Email'].touched ">
-                <span class="error" *ngIf="f['Email'].errors?.['required']">
-                  Email is a required ! </span>
+                <span class="error" *ngIf="f['Email'].errors?.['required']">Email is a required ! </span>
+                <span class="error" *ngIf="f['Email'].errors?.['email']">Email is Not valid ! </span>
               </div>
             </div>
             <div class="form-group">
               <label for="contactNo">contactNumber:</label>
-              <input type="text" placeholder="Enter contactNumber" formControlName="contactNo">
+              <input type="text" placeholder="Enter contactNumber" formControlName="contactNo" 
+              onkeypress="return event.charCode>=48 && event.charCode<=57">
               <div *ngIf="f['contactNo'].touched ">
-                <span class="error" *ngIf="f['contactNo'].errors?.['required']">
-                  contactNumber is a required ! </span>
+                <span class="error" *ngIf="f['contactNo'].errors?.['required']">contactNumber is a required ! </span>
+                <span class="error" *ngIf="f['contactNo'].errors?.['minlength']">contactNumber must be 10 Digit ! </span>
+                <span class="error" *ngIf="f['contactNo'].errors?.['maxlength']">contactNumber must be 10 Digit ! </span>
               </div>
             </div>
             <div class="form-group">
@@ -59,25 +63,30 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" (click)="openModal()" #closebutton class="btn btn-secondary"
+        <button type="button" (click)="closeModal()" #closebutton class="btn btn-secondary"
           data-dismiss="modal">Close</button>
-        <button type="button" (click)="addUser()" class="btn btn-primary">Add User</button>
+        <button type="button" id="addUserButton" (click)="isEditMode ? updateUser() : addUser()"
+          class="btn btn-primary">
+          {{ isEditMode ? 'Update User' : 'Add User' }}
+        </button>
+
       </div>
     </div>
   </div>
 </div>
 
 <div class="action-container">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddUser">
-    Add User
-  </button>
-
   <form [formGroup]="UserDetailform">
     <div class="search-container">
       <input type="text" placeholder="Search" formControlName="GlobalSearch" class="search-input">
       <button class="btn btn-primary search-button" type="button" (click)="Search()">Search</button>
     </div>
   </form>
+  <button type="button" class="btn btn-primary" (click)="openModal()">
+    Add User
+  </button>
 </div>
 
-<app-table [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns" [ActionEdit]="true" [ActionDelete]="true"></app-table>
+<app-table [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns"
+  (isActiveClick)="ActiveInActive($event)" (editClick)="populateEditForm($event)" (deleteClick)="DeleteUser($event)"
+  (pageSizeChnage)="onPageSizeChange($event)" (IsEmailConfirmed)="onEmailResend($event)" (priviousPageChanage)="onPriviousPageChange($event)" [ActionEdit]="true" [ActionDelete]="true"></app-table>

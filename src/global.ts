@@ -52,6 +52,7 @@ export class QboDataModel {
 }
 
 export class saveUser {
+  Id : number;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -95,4 +96,13 @@ export class requestUserDetails{
   SortColumn:string;
   IsDesc:boolean;
   IsActive:boolean;
+}
+
+export class UserId{
+  UserId : number;
+}
+
+export class ActiveInActive  {
+  UserId : number;
+  Active : string;
 }

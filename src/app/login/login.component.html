@@ -13,6 +13,8 @@
             <input type="password" placeholder="Enter Password" formControlName="Password">
             <div *ngIf="f['Password'].touched ">
                 <span class="error" *ngIf="f['Password'].errors?.['required']"> Password is a required ! </span>
+                <span class="error" *ngIf="f['Password'].errors?.['minlength'] ">Password must be 6 characters!</span> 
+                <span class="error" *ngIf="f['Password'].errors?.['maxlength'] ">Password must be under 50 characters!</span> 
             </div>
         </div>
         <div class="login-button">

@@ -31,21 +31,21 @@ export class TableComponent implements OnInit {
   @Output() editClick = new EventEmitter<any>();
   @Output() deleteClick = new EventEmitter<any>();
   @Output() isActiveClick = new EventEmitter<any>();
+  @Output() IsEmailConfirmed = new EventEmitter<any>();
 
   @Output() nextpage = new EventEmitter<{ pageNo: number, pageSize: number }>();
-  @Output() pageSizeChnage = new EventEmitter<{pageSize:number}>();
+  @Output() pageSizeChnage = new EventEmitter<{ pageSize: number }>();
   @Output() PriviousPage = new EventEmitter<{ pageNo: number, pageSize: number }>();
 
   pageSizes = [5, 10, 20];
   pageSize: number = this.pageSizes[0];
   ngOnInit() {
-    if(this.ActionDelete || this.ActionEdit)
-    {
+    if (this.ActionDelete || this.ActionEdit) {
       this.columns = [...this.columns, actionColumn];
     }
   }
 
-  
+
   // onRowClick(row: TableData) {
   //   if (this.columns.every(column => row[column.field] !== 'action')) {
   //     this.rowClick.emit(row);
@@ -54,8 +54,7 @@ export class TableComponent implements OnInit {
 
   onEditClick(row: any) {
     this.editClick.emit(row);
-  console.log(row);
-  
+    console.log(row);
   }
 
   onDeleteClick(row: any) {
@@ -66,28 +65,35 @@ export class TableComponent implements OnInit {
     console.log(row)
   }
 
-  onPageSizeChange(){
-    this.pageSizeChnage.emit({pageSize: this.pageSize});
+  onPageSizeChange() {
+    this.pageSizeChnage.emit({ pageSize: this.pageSize });
     console.log(this.pageSize);
   }
-  
-  nextPageChanage(){
+
+  nextPageChanage() {
     this.nextpage.emit({ pageNo: this.PageNo + 1, pageSize: this.pageSize })
+    console.log(this.pageSize, this.PageNo);
   }
 
-  priviousPageChanage(){
-    let page =  this.PriviousPage.emit({pageSize:this.pageSize,pageNo:this.PageNo - 1})
+  priviousPageChanage() {
+    let page = this.PriviousPage.emit({ pageSize: this.pageSize, pageNo: this.PageNo - 1 })
+    console.log("priviousPageChange", page)
   }
-  
+
   getPages(): number[] {
     const totalPages = Math.ceil(this.TotalCount / this.pageSize);
     return Array.from({ length: totalPages }, (_, index) => index + 1);
   }
-  
+
   goToPage(page: number) {
     if (page !== this.PageNo) {
       this.nextpage.emit({ pageNo: page, pageSize: this.pageSize });
     }
   }
+
+  onResendLinkClick(data: TableData) {
+    this.IsEmailConfirmed.emit(data)
+  }
+    
 
 }

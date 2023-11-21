@@ -1,127 +1,173 @@
 .table-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  /* Style the table */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px;
-  }
-  
-  /* Style the table header row */
-  thead {
-    background-color: #007BFF;
-    color: #fff;
-  }
-  
-  th {
-    padding: 10px;
-    text-align: left;
-  }
-  
-  /* Style the table data rows */
-  tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  tbody tr:nth-child(odd) {
-    background-color: #fff;
-  }
-  
-  td {
-    padding: 10px;
-  }
-  
-  /* Style the "Edit" button */
-  button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .pagination {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .pagination-button {
-    padding: 5px 10px;
-    margin: 0 5px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    background-color: #fff;
-  }
-  
-  .pagination-button:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .pagination-button[disabled] {
-    cursor: not-allowed;
-    color: #ccc;
-  }
-  
-  .active-page {
-    font-weight: bold;
-    color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Style the table */
+table {
+  width: 1000px;
+  border-collapse: collapse;
+  margin: 10px;
+}
+
+/* Style the table header row */
+thead {
+  background-color: #007BFF;
+  color: #fff;
+}
+
+th {
+  padding: 10px;
+  text-align: left;
+}
+
+/* Style the table data rows */
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+td {
+  padding: 10px;
+}
+
+/* Style the "Edit" button */
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination-button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  color:  black;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.pagination-button:hover {
+  background-color: #f0f0f0;
+}
+
+.pagination-button[disabled] {
+  cursor: not-allowed;
+  color: #ccc;
+}
+
+.active-page {
+  font-weight: bold;
+  color: #333;
 }
 
 button.active {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin: 5px;
-    cursor: pointer;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
 }
 
 button.active:hover {
-    background-color: #218838;
+  background-color: #218838;
 }
 
 /* Style the "Inactive" button */
 button.inactive {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin: 5px;
-    cursor: pointer;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
 }
 
 button.inactive:hover {
-    background-color: #c82333;
+  background-color: #c82333;
+}
+
+.table-container {
+position: relative;
+overflow: hidden;
+}
+
+.table-scroll table {
+border-collapse: collapse;
+margin: 10px;
+}
+
+.table-scroll thead {
+background-color: #007BFF;
+color: #fff;
+position: sticky;
+top: 0;
+z-index: 1;
+}
+
+.table-scroll th {
+padding: 10px;
+text-align: left;
+}
+
+/* Add styles for the scrollable area */
+.table-scroll {
+max-height: 450px;
+overflow-y: auto;
+overflow-x: hidden;
+}
+
+.IsConfirmed {
+width: 50px;
+}
+.IsConfirmed button {
+width: 80%;
+}
+
+.pagination {
+position: relative;
+display: flex;
+flex-direction: row;
+float:  right;
+// margin: 10px;
 }
 
 @media only screen and (max-width: 600px) {
-  th, td {
-    width: auto;
-    display: block;
-  }
+th, td {
+  width: auto;
+  display: block;
+}
 
-  th {
-    text-align: center;
-  }
+th {
+  text-align: center;
+}
 
-  tbody tr {
-    display: block;
-    margin-bottom: 10px;
-  }
+tbody tr {
+  display: block;
+  margin-bottom: 10px;
+}
 
-  button {
-    width: 100%;
-  }
+button {
+  width: 100%;
+}
 }

@@ -50,7 +50,7 @@
             <div class="form-group">
               <label for="FirstName">Role:</label>
               <select class="form-select" aria-label="Role" formControlName="role">
-                <option selected>Select Role</option>
+                <option selected disabled>Select Role</option>
                 <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
               </select>
               <div *ngIf="f['role'].touched ">

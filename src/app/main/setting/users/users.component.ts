@@ -1,4 +1,4 @@
-import { Component,OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -6,60 +6,71 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
 import { ApiResponse, Role, requestUserDetails } from 'src/global';
-
+import Swal from 'sweetalert2';
+declare var $: any;
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  TotalCount : number;
+
+
+  @ViewChild('addUserModal') addUserModal: ElementRef;
+  userDetails:any;
+  isEditMode: boolean = false;
+  TotalCount: number;
 
   tableData: TableData[];
-  tableColumns: TableColumn[]=[
+  tableColumns: TableColumn[] = [
     { header: 'Name', field: 'FullName' },
-    { header: 'Role', field: 'RoleName' },
     { header: 'Email', field: 'Email' },
-    { header: 'Contact Number', field: 'ContactNo' }
+    { header: 'Contact Number', field: 'ContactNo' },
+    { header: 'Role',field:'RoleName'},
+    { header: 'IsConfirmed', field: 'IsConfirmed' },
+    { header: 'Status', field: 'IsActive' },
+
+
+  ];
+  PageNo: number;
+  options = [
+    { label: "Admin", value: Role.Admin },
+    { label: "Employee", value: Role.Employee }
   ];
 
-  options = [
-    {label:"Admin",value: Role.Admin}, 
-    {label:"Employee",value: Role.Employee}
-  ];
-  
   addUserform: FormGroup = new FormGroup({
     FirstName: new FormControl(''),
     LastName: new FormControl(''),
     Email: new FormControl(''),
     contactNo: new FormControl(''),
-    role:new FormControl('')
+    role: new FormControl('')
   });
 
-  UserDetailform : FormGroup = new FormGroup({
-    PageNo : new FormControl(1),
-    PageSize : new FormControl(100),
-    GlobalSearch : new FormControl(''),
-    SortColumn : new FormControl(''),
-    IsDesc : new FormControl(false),
-    IsActive : new FormControl(false),
+  UserDetailform: FormGroup = new FormGroup({
+    PageNo: new FormControl(1),
+    PageSize: new FormControl(5),
+    GlobalSearch: new FormControl(''),
+    SortColumn: new FormControl(''),
+    IsDesc: new FormControl(false),
+    IsActive: new FormControl(null),
   });
+  UserId: number;
   constructor(
     private router: Router,
     private builder: FormBuilder,
     private authService: AuthService,
-    private spinner:NgxSpinnerService,
+    private spinner: NgxSpinnerService,
     private toastr: ToastrService
-  ) {   }
-  @ViewChild('closebutton') closebutton;
+  ) { }
+
   ngOnInit(): void {
     this.GetUserDetial();
     this.addUserform = this.builder.group(
       {
-        FirstName: ['', [Validators.required]],
-        LastName: ['', [Validators.required]],
-        Email: ['', [Validators.required]],
-        contactNo: ['', [Validators.required]],
+        FirstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+        LastName: ['', [Validators.required , Validators.minLength(3), Validators.maxLength(20)]],
+        Email: ['', [Validators.required, Validators.email]],
+        contactNo: ['', [Validators.required , Validators.minLength(10), Validators.maxLength(10)]],
         role: ['', [Validators.required]],
       },
     );
@@ -67,11 +78,11 @@ export class UsersComponent implements OnInit {
     this.UserDetailform = this.builder.group(
       {
         PageNo: [1],
-        PageSize: [100],
+        PageSize: [5],
         GlobalSearch: [''],
         SortColumn: [''],
         IsDesc: [false],
-        IsActive: [false]
+        IsActive: [null]
       },
     );
     console.log(this.UserDetailform.value)
@@ -80,67 +91,182 @@ export class UsersComponent implements OnInit {
 
   addUser() {
     if (this.addUserform.valid) {
-      console.log("data",this.addUserform)
+      this.spinner.show();
+      console.log("data", this.addUserform)
       this.authService.saveUser(this.addUserform.value).subscribe((response: ApiResponse) => {
-        this.spinner.show();
+        this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
-          this.spinner.hide();
           console.log(response.Message);
           this.toastr.success("User created successful");
-          this.openModal();
-          this.closeAddUserModal();
-          // this.router.navigate(['/user-verification']);
+          this.closeModal();
+          this.GetUserDetial();
         }
         else if (response.ResponseStatus === 'Failure') {
-          this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);
           this.openModal();
         }
       })
-    }
+    } else
+    this.toastr.error("Invalid Form's Value")
   }
- 
+
+  updateUser() {
+    if (this.addUserform.valid) {
+       this.userDetails = { UserId: this.UserId ,  
+        Email : this.addUserform.value.Email, 
+        FirstName : this.addUserform.value.FirstName,
+        LastName : this.addUserform.value.LastName,
+        ContactNo : this.addUserform.value.contactNo
+      };
+      console.log(this.userDetails)
+      this.authService.saveUser(this.userDetails).subscribe((response: ApiResponse) => {
+        this.spinner.show();
+        if (response && response.ResponseStatus === 'Success') {
+          this.spinner.hide();
+          console.log(response.Message);
+          this.toastr.success("User updated successfully");
+          this.closeModal();
+          this.GetUserDetial();
+        } else if (response.ResponseStatus === 'Failure') {
+          this.spinner.hide();
+          this.toastr.error(response.ErrorData.Error);
+          console.log("Message", response.Message, "Error", response.ErrorData.Error);
+          this.openModal();
+        }
+      });
+    }
+    else
+      this.toastr.error("Invalid Form's Value")
+    
+  }
+
   get f(): { [key: string]: AbstractControl } {
     return this.addUserform.controls;
   }
-  
+
   openModal() {
-    this.addUserform.reset(); 
+    const modal: any = this.addUserModal.nativeElement;
+    $(modal).modal('show');
+    const buttonLabel = this.isEditMode ? 'Update User' : 'Add User';
+    $('#addUserButton').text(buttonLabel);
   }
 
-  closeAddUserModal() {
-    this.closebutton.nativeElement.click();
+  closeModal() {
+    const modal: any = this.addUserModal.nativeElement;
+    $(modal).modal('hide');
+    this.addUserform.reset();
+    this.isEditMode = false;
   }
-  GetUserDetial(){
-    console.log("data" , this.UserDetailform.value )
+
+  GetUserDetial() {
+    console.log("data", this.UserDetailform.value)
+    this.spinner.show();
     this.authService.GetUserDetails(this.UserDetailform.value).subscribe((response: ApiResponse) => {
-      this.spinner.show();
+      this.spinner.hide();
       if (response && response.ResponseStatus === 'Success') {
-        this.tableData =response.ResponseData.List;
+        this.tableData = response.ResponseData.List;
         this.TotalCount = response.ResponseData.TotalCount;
         console.log(this.tableData, this.TotalCount)
-        
-        this.spinner.hide();
       }
       else if (response.ResponseStatus === 'Failure') {
-        this.spinner.hide();
         this.toastr.error(response.ErrorData.Error);
         console.log("Message", response.Message, "Error", response.ErrorData.Error);
-        // this.openModal();
       }
     });
   }
 
-  Search(){
+  Search() {
     this.GetUserDetial()
   }
-  EditUser($event : Event){
-    console.log($event)
+
+  populateEditForm(user: TableData) {
+    this.UserId = user['UserId']; 
+    this.addUserform.patchValue({
+      UserId : user['UserId'] || '',
+      FirstName: user['FirstName'] || '',
+      LastName: user['LastName'] || '',
+      Email: user['Email'] || '',
+      contactNo: user['ContactNo'] || '',
+      role: user['Role'] || ''
+    });
+    this.isEditMode = true;
+    this.openModal();
   }
 
-  DeleteUser($event : Event){
-    console.log($event);
-    
+  DeleteUser($event: any) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this user!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.spinner.show();
+        const user = { UserId: $event.UserId };
+        this.authService.Deleteuser(user).subscribe((response: ApiResponse) => {
+          this.spinner.hide();
+          if (response && response.ResponseStatus === 'Success') {
+            this.toastr.success('User deleted successfully');
+            this.GetUserDetial();
+          } else if (response.ResponseStatus === 'Failure') {
+            this.toastr.error(response.ErrorData.Error);
+          }
+        });
+      }
+    });
   }
+
+  ActiveInActive($event: any) {
+    const userId = $event.UserId;
+    const newStatus = !$event.IsActive;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you want to ${newStatus ? 'Activate' : 'InActivate'} this user?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const user = { UserId: userId, ActiveStatus: newStatus };
+        this.spinner.show();
+        this.authService.ActiveInactiveUser(user).subscribe((response: ApiResponse) => {
+          this.spinner.hide();
+          if (response && response.ResponseStatus === 'Success') {
+            const action = newStatus ? 'Activated' : 'InActivated';
+            this.toastr.success(`User ${action} successfully`);
+            this.GetUserDetial();
+          } else if (response.ResponseStatus === 'Failure') {
+            this.toastr.error(response.ErrorData.Error);
+          }
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelled', 'User status change was cancelled', 'info');
+      }
+    });
+  }
+  onPageSizeChange(PageSize:any) {
+    this.UserDetailform.get('PageSize').setValue(PageSize.pageSize);
+    this.GetUserDetial()
+  }
+  onPriviousPageChange($event:any){
+    console.log("Privious page change",$event)
+  }
+
+  onEmailResend(data: any) {
+   console.log("Email resend",data)
+   this.authService.ResendLink(data).subscribe((response: ApiResponse) => {
+    this.spinner.hide();
+    if (response && response.ResponseStatus === 'Success') {
+      this.toastr.success(`Email verifcation link send successfully`);
+      this.GetUserDetial();
+    } else if (response.ResponseStatus === 'Failure') {
+      this.toastr.error(response.ErrorData.Error);
+    }
+  });
+  }
+    
 }

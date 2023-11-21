@@ -87,6 +87,6 @@
   </button>
 </div>
 
-<app-table [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns"
+<app-table [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns" [PageNo]="PageNo"
   (isActiveClick)="ActiveInActive($event)" (editClick)="populateEditForm($event)" (deleteClick)="DeleteUser($event)"
-  (pageSizeChnage)="onPageSizeChange($event)" (IsEmailConfirmed)="onEmailResend($event)" (priviousPageChanage)="onPriviousPageChange($event)" [ActionEdit]="true" [ActionDelete]="true"></app-table>
+  (pageSizeChnage)="onPageSizeChange($event)" (IsEmailConfirmed)="onEmailResend($event)" (PriviousPage)="onPageChange($event)" (nextpage)="onPageChange($event)" (GotoPage)="onPageChange($event)" [ActionEdit]="true" [ActionDelete]="true"></app-table>

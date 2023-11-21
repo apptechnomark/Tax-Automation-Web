@@ -19,7 +19,7 @@ export class UsersComponent implements OnInit {
   @ViewChild('addUserModal') addUserModal: ElementRef;
   userDetails:any;
   isEditMode: boolean = false;
-  TotalCount: number;
+  TotalCount: number = 1;
 
   tableData: TableData[];
   tableColumns: TableColumn[] = [
@@ -205,8 +205,7 @@ export class UsersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.spinner.show();
-        const user = { UserId: $event.UserId };
-        this.authService.Deleteuser(user).subscribe((response: ApiResponse) => {
+        this.authService.Deleteuser({ UserId: $event.UserId }).subscribe((response: ApiResponse) => {
           this.spinner.hide();
           if (response && response.ResponseStatus === 'Success') {
             this.toastr.success('User deleted successfully');
@@ -250,11 +249,19 @@ export class UsersComponent implements OnInit {
   }
   onPageSizeChange(PageSize:any) {
     this.UserDetailform.get('PageSize').setValue(PageSize.pageSize);
+    this.PageNo = 1;
+    this.UserDetailform.get('PageNo').setValue(1);
     this.GetUserDetial()
   }
-  onPriviousPageChange($event:any){
-    console.log("Privious page change",$event)
+  onPageChange($event:any){
+    console.log($event.pageNo)
+    this.UserDetailform.get('PageSize').setValue($event.pageSize);
+    this.PageNo = $event.pageNo;
+    this.UserDetailform.get('PageNo').setValue($event.pageNo);
+    console.log(this.UserDetailform)
+    this.GetUserDetial()
   }
+
 
   onEmailResend(data: any) {
    console.log("Email resend",data)

@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
 import { ApiResponse, Role, requestUserDetails } from 'src/global';
@@ -17,20 +18,20 @@ export class UsersComponent implements OnInit {
 
 
   @ViewChild('addUserModal') addUserModal: ElementRef;
+  @ViewChild('connectionModal') connectionModal: ElementRef;
   userDetails:any;
   isEditMode: boolean = false;
   TotalCount: number = 1;
+  isAddCompanyModalOpen: boolean = false;
 
   tableData: TableData[];
   tableColumns: TableColumn[] = [
     { header: 'Name', field: 'FullName' },
     { header: 'Email', field: 'Email' },
     { header: 'Contact Number', field: 'ContactNo' },
-    { header: 'Role',field:'RoleName'},
-    { header: 'IsConfirmed', field: 'IsConfirmed' },
+    { header : 'Company' , field: 'QBO_AccountName'},
+    { header: 'EmailConfirmed', field: 'IsConfirmed' },
     { header: 'Status', field: 'IsActive' },
-
-
   ];
   PageNo: number;
   options = [
@@ -54,16 +55,24 @@ export class UsersComponent implements OnInit {
     IsDesc: new FormControl(false),
     IsActive: new FormControl(null),
   });
+
+  CompanyConnectionform: FormGroup;
+  companies: any[] = [];
+  // CompanyConnectionform : FormGroup = new FormGroup({
+  //   CompanyId: new FormControl()
+  // });
   UserId: number;
   constructor(
     private router: Router,
     private builder: FormBuilder,
     private authService: AuthService,
+    private Service: ApiService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
+    this.getCompanies();
     this.GetUserDetial();
     this.addUserform = this.builder.group(
       {
@@ -74,6 +83,10 @@ export class UsersComponent implements OnInit {
         role: ['', [Validators.required]],
       },
     );
+
+    this.CompanyConnectionform = this.builder.group({
+      CompanyId :[null]
+    })
 
     this.UserDetailform = this.builder.group(
       {
@@ -275,5 +288,61 @@ export class UsersComponent implements OnInit {
     }
   });
   }
+
+  UserData : any;
+  AddCompany(data: any) {
+    console.log(data);
+    this.UserData = data;
+    this.openModalForConnection();
+  }
+
+  openModalForConnection() {
+    const modal: any = this.connectionModal.nativeElement;
+    $(modal).modal('show');
+    // const buttonLabel = this.isEditMode ? 'Update User' : 'Add User';
+    // $('#addUserButton').text(buttonLabel);
+  }
+
+  closeModalForConnection() {
+    const modal: any = this.connectionModal.nativeElement;
+    $(modal).modal('hide');
+    this.CompanyConnectionform.reset();
+    this.isEditMode = false;
+  }
+
+  ConnectCompany(){
+    const combinedData = {
+      ...this.CompanyConnectionform.value,
+      ...this.UserData
+    };
     
+    if(this.CompanyConnectionform.valid){
+      this.spinner.show();
+      this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
+        this.spinner.hide();
+        if (response && response.ResponseStatus === 'Success') {
+          // this.tableData = response.ResponseData.List;
+          // this.TotalCount = response.ResponseData.TotalCount;
+          // console.log(this.tableData, this.TotalCount)
+          
+        }
+        else if (response.ResponseStatus === 'Failure') {
+          this.toastr.error(response.ErrorData.Error);
+          console.log("Message", response.Message, "Error", response.ErrorData.Error);
+        }
+      });
+    }
+  }
+
+  getCompanies() {
+    this.Service.CompanyDropDown().subscribe(
+      (response: any) => {
+        this.companies = response.ResponseData;
+       },
+      (error) => {
+        console.error('Error fetching companies', error);
+     }
+    );
+  }
+
 }

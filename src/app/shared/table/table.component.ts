@@ -25,6 +25,7 @@ export class TableComponent implements OnInit {
   @Input() columns: TableColumn[] = [];
   @Input() ActionEdit: boolean = false;
   @Input() ActionDelete: boolean = false;
+  @Input() ActionMapping : boolean = false;
   @Input() TotalCount: number = 0;
   @Input() PageNo: number = 1;
   // @Output() rowClick = new EventEmitter<any>();
@@ -32,7 +33,8 @@ export class TableComponent implements OnInit {
   @Output() deleteClick = new EventEmitter<any>();
   @Output() isActiveClick = new EventEmitter<any>();
   @Output() IsEmailConfirmed = new EventEmitter<any>();
-
+  @Output() AddCompany = new EventEmitter<any>();
+  
   @Output() nextpage = new EventEmitter<{ pageNo: number, pageSize: number }>();
   @Output() pageSizeChnage = new EventEmitter<{ pageSize: number }>();
   @Output() PriviousPage = new EventEmitter<{ pageNo: number, pageSize: number }>();
@@ -41,7 +43,7 @@ export class TableComponent implements OnInit {
   pageSizes = [5, 10, 20];
   pageSize: number = this.pageSizes[0];
   ngOnInit() {
-    if (this.ActionDelete || this.ActionEdit) {
+    if (this.ActionDelete || this.ActionEdit || this.ActionMapping || this.AddCompany)  {
       this.columns = [...this.columns, actionColumn];
     }
   }
@@ -96,5 +98,8 @@ export class TableComponent implements OnInit {
     this.IsEmailConfirmed.emit(data)
   }
     
+  onAddCompany(data: TableData) {
+    this.AddCompany.emit(data)
+  }
 
 }

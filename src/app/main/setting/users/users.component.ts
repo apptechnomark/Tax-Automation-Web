@@ -26,7 +26,7 @@ export class UsersComponent implements OnInit {
  ActionButtons : ActionButton[] = [
   {lable: "Edit", Action: 'Edit'},
   {lable: "Delete", Action: 'DeleteUser'},
-  {lable: "Connect", Action : 'connect'},
+  {lable: "Connect", Action : 'Connect'},
   {lable: "Resend Link", Action: 'onEmailResend'}
  ]
   tableData: TableData[];
@@ -351,7 +351,7 @@ export class UsersComponent implements OnInit {
     } else if (action === 'onEmailResend') {
       this.onEmailResend(data);
     } else if (action === 'Connect') {
-      this.ConnectCompany()
+      this.AddCompany(data)
     }
     // Add more conditions for other actions if needed
   }

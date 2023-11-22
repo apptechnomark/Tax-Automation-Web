@@ -31,9 +31,18 @@
               </ng-container>
               <!-- Actions column -->
               <ng-container *ngIf="column.field === 'action'">
-                <ng-container *ngIf="ActionEdit"><button (click)="onEditClick(row)">Edit</button></ng-container>
-                <ng-container *ngIf="ActionDelete"><button (click)="onDeleteClick(row)">Delete</button></ng-container>
-              </ng-container>
+                <!-- <ng-container *ngIf="ActionEdit"><button (click)="onEditClick(row)">Edit</button></ng-container>
+                <ng-container *ngIf="ActionDelete"><button (click)="onDeleteClick(row)">Delete</button></ng-container> -->
+                <div class="dropdown">
+                  <button class=" bi-three-dots-vertical text-dark btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              
+                  </button>
+                  <div *ngFor="let item of actionButtons" class="dropdown-menu width" aria-labelledby="dropdownMenuButton">
+                    <button style="width: 80%; height: 70%;" class="btn text-dark fw-normal" *ngFor="let item of actionButtons"   (click)="performAction(item.Action,row)">{{item.lable}}</button>
+                  </div>
+                </div>
+              </ng-container> 
+
             </td>
           </tr>
         </tbody>

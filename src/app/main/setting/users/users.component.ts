@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { TableColumn, TableData } from 'src/app/shared/table/table.component';
+import { ActionButton, TableColumn, TableData } from 'src/app/shared/table/table.component';
 import { ApiResponse, Role, requestUserDetails } from 'src/global';
 import Swal from 'sweetalert2';
 declare var $: any;
@@ -23,7 +23,12 @@ export class UsersComponent implements OnInit {
   isEditMode: boolean = false;
   TotalCount: number = 1;
   isAddCompanyModalOpen: boolean = false;
-
+ ActionButtons : ActionButton[] = [
+  {lable: "Edit", Action: 'Edit'},
+  {lable: "Delete", Action: 'DeleteUser'},
+  {lable: "Connect", Action : 'connect'},
+  {lable: "Resend Link", Action: 'onEmailResend'}
+ ]
   tableData: TableData[];
   tableColumns: TableColumn[] = [
     { header: 'Name', field: 'FullName' },
@@ -335,6 +340,20 @@ export class UsersComponent implements OnInit {
       });
       this.GetUserDetial();
     }
+  }
+
+  handleActionClick(event: { action: string, data: any }) {
+    const { action, data } = event;
+    if (action === 'DeleteUser') {
+      this.DeleteUser(data);
+    } else if (action === 'Edit') {
+      this.populateEditForm(data);
+    } else if (action === 'onEmailResend') {
+      this.onEmailResend(data);
+    } else if (action === 'Connect') {
+      this.ConnectCompany()
+    }
+    // Add more conditions for other actions if needed
   }
 
   getCompanies() {

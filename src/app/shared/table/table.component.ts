@@ -34,7 +34,7 @@ export class TableComponent implements OnInit {
   @Output() isActiveClick = new EventEmitter<any>();
   @Output() IsEmailConfirmed = new EventEmitter<any>();
   @Output() AddCompany = new EventEmitter<any>();
-  
+  @Output() RemoveCompany = new EventEmitter<any>();
   @Output() nextpage = new EventEmitter<{ pageNo: number, pageSize: number }>();
   @Output() pageSizeChnage = new EventEmitter<{ pageSize: number }>();
   @Output() PriviousPage = new EventEmitter<{ pageNo: number, pageSize: number }>();
@@ -43,7 +43,7 @@ export class TableComponent implements OnInit {
   pageSizes = [5, 10, 20];
   pageSize: number = this.pageSizes[0];
   ngOnInit() {
-    if (this.ActionDelete || this.ActionEdit || this.ActionMapping || this.AddCompany)  {
+    if (this.ActionDelete || this.ActionEdit || this.ActionMapping || this.AddCompany|| this.RemoveCompany)  {
       this.columns = [...this.columns, actionColumn];
     }
   }
@@ -102,4 +102,7 @@ export class TableComponent implements OnInit {
     this.AddCompany.emit(data)
   }
 
+  onRemoveCompany(data:TableData){
+    this.RemoveCompany.emit(data)
+  }
 }

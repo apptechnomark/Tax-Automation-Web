@@ -85,7 +85,7 @@ export class UsersComponent implements OnInit {
     );
 
     this.CompanyConnectionform = this.builder.group({
-      CompanyId :[null]
+      CompanyId :['']
     })
 
     this.UserDetailform = this.builder.group(
@@ -145,7 +145,7 @@ export class UsersComponent implements OnInit {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);
-          this.openModal();
+          // this.openModal();
         }
       });
     }
@@ -299,8 +299,6 @@ export class UsersComponent implements OnInit {
   openModalForConnection() {
     const modal: any = this.connectionModal.nativeElement;
     $(modal).modal('show');
-    // const buttonLabel = this.isEditMode ? 'Update User' : 'Add User';
-    // $('#addUserButton').text(buttonLabel);
   }
 
   closeModalForConnection() {
@@ -311,26 +309,31 @@ export class UsersComponent implements OnInit {
   }
 
   ConnectCompany(){
+    console.log(this.UserData)
+    
     const combinedData = {
       ...this.CompanyConnectionform.value,
-      ...this.UserData
-    };
+      "UserId":this.UserData.UserId,
+      "id":this.UserData.QBO_ID
+      
+     };
+    console.log(combinedData);
     
     if(this.CompanyConnectionform.valid){
       this.spinner.show();
       this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
-          // this.tableData = response.ResponseData.List;
-          // this.TotalCount = response.ResponseData.TotalCount;
-          // console.log(this.tableData, this.TotalCount)
-          
+          this.toastr.success("Company Connected Successfully");
+        
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);
-        }
+        } 
+        this.closeModalForConnection();
       });
+      this.GetUserDetial();
     }
   }
 
@@ -343,6 +346,33 @@ export class UsersComponent implements OnInit {
         console.error('Error fetching companies', error);
      }
     );
+  }
+
+  RemoveCompany(data: any){
+    this.UserData =data;
+    const combinedData = {
+      "CompanyId":this.UserData.QBO_DetailId,
+      "UserId":this.UserData.UserId,
+      "id":this.UserData.QBO_ID
+      
+     };
+     console.log(combinedData);
+     
+     if(this.CompanyConnectionform.valid){
+       this.spinner.show();
+       this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
+         this.spinner.hide();
+         if (response && response.ResponseStatus === 'Success') {
+           this.toastr.success("Company Removed Successfully");
+           this.GetUserDetial();
+         }
+         else if (response.ResponseStatus === 'Failure') {
+           this.toastr.error(response.ErrorData.Error);
+           console.log("Message", response.Message, "Error", response.ErrorData.Error);
+         } 
+         this.closeModalForConnection();
+       });
+     }
   }
 
 }

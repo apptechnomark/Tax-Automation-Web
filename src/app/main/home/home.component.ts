@@ -16,8 +16,7 @@ declare var $: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-  data: TableData[] = [
-  ];
+  data: TableData[] = [];
 
   headers: TableColumn[] = [
     { header: 'Id', field: 'Id' },
@@ -77,26 +76,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
   UploadData() {
     if (this.clientform.valid) {
       this.spinner.show();
-      console.log('data', this.clientform);
-      this.service
-        .updateImportData(this.clientform.value)
-        .subscribe((response: ApiResponse) => {
-          this.spinner.hide();
-          if (response && response.ResponseStatus === 'Success') {
-            this.ClientId = response.ResponseData;
-            localStorage.setItem('clientId', response.ResponseData);
-            this.toastr.success('User created successful');
-          } else if (response.ResponseStatus === 'Failure') {
-            this.toastr.error(response.ErrorData.Error);
-            console.log(
-              'Message',
-              response.Message,
-              'Error',
-              response.ErrorData.Error
-            );
-          }
-        });
-    } else this.toastr.error("Invalid Form's Value");
+      console.log("data", this.clientform)
+      this.service.updateImportData(this.clientform.value).subscribe((response: ApiResponse) => {
+        this.spinner.hide();
+        if (response && response.ResponseStatus === 'Success') {
+          this.ClientId = response.ResponseData
+          localStorage.setItem("clientId", response.ResponseData)
+          this.toastr.success("Client Detail Added");
+          this.clientform.reset();
+        }
+        else if (response.ResponseStatus === 'Failure') {
+          this.toastr.error(response.ErrorData.Error);
+          console.log("Message", response.Message, "Error", response.ErrorData.Error);
+        }
+      })
+    }
+    else
+      this.toastr.error("Invalid Form's Value")
   }
 
   get f(): { [key: string]: AbstractControl } {

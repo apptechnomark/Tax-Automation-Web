@@ -185,7 +185,7 @@ export class UsersComponent implements OnInit {
       if (response && response.ResponseStatus === 'Success') {
         this.tableData = response.ResponseData.List;
         this.TotalCount = response.ResponseData.TotalCount;
-        console.log(this.tableData, this.TotalCount)
+        console.log(this.tableData, this.TotalCount) 
       }
       else if (response.ResponseStatus === 'Failure') {
         this.toastr.error(response.ErrorData.Error);
@@ -193,6 +193,7 @@ export class UsersComponent implements OnInit {
       }
     });
   }
+
 
   Search() {
     this.GetUserDetial()
@@ -367,31 +368,65 @@ export class UsersComponent implements OnInit {
     );
   }
 
-  RemoveCompany(data: any){
-    this.UserData =data;
-    const combinedData = {
-      "CompanyId":this.UserData.QBO_DetailId,
-      "UserId":this.UserData.UserId,
-      "id":this.UserData.QBO_ID
+  // RemoveCompany(data: any){
+  //   this.UserData =data;
+  //   const combinedData = {
+  //     "CompanyId":this.UserData.QBO_DetailId,
+  //     "UserId":this.UserData.UserId,
+  //     "id":this.UserData.QBO_ID
       
-     };
-     console.log(combinedData);
+  //    };
+  //    console.log(combinedData);
      
-     if(this.CompanyConnectionform.valid){
-       this.spinner.show();
-       this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
-         this.spinner.hide();
-         if (response && response.ResponseStatus === 'Success') {
-           this.toastr.success("Company Removed Successfully");
-           this.GetUserDetial();
-         }
-         else if (response.ResponseStatus === 'Failure') {
-           this.toastr.error(response.ErrorData.Error);
-           console.log("Message", response.Message, "Error", response.ErrorData.Error);
-         } 
-         this.closeModalForConnection();
-       });
-     }
-  }
+  //    if(this.CompanyConnectionform.valid){
+  //      this.spinner.show();
+  //      this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
+  //        this.spinner.hide();
+  //        if (response && response.ResponseStatus === 'Success') {
+  //          this.toastr.success("Company Removed Successfully");
+  //          this.GetUserDetial();
+  //        }
+  //        else if (response.ResponseStatus === 'Failure') {
+  //          this.toastr.error(response.ErrorData.Error);
+  //          console.log("Message", response.Message, "Error", response.ErrorData.Error);
+  //        } 
+  //        this.closeModalForConnection();
+  //      });
+  //    }
+  // }
 
+
+  RemoveCompany(data: any) {
+    this.UserData = data;
+    const combinedData = {
+      "CompanyId": this.UserData.QBO_DetailId,
+      "UserId": this.UserData.UserId,
+      "id": this.UserData.QBO_ID
+    };
+  
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will remove the connection with this company!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, remove it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.spinner.show();
+        this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
+          this.spinner.hide();
+          if (response && response.ResponseStatus === 'Success') {
+            this.toastr.success("Company Removed Successfully");
+            this.GetUserDetial();
+          } else if (response.ResponseStatus === 'Failure') {
+            this.toastr.error(response.ErrorData.Error);
+            console.log("Message", response.Message, "Error", response.ErrorData.Error);
+          }
+          this.closeModalForConnection();
+        });
+      }
+    });
+  }
+  
 }

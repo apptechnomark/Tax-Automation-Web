@@ -29,25 +29,40 @@
   </form>
 </div>
 
-
-
-
-
-
-
 <hr/>
 
+<div class="card-container">
+  <div class="row">
+      <div class="col-3 Download">    
+        <label class="me-3">Download Sample File:</label>
+        <a class="custom-file-upload" (click)="ExportExcel()">
+          <i class="bi bi-download"  title="Download Excel"></i>
+        </a>
+      </div>
+  <div class="col-6">
+    <form >
+      <div class="row">
+        <div class="col-7">
+          <label for="file">Upload Excel File:</label>&nbsp;
+          <input type="file" #fileInput (change)="onFileChange($event)" accept=".xlsx, .xls">
+          <label class="custom-file-upload">
+            <i class="bi bi-upload"></i> Choose File
+          </label>
+        </div>
+        <div class=" col-3">
+          <button class="btn btn-primary" (click)="uploadFile()">Upload File</button>
+        </div>
+      </div>
 
-<a class="me-3" (click)="ExportExcel()">
-  <i class="bi bi-download" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Excel"></i>
-</a>
-<form class="mt-3">
-    <div class="form-group">
-      <label for="file">Upload Excel File:</label>
-      <input type="file" #fileInput (change)="onFileChange($event)" accept=".xlsx, .xls">
-    </div>
-    <div class="form-button">
-      <button class="btn btn-primary" (click)="uploadFile()">Upload File</button>
-    </div>
-  </form>
+    </form>
+  </div>
+  </div>
+
+</div>
+
+<div class="card-container">
+  
+
+</div>
+
   

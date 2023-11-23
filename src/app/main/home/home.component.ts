@@ -55,7 +55,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (response && response.ResponseStatus === 'Success') {
           this.ClientId = response.ResponseData
           localStorage.setItem("clientId", response.ResponseData)
-          this.toastr.success("User created successful");
+          this.toastr.success("Client Detail Added");
+          this.clientform.reset();
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);

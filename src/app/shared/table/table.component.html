@@ -26,12 +26,12 @@
               <ng-container class="IsConfirmed" *ngIf="column.field === 'IsConfirmed'">
                 <button *ngIf="!row?.['IsConfirmed']" (click)="onResendLinkClick(row)">Resend Link</button>
               </ng-container>
-              <!-- <ng-container class="QBO_AccountName" *ngIf="column.field === 'QBO_AccountName'">
+              <ng-container class="QBO_AccountName" *ngIf="column.field === 'QBO_AccountName'">
                 <a *ngIf="row?.['QBO_AccountName']" (click)="onRemoveCompany(row)"><i class="bi bi-x-circle"></i></a>
                 
-              </ng-container> -->
+              </ng-container>
               <ng-container class="QBO_AccountName" *ngIf="column.field === 'QBO_AccountName'">
-               <a *ngIf="!row?.['QBO_AccountName']" (click)="onAddCompany(row)"><i class="bi bi-link-45deg"></i>Connect</a>
+               <a *ngIf="!row?.['QBO_AccountName']" (click)="onAddCompany(row)">Not Connected</a>
                 <!-- <button *ngIf="!row?.['QBO_AccountName']" (click)="onAddCompany(row)">Connect Company</button> -->
               </ng-container>
               <!-- Actions column -->

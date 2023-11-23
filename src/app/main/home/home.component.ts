@@ -101,6 +101,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   uploadedFile:any;
  
   onFileChange(event: any) {
+    console.log("Uploaded file",event.target);
+    
     const file = event.target.files[0];
     this.uploadedFile = file; 
   }

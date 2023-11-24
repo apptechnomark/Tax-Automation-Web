@@ -39,18 +39,15 @@ export class UsersComponent implements OnInit {
     { header: 'Status', field: 'IsActive' },
   ];
   PageNo: number;
+  select:any;
+  
+
   options = [
     { label: "Admin", value: Role.Admin },
     { label: "Employee", value: Role.Employee }
   ];
 
-  addUserform: FormGroup = new FormGroup({
-    FirstName: new FormControl(''),
-    LastName: new FormControl(''),
-    Email: new FormControl(''),
-    contactNo: new FormControl(''),
-    role: new FormControl('')
-  });
+  addUserform: FormGroup;
 
   UserDetailform: FormGroup = new FormGroup({
     PageNo: new FormControl(1),
@@ -78,14 +75,14 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCompanies();
-    this.GetUserDetial();
+    this.GetUserDetail();
     this.addUserform = this.builder.group(
       {
         FirstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
         LastName: ['', [Validators.required , Validators.minLength(3), Validators.maxLength(20)]],
         Email: ['', [Validators.required, Validators.email]],
         contactNo: ['', [Validators.required , Validators.minLength(10), Validators.maxLength(10)]],
-        role: ['', [Validators.required]],
+        Role: ['', [Validators.required]],
       },
     );
 
@@ -95,47 +92,44 @@ export class UsersComponent implements OnInit {
 
     this.UserDetailform = this.builder.group(
       {
-        PageNo: [1],
-        PageSize: [5],
-        GlobalSearch: [''],
-        SortColumn: [''],
-        IsDesc: [false],
-        IsActive: [null]
+        PageNo: [],
+        PageSize: [],
+        GlobalSearch: [],
+        SortColumn: [],
+        IsDesc: [],
+        IsActive: []
       },
     );
     console.log(this.UserDetailform.value)
   }
 
 
-  addUser() {
+  AddUserButton() {
     if (this.addUserform.valid) {
       this.spinner.show();
-      console.log("data", this.addUserform)
       this.authService.saveUser(this.addUserform.value).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
-          console.log(response.Message);
           this.toastr.success("User created successful");
           this.closeModal();
-          this.GetUserDetial();
+          this.GetUserDetail();
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
           this.openModal();
         }
       })
     } else
-    this.toastr.error("Invalid Form's Value")
+    this.toastr.warning("Invalid Form's Value")
   }
 
-  updateUser() {
+  UpdateUserButton() {
     if (this.addUserform.valid) {
        this.userDetails = { UserId: this.UserId ,  
         Email : this.addUserform.value.Email, 
         FirstName : this.addUserform.value.FirstName,
         LastName : this.addUserform.value.LastName,
-        ContactNo : this.addUserform.value.contactNo
+        ContactNo : this.addUserform.value.contactNo,
       };
       console.log(this.userDetails)
       this.authService.saveUser(this.userDetails).subscribe((response: ApiResponse) => {
@@ -145,21 +139,20 @@ export class UsersComponent implements OnInit {
           console.log(response.Message);
           this.toastr.success("User updated successfully");
           this.closeModal();
-          this.GetUserDetial();
+          this.GetUserDetail();
         } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);
-          // this.openModal();
         }
       });
     }
     else
-      this.toastr.error("Invalid Form's Value")
+      this.toastr.warning("Invalid Form's Value")
     
   }
 
-  get f(): { [key: string]: AbstractControl } {
+  get abstract(): { [key: string]: AbstractControl } {
     return this.addUserform.controls;
   }
 
@@ -177,7 +170,7 @@ export class UsersComponent implements OnInit {
     this.isEditMode = false;
   }
 
-  GetUserDetial() {
+  GetUserDetail() {
     console.log("data", this.UserDetailform.value)
     this.spinner.show();
     this.authService.GetUserDetails(this.UserDetailform.value).subscribe((response: ApiResponse) => {
@@ -196,7 +189,7 @@ export class UsersComponent implements OnInit {
 
 
   Search() {
-    this.GetUserDetial()
+    this.GetUserDetail()
   }
 
   populateEditForm(user: TableData) {
@@ -207,9 +200,17 @@ export class UsersComponent implements OnInit {
       LastName: user['LastName'] || '',
       Email: user['Email'] || '',
       contactNo: user['ContactNo'] || '',
-      role: user['Role'] || ''
+      Role: user['Role'] 
     });
     this.isEditMode = true;
+    const select = user['Role'];
+    const selectedRole = this.options.find(option => option.value === select);
+    console.log('Selected Role:', selectedRole);
+  
+    if (selectedRole) 
+      this.addUserform.get('Role').setValue(selectedRole.value);
+    else 
+      console.error('Invalid Role:', select);
     this.openModal();
   }
 
@@ -228,7 +229,7 @@ export class UsersComponent implements OnInit {
           this.spinner.hide();
           if (response && response.ResponseStatus === 'Success') {
             this.toastr.success('User deleted successfully');
-            this.GetUserDetial();
+            this.GetUserDetail();
           } else if (response.ResponseStatus === 'Failure') {
             this.toastr.error(response.ErrorData.Error);
           }
@@ -256,7 +257,7 @@ export class UsersComponent implements OnInit {
           if (response && response.ResponseStatus === 'Success') {
             const action = newStatus ? 'Activated' : 'InActivated';
             this.toastr.success(`User ${action} successfully`);
-            this.GetUserDetial();
+            this.GetUserDetail();
           } else if (response.ResponseStatus === 'Failure') {
             this.toastr.error(response.ErrorData.Error);
           }
@@ -270,7 +271,7 @@ export class UsersComponent implements OnInit {
     this.UserDetailform.get('PageSize').setValue(PageSize.pageSize);
     this.PageNo = 1;
     this.UserDetailform.get('PageNo').setValue(1);
-    this.GetUserDetial()
+    this.GetUserDetail()
   }
   onPageChange($event:any){
     console.log($event.pageNo)
@@ -278,7 +279,7 @@ export class UsersComponent implements OnInit {
     this.PageNo = $event.pageNo;
     this.UserDetailform.get('PageNo').setValue($event.pageNo);
     console.log(this.UserDetailform)
-    this.GetUserDetial()
+    this.GetUserDetail()
   }
 
 
@@ -288,7 +289,7 @@ export class UsersComponent implements OnInit {
     this.spinner.hide();
     if (response && response.ResponseStatus === 'Success') {
       this.toastr.success(`Email verifcation link send successfully`);
-      this.GetUserDetial();
+      this.GetUserDetail();
     } else if (response.ResponseStatus === 'Failure') {
       this.toastr.error(response.ErrorData.Error);
     }
@@ -339,7 +340,7 @@ export class UsersComponent implements OnInit {
         } 
         this.closeModalForConnection();
       });
-      this.GetUserDetial();
+      this.GetUserDetail();
     }
   }
 
@@ -418,7 +419,7 @@ export class UsersComponent implements OnInit {
           this.spinner.hide();
           if (response && response.ResponseStatus === 'Success') {
             this.toastr.success("Company Removed Successfully");
-            this.GetUserDetial();
+            this.GetUserDetail();
           } else if (response.ResponseStatus === 'Failure') {
             this.toastr.error(response.ErrorData.Error);
             console.log("Message", response.Message, "Error", response.ErrorData.Error);

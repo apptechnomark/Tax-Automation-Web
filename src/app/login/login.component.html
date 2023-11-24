@@ -4,21 +4,21 @@
         <div class="form-group">
             <label for="Username">Username:</label>
             <input type="email" placeholder="Enter Username" formControlName="Username">
-            <div *ngIf="f['Username'].touched ">
-                <span class="error" *ngIf="f['Username'].errors?.['required']"> Username is a required !</span>
+            <div *ngIf="abstract['Username'].touched ">
+                <span class="error" *ngIf="abstract['Username'].errors?.['required']"> Username is a required !</span>
             </div>
         </div>
         <div class="form-group">
             <label for="Password">Password:</label>
             <input type="password" placeholder="Enter Password" formControlName="Password">
-            <div *ngIf="f['Password'].touched ">
-                <span class="error" *ngIf="f['Password'].errors?.['required']"> Password is a required ! </span>
-                <span class="error" *ngIf="f['Password'].errors?.['minlength'] ">Password must be 6 characters!</span> 
-                <span class="error" *ngIf="f['Password'].errors?.['maxlength'] ">Password must be under 50 characters!</span> 
+            <div *ngIf="abstract['Password'].touched ">
+                <span class="error" *ngIf="abstract['Password'].errors?.['required']"> Password is a required ! </span>
+                <span class="error" *ngIf="abstract['Password'].errors?.['minlength'] ">Password must be 6 characters!</span> 
+                <span class="error" *ngIf="abstract['Password'].errors?.['maxlength'] ">Password must be under 50 characters!</span> 
             </div>
         </div>
         <div class="login-button">
-            <button class="btn btn-primary" (click)="authenticate()">Login</button>
+            <button class="btn btn-primary" (click)="LoginButton()">Login</button>
         </div>
     </div>
 </form>

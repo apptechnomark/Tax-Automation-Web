@@ -17,7 +17,6 @@ declare var $: any;
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   data: TableData[] = [];
-  IsClientField: boolean = true;
   headers: TableColumn[] = [
     { header: 'Id', field: 'Id' },
     { header: 'Name', field: 'name' },
@@ -32,9 +31,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   form!: FormGroup;
   client: any;
-  qbobuttons : boolean = false;
   ClientId: number;
-
   @ViewChild('fileInput') fileInput: ElementRef;
   clientform: FormGroup = new FormGroup({
     Clientname: new FormControl(''),
@@ -53,7 +50,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    
     this.clientform = this.builder.group({
       Clientname: [
         '',
@@ -69,8 +65,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if(this.data.length > 0 ){
       this.initializeForm();
     }
-    this.GetclientDetials();
-
+    if (localStorage.getItem("clientId")) {
+      // console.log( typeof Number (localStorage.getItem("clientId")))
+      this.ClientId = Number (localStorage.getItem("clientId"))
+    }
     $('[data-bs-toggle="tooltip"]').tooltip();
   }
 
@@ -200,9 +198,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           if(this.data.length > 0 ) {
             this.initializeForm();
           }
-          if(this.data.length === 0) {
-            this.qbobuttons = true
-          }
           console.log(response.ResponseData);
           
           this.toastr.success('File uploaded successfully');
@@ -219,48 +214,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
   }
 
-
-  //#region Qbo Process
-  AddtoQbo(){
-    this.service.AddDataToQbo().subscribe((res:any) => {
-      console.log(res)
-      if (res && res.ResponseStatus === 'Success') {
-        this.toastr.success("Data added successfully");
-      }
-      else if (res.ResponseStatus === 'Failure') {
-        this.toastr.error(res.ErrorData.Error)
-      }
-    })
-  }
-
-  RevrseEntry(){
-    this.service.ReversalEntry().subscribe((res:any) => {
-      console.log(res)
-      if (res && res.ResponseStatus === 'Success') {
-        this.toastr.success("All Account has been Inactivated","Client Has Been Disconnected",);
-      }
-      else if (res.ResponseStatus === 'Failure') {
-        this.toastr.error(res.ErrorData.Error)
-      }
-    })
-  }
-
-  //#endregion
   //#region  error table
   initializeForm(): void {
     const formControls: any = {};
 
     this.data.forEach((row, rowIndex) => {
       this.headers.forEach((header, columnIndex) => {
-        let initialValue = row[header.field];
-        if (header.field === 'debit' || header.field === 'credit') {
-          initialValue = parseFloat(initialValue).toFixed(2);
-          console.log(initialValue)
-        }
-          formControls[`${rowIndex}_${header.field}`] = [
-            initialValue,
-            [Validators.required] 
-          ];
+        formControls[`${rowIndex}_${header.field}`] = [
+          row[header.field],
+          [Validators.required], // Set the control as required
+        ];
       });
     });
 
@@ -297,7 +260,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   onSave() {
     const transformedData: TableData[] = [];
-    this.spinner.show();
     for (let i = 0; i < this.data.length; i++) {
       const transformedRow: TableData = {};
 
@@ -309,33 +271,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
 
       transformedData.push(transformedRow);
-    }
-
-    const AccountDetail = {
-      ClientId: this.ClientId,
-      ClientAccountDetail : transformedData
-    }
-
-    if(this.form.valid){
-      this.service.SaveClientAccoutn(AccountDetail).subscribe((response: ApiResponse) => {
-        this.spinner.hide();
-        if (response && response.ResponseStatus === 'Success') {
-          this.data = response.ResponseData 
-          if(this.data.length > 0 ) {
-            this.initializeForm();
-          }
-          if(this.data.length === 0) {
-            this.qbobuttons = true
-          }
-        }
-        else if (response.ResponseStatus === 'Failure') {
-          this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
-        }
-      })
-    } else {
-      this.spinner.hide();
-      this.toastr.warning("Please Fill All Field");
     }
     console.log(transformedData);
     
@@ -357,5 +292,4 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return false;
   }
   //#endregion
-
 }

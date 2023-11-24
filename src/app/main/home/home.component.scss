@@ -62,3 +62,66 @@
   padding: 6px 12px;
   cursor: pointer;
 }
+
+
+// error table css 
+
+.table-container {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px;
+    }
+
+    button {
+      background-color: #ff6347;
+      color: white;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d32f2f;
+    }
+  }
+
+}
+
+td .ng-invalid {
+  border: 1px solid red;
+}
+
+.error-text {
+  color: #ff6347;
+  font-size: 12px;
+  margin-top: 4px;
+  z-index: 15;
+  white-space: pre-wrap; /* Preserve line breaks */
+}
+
+.error-border {
+  border: 1px solid red;
+}

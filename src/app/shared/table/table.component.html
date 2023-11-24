@@ -23,9 +23,9 @@
                   {{ row[column.field] }}
                 </ng-container>
               </ng-container>
-              <ng-container class="IsConfirmed" *ngIf="column.field === 'IsConfirmed'">
+              <!-- <ng-container class="IsConfirmed" *ngIf="column.field === 'IsConfirmed'">
                 <button *ngIf="!row?.['IsConfirmed']" (click)="onResendLinkClick(row)">Resend Link</button>
-              </ng-container>
+              </ng-container> -->
               <ng-container class="QBO_AccountName" *ngIf="column.field === 'QBO_AccountName'">
                 <a *ngIf="row?.['QBO_AccountName']" (click)="onRemoveCompany(row)"><i class="bi bi-x-circle"></i></a>
                 
@@ -42,8 +42,11 @@
                   <button class=" bi-three-dots-vertical text-dark btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               
                   </button>
-                  <div *ngFor="let item of actionButtons" class="dropdown-menu width" aria-labelledby="dropdownMenuButton">
-                    <button style="width: 80%; height: 70%;" class="btn text-dark fw-normal" *ngFor="let item of actionButtons"   (click)="performAction(item.Action,row)">{{item.lable}}</button>
+                  <div  class="dropdown-menu width" aria-labelledby="dropdownMenuButton">
+                    <div *ngFor="let item of actionButtons">
+                      <button style="width: 80%; height: 50%;" class="btn text-dark fw-normal" *ngIf="(!row?.['IsConfirmed'] || item.lable !=='Resend Link') && (!row?.['QBO_AccountName'] || item.lable !=='Connect') "   (click)="performAction(item.Action,row)">{{item.lable}}</button>
+                    </div>
+
                   </div>
                 </div>
               </ng-container> 
@@ -59,7 +62,7 @@
       <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
         <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
       </select>
-      <button class="pagination-button" [disabled]="PageNo === 1" (click)="priviousPageChanage()"> &lt; </button>
+      <button class="pagination-button" [disabled]="PageNo == 1" (click)="priviousPageChanage()"> &lt; </button>
       <ng-container *ngFor="let page of getPages()">
         <button class="pagination-button" [class.active-page]="page === PageNo" (click)="goToPage(page)">{{ page }}</button>
       </ng-container>

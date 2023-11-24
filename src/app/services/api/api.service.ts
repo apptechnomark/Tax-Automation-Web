@@ -100,4 +100,41 @@ export class ApiService {
     });
     return this.http.get(`${environment.automation_api + "Qbo/GetCompanyDropdown"}`,{headers});
   }
+
+  AddDataToQbo(){
+    const token = localStorage.getItem("token");
+    const clientId = localStorage.getItem("clientId");
+    const data = {QboId: null, ClientId: clientId}
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.automation_api + "Qbo/AddtoQbo"}`,data,{headers});
+  }
+
+  ReversalEntry(){
+    const token = localStorage.getItem("token");
+    const clientId = localStorage.getItem("clientId");
+    const data = {QboId: null, ClientId: clientId}
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.automation_api + "Qbo/ReversalEntry"}`,data,{headers});
+  }
+  
+
+  SaveClientAccoutn(data:any){
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.automation_api + "SaveClientAccountDetail"}`,data,{headers});
+  }
+
+  GetClient(){
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${environment.automation_api + "GetClientDetail"}`,{headers});
+  }
 }

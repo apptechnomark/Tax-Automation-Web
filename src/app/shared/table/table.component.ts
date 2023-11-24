@@ -30,7 +30,7 @@ export class TableComponent implements OnInit {
   @Input() ActionEdit: boolean = false;
   @Input() ActionDelete: boolean = false;
   @Input() TotalCount: number = 0;
-  @Input() PageNo: number = 1;
+  @Input() PageNo: number;
 
   @Output() editClick = new EventEmitter<any>();
   @Output() deleteClick = new EventEmitter<any>();

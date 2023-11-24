@@ -35,7 +35,6 @@ export class UsersComponent implements OnInit {
     { header: 'Email', field: 'Email' },
     { header: 'Contact Number', field: 'ContactNo' },
     { header : 'Company' , field: 'QBO_AccountName'},
-    { header: 'EmailConfirmed', field: 'IsConfirmed' },
     { header: 'Status', field: 'IsActive' },
   ];
   PageNo: number;

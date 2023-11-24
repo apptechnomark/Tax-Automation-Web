@@ -357,5 +357,4 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return false;
   }
   //#endregion
-
 }

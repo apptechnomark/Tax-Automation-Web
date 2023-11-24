@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { login, ApiResponse } from 'src/global';
+import { ApiResponse } from 'src/global';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -15,11 +15,7 @@ export class LoginComponent implements OnInit {
 
   Username!: string;
   Password!: string;
-
-  loginform: FormGroup = new FormGroup({
-    Username: new FormControl(''),
-    Password: new FormControl(''),
-  });
+  loginform: FormGroup;
 
   constructor(
     private router: Router,
@@ -38,14 +34,12 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  authenticate() {
+  LoginButton() {
     if (this.loginform.valid) {
       this.spinner.show();
       this.authService.login(this.loginform.value).subscribe((response: ApiResponse) => {
       this.spinner.hide();
-        console.log(this.loginform.value.Username, this.loginform.value.Password);
         if (response && response.ResponseStatus === 'Success') {
-          console.log(response.Message);
           this.toastr.success("Login successful");
           localStorage.setItem("isAuthenticate", "true");
           const token = response.ResponseData.Token.Token;
@@ -54,13 +48,12 @@ export class LoginComponent implements OnInit {
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       })
     }
   }
 
-  get f(): { [key: string]: AbstractControl } {
+  get abstract(): { [key: string]: AbstractControl } {
     return this.loginform.controls;
   }
 }

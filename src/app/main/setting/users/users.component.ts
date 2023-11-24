@@ -95,7 +95,7 @@ export class UsersComponent implements OnInit {
         PageSize: [],
         GlobalSearch: [],
         SortColumn: [],
-        IsDesc: [],
+        IsDesc: [false],
         IsActive: []
       },
     );

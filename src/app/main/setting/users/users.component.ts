@@ -325,7 +325,7 @@ export class UsersComponent implements OnInit {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           this.toastr.success("Company Connected Successfully");
-
+          this.GetUserDetail();
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);

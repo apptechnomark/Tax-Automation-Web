@@ -122,10 +122,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.service.updateImportData(this.clientform.value).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
-          this.ClientId = response.ResponseData
+          this.ClientId = response.ResponseData.Id
+          localStorage.setItem('clientId', response.ResponseData.Id)
+          this.clientform.patchValue({
+            Clientname: response.ResponseData.ClientName,
+            Year : response.ResponseData.Year,
+            FormType: response.ResponseData.Formtype
+          })
+          this.clientform.controls?.['Clientname'].disable();
+          this.clientform.controls?.['Year'].disable();
+          this.clientform.controls?.['FormType'].disable();
           console.log(response);
           this.toastr.success("Client Detail Added");
-          this.clientform.reset();
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
@@ -181,8 +189,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.uploadedFile = file;
   }
 
+
   // Import Excel Button
-  ImportExcelButton() {
+  UploadExcelButton() {
+    this.GetclientDetials();
     if (!this.uploadedFile) {
       this.toastr.error('Please select a file.');
       return;
@@ -225,7 +235,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toastr.success("Data added successfully");
       }
       else if (res.ResponseStatus === 'Failure') {
-        this.toastr.error(res.ErrorData.Error)
+        if (res.ErrorData.ErrorDetail.ReturnValue == -1) {
+          this.toastr.warning("Some Date Have Error")
+          console.log(res.ErrorData.ErrorDetail.ErrorDate)
+          this.data = res.ErrorData.ErrorDetail.ErrorDate
+          this.initializeForm();
+        }
+        if(res.ErrorData.ErrorDetail.ReturnValue == -2 ){
+          this.toastr.error(res.ErrorData.Error)
+        }
       }
     })
   }
@@ -237,6 +255,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toastr.success("All Account has been Inactivated","Client Has Been Disconnected",);
         this.clientform.reset();
         this.IsClientField = true;
+        this.clientform.controls?.['Clientname'].enable();
+        this.clientform.controls?.['Year'].enable();
+        this.clientform.controls?.['FormType'].enable();
+        this.ClientId = null
+        this.qbobuttons = false
       }
       else if (res.ResponseStatus === 'Failure') {
         this.toastr.error(res.ErrorData.Error)
@@ -283,7 +306,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (control && control.valid) {
       const inputElement = document.getElementById(`${rowIndex}_${field}`);
-      // const errorclass = document.getElementById(`Erorr_${rowIndex}_${field}`)
+    
       inputElement?.classList.remove('error-border');
     }
     // Update the data array
@@ -322,29 +345,35 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     const AccountDetail = {
       ClientId: this.ClientId,
-      ClientAccountDetail : transformedData
-    }
-console.log(this.form.controls,this.form.valid)
-    if(this.form.valid){
-      this.service.SaveClientAccoutn(AccountDetail).subscribe((response: ApiResponse) => {
-        this.spinner.hide();
-        if (response && response.ResponseStatus === 'Success') {
-          this.data = response.ResponseData 
-          if(this.data.length > 0 ) {
-            this.initializeForm();
+      ClientAccountDetail: transformedData,
+    };
+    console.log(this.form.controls, this.form.valid);
+    if (this.form.valid) {
+      this.service
+        .SaveClientAccoutn(AccountDetail)
+        .subscribe((response: ApiResponse) => {
+          this.spinner.hide();
+          if (response && response.ResponseStatus === 'Success') {
+            this.data = response.ResponseData;
+            if (this.data.length > 0) {
+              this.initializeForm();
+            }
+            if (this.data.length === 0) {
+              this.qbobuttons = true;
+            }
+          } else if (response.ResponseStatus === 'Failure') {
+            this.toastr.error(response.ErrorData.Error);
+            console.log(
+              'Message',
+              response.Message,
+              'Error',
+              response.ErrorData.Error
+            );
           }
-          if(this.data.length === 0) {
-            this.qbobuttons = true;
-          }
-        }
-        else if (response.ResponseStatus === 'Failure') {
-          this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
-        }
-      })
+        });
     } else {
       this.spinner.hide();
-      this.toastr.warning("Please Fill All Field");
+      this.toastr.warning('Please Fill All Field');
     }
     console.log(transformedData);
     

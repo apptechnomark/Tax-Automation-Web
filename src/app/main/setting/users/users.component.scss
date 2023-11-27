@@ -4,7 +4,7 @@
   }
   
   .modal-header {
-    background-color: #007bff;
+    background-color: rgb(30, 62, 107);
     color: #fff;
     border-bottom: 1px solid #dee2e6;
   }
@@ -17,6 +17,17 @@
     padding: 10px;
   }
   
+  .modal-body .row {
+    margin-bottom: 20px; /* Add some spacing between rows to accommodate error messages */
+  }
+
+  .modal-body .error {
+    display: block; /* Show error messages */
+  }
+
+  .modal-dialog {
+    transition: max-height 0.3s;
+  }
   /* Style for the form inside the modal */
   .login-container {
     max-width: 400px;

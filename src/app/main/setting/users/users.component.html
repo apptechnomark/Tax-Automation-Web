@@ -4,14 +4,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Add User</h5>
-        <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" (click)="closeModal()" style="color: aliceblue;" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form [formGroup]="addUserform">
-          <div class="login-container">
-            <div class="form-group">
+          <div class="row">
+            <div class="col">
               <label for="FirstName">FirstName:</label>
               <input type="text" placeholder="Enter FirstName" formControlName="FirstName">
               <div *ngIf="abstract['FirstName'].touched ">
@@ -22,7 +22,7 @@
                   characters!</span>
               </div>
             </div>
-            <div class="form-group">
+            <div class="col">
               <label for="LastName">LastName:</label>
               <input type="text" placeholder="Enter LastName" formControlName="LastName">
               <div *ngIf="abstract['LastName'].touched ">
@@ -33,7 +33,9 @@
                   characters!</span>
               </div>
             </div>
-            <div class="form-group">
+          </div>
+          <div class="row">
+            <div class="col">
               <label for="Email">Email:</label>
               <input type="Email" placeholder="Enter Username" formControlName="Email">
               <div *ngIf="abstract['Email'].touched ">
@@ -41,7 +43,7 @@
                 <span class="error" *ngIf="abstract['Email'].errors?.['email']">Email is Not valid ! </span>
               </div>
             </div>
-            <div class="form-group">
+            <div class="col">
               <label for="contactNo">contactNumber:</label>
               <input type="text" placeholder="Enter contactNumber" formControlName="contactNo"
                 onkeypress="return event.charCode>=48 && event.charCode<=57">
@@ -54,15 +56,17 @@
                 </span>
               </div>
             </div>
-            <div class="form-group">
-              <label for="Role">Role:</label>
-              <select class="form-select" id="role" aria-label="Role" formControlName="Role">
-                <option selected disabled>Select Role</option>
-                <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
-              </select>
-              <div *ngIf="abstract['Role'].touched ">
-                <span class="error" *ngIf="abstract['Role'].errors?.['required']">
-                  Role is a required ! </span>
+            <div class="row">
+              <div class="col">
+                <label for="Role">Role:</label>
+                <select class="form-select" id="role" aria-label="Role" formControlName="Role">
+                  <option selected disabled>Select Role</option>
+                  <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
+                </select>
+                <div *ngIf="abstract['Role'].touched ">
+                  <span class="error" *ngIf="abstract['Role'].errors?.['required']">
+                    Role is a required ! </span>
+                </div>
               </div>
             </div>
           </div>
@@ -89,16 +93,16 @@
       <button class="btn btn-primary search-button" type="button" (click)="Search()">Search</button>
     </div>
   </form>
-  <button type="button" class="btn btn-primary" (click)="openModal()">
+  <button type="button" class="btn btn-primary btn-sm" (click)="openModal()">
     Add User
   </button>
 </div>
 
 <app-table [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns" [actionButtons]="ActionButtons"
-  [PageNo]="PageNo" (isActiveClick)="ActiveInActive($event)" 
-  (actionClick)="handleActionClick($event)" (pageSizeChnage)="onPageSizeChange($event)" (RemoveCompany)="RemoveCompany($event)"
-  (PriviousPage)="onPageChange($event)" (nextpage)="onPageChange($event)"
-  (GotoPage)="onPageChange($event)" [ActionEdit]="true" [ActionDelete]="true" ></app-table>
+  [PageNo]="PageNo" (isActiveClick)="ActiveInActive($event)" (actionClick)="handleActionClick($event)"
+  (pageSizeChnage)="onPageSizeChange($event)" (RemoveCompany)="RemoveCompany($event)"
+  (PriviousPage)="onPageChange($event)" (nextpage)="onPageChange($event)" (GotoPage)="onPageChange($event)"
+  [ActionEdit]="true" [ActionDelete]="true"></app-table>
 
 <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true" #connectionModal>
@@ -106,7 +110,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Company connection</h5>
-        <button type="button" (click)="closeModalForConnection()" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" style="color: aliceblue;" (click)="closeModalForConnection()" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -117,13 +121,14 @@
             <option selected disabled>Select company</option>
             <option *ngFor="let company of companies" [value]="company.value">{{ company.label }}</option>
           </select>
-          <button type="button" class="btn btn-primary" (click)="ConnectCompany()">
-            Add Company
-          </button>
+         
         </form>
 
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary text-white"  (click)="ConnectCompany()">
+          Add Company
+        </button>
         <button type="button" (click)="closeModalForConnection()" #closebutton class="btn btn-secondary"
           data-dismiss="modal">Close</button>
 

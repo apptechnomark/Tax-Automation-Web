@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
@@ -18,7 +19,7 @@ export class CompanyComponent implements OnInit {
   TotalCount: number;
   
 
-  constructor(private _service: ApiService,private toastr:ToastrService) {
+  constructor(private _service: ApiService,private toastr:ToastrService,  private spinner: NgxSpinnerService,) {
   }
   ngOnInit(): void {
     this.companyList();
@@ -36,7 +37,9 @@ export class CompanyComponent implements OnInit {
       IsDesc : false,
       IsActive: null
     } 
+    this.spinner.show();
     this._service.GetCompanyList(Filter).subscribe((res:ApiResponse) => {
+      this.spinner.hide();
       console.log(res);
       if(res && res.ResponseStatus === "Success"){
         this.tableData = res.ResponseData.List;

@@ -52,6 +52,7 @@ export class ApiService {
     return this.http.post(this.baseUrl + "Qbo/getlist",data,{headers})
   }
 
+  // Save Client information
   updateImportData(data:any){
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
@@ -60,6 +61,7 @@ export class ApiService {
     return this.http.post(`${environment.automation_api + "Import/Data"}`,data,{headers});
   }
 
+  // Export Excel file
   ExportExcel(): Observable<HttpResponse<ArrayBuffer>> {
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
@@ -75,6 +77,7 @@ export class ApiService {
     });
   }
   
+  // Import Excel file
   ImportExcel(formData: FormData,ClientId : number): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({

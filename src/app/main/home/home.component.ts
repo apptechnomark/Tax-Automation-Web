@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { header: 'Error', field: 'ErrorDetail' },
     { header: 'Action', field: 'action' },
   ];
-
   form!: FormGroup;
   client: any;
   qbobuttons : boolean = false;
@@ -275,9 +274,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   onCellChange(rowIndex: number, field: string, event: any): void {
     const control = this.form.get(`${rowIndex}_${field}`);
     const currentValue = control?.value;
-
+    
     control?.setValue(event.target.value);
 
+    if (control && control.valid) {
+      const inputElement = document.getElementById(`${rowIndex}_${field}`);
+      // const errorclass = document.getElementById(`Erorr_${rowIndex}_${field}`)
+      inputElement?.classList.remove('error-border');
+    }
     // Update the data array
     this.data[rowIndex][field] = event.target.value;
   }
@@ -342,7 +346,7 @@ console.log(this.form.controls,this.form.valid)
     
   }
 
-  isFieldWithError(row: TableData, field: string): boolean {
+  isFieldWithError(row: TableData, field: string) {
     const errorDetail = row['ErrorDetail'];
 
     if (
@@ -352,6 +356,9 @@ console.log(this.form.controls,this.form.valid)
       return true;
     }
     if (errorDetail === 'AccountType not match' && field === 'accounttype') {
+      return true;
+    }
+    if (errorDetail === 'Duplicate Name Exists Error' && field == 'name'){
       return true;
     }
     return false;

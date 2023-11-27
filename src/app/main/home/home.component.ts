@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           this.ClientId = response.ResponseData
-          localStorage.setItem("clientId", response.ResponseData)
+          console.log(response);
           this.toastr.success("Client Detail Added");
           this.clientform.reset();
         }

@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ActionButton, TableColumn, TableData } from 'src/app/shared/table/table.component';
-import { ApiResponse, Role, requestUserDetails } from 'src/global';
+import { ApiResponse, Role } from 'src/global';
 import Swal from 'sweetalert2';
 declare var $: any;
 @Component({
@@ -19,27 +19,27 @@ export class UsersComponent implements OnInit {
 
   @ViewChild('addUserModal') addUserModal: ElementRef;
   @ViewChild('connectionModal') connectionModal: ElementRef;
-  userDetails:any;
+  userDetails: any;
   isEditMode: boolean = false;
   TotalCount: number = 1;
   isAddCompanyModalOpen: boolean = false;
- ActionButtons : ActionButton[] = [
-  {lable: "Edit", Action: 'Edit'},
-  {lable: "Delete", Action: 'DeleteUser'},
-  {lable: "Connect", Action : 'Connect'},
-  {lable: "Resend Link", Action: 'onEmailResend'}
- ]
+  ActionButtons: ActionButton[] = [
+    { lable: "Edit", Action: 'Edit' },
+    { lable: "Delete", Action: 'DeleteUser' },
+    { lable: "Connect", Action: 'Connect' },
+    { lable: "Resend Link", Action: 'onEmailResend' }
+  ]
   tableData: TableData[];
   tableColumns: TableColumn[] = [
     { header: 'Name', field: 'FullName' },
     { header: 'Email', field: 'Email' },
     { header: 'Contact Number', field: 'ContactNo' },
-    { header : 'Company' , field: 'QBO_AccountName'},
+    { header: 'Company', field: 'QBO_AccountName' },
     { header: 'Status', field: 'IsActive' },
   ];
-  PageNo: number;
-  select:any;
-  
+  PageNo: number=1;
+  select: any;
+
 
   options = [
     { label: "Admin", value: Role.Admin },
@@ -48,14 +48,7 @@ export class UsersComponent implements OnInit {
 
   addUserform: FormGroup;
 
-  UserDetailform: FormGroup = new FormGroup({
-    PageNo: new FormControl(1),
-    PageSize: new FormControl(5),
-    GlobalSearch: new FormControl(''),
-    SortColumn: new FormControl(''),
-    IsDesc: new FormControl(false),
-    IsActive: new FormControl(null),
-  });
+  UserDetailform: FormGroup ;
 
   CompanyConnectionform: FormGroup;
   companies: any[] = [];
@@ -73,33 +66,33 @@ export class UsersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getCompanies();
-    this.GetUserDetail();
+
     this.addUserform = this.builder.group(
       {
         FirstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-        LastName: ['', [Validators.required , Validators.minLength(3), Validators.maxLength(20)]],
+        LastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
         Email: ['', [Validators.required, Validators.email]],
-        contactNo: ['', [Validators.required , Validators.minLength(10), Validators.maxLength(10)]],
+        contactNo: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
         Role: ['', [Validators.required]],
       },
     );
 
     this.CompanyConnectionform = this.builder.group({
-      CompanyId :['']
+      CompanyId: ['']
     })
 
     this.UserDetailform = this.builder.group(
       {
-        PageNo: [],
-        PageSize: [],
-        GlobalSearch: [],
-        SortColumn: [],
-        IsDesc: [],
-        IsActive: []
+        PageNo: [this.PageNo],
+        PageSize: ['5'],
+        GlobalSearch: [''],
+        SortColumn: [''],
+        IsDesc: [false],
+        IsActive: [true]
       },
     );
-    console.log(this.UserDetailform.value)
+    this.getCompanies();
+    this.GetUserDetail();
   }
 
 
@@ -119,16 +112,17 @@ export class UsersComponent implements OnInit {
         }
       })
     } else
-    this.toastr.warning("Invalid Form's Value")
+      this.toastr.warning("Invalid Form's Value")
   }
 
   UpdateUserButton() {
     if (this.addUserform.valid) {
-       this.userDetails = { UserId: this.UserId ,  
-        Email : this.addUserform.value.Email, 
-        FirstName : this.addUserform.value.FirstName,
-        LastName : this.addUserform.value.LastName,
-        ContactNo : this.addUserform.value.contactNo,
+      this.userDetails = {
+        UserId: this.UserId,
+        Email: this.addUserform.value.Email,
+        FirstName: this.addUserform.value.FirstName,
+        LastName: this.addUserform.value.LastName,
+        ContactNo: this.addUserform.value.contactNo,
       };
       console.log(this.userDetails)
       this.authService.saveUser(this.userDetails).subscribe((response: ApiResponse) => {
@@ -148,7 +142,7 @@ export class UsersComponent implements OnInit {
     }
     else
       this.toastr.warning("Invalid Form's Value")
-    
+
   }
 
   get abstract(): { [key: string]: AbstractControl } {
@@ -177,7 +171,7 @@ export class UsersComponent implements OnInit {
       if (response && response.ResponseStatus === 'Success') {
         this.tableData = response.ResponseData.List;
         this.TotalCount = response.ResponseData.TotalCount;
-        console.log(this.tableData, this.TotalCount) 
+        console.log(this.tableData, this.TotalCount)
       }
       else if (response.ResponseStatus === 'Failure') {
         this.toastr.error(response.ErrorData.Error);
@@ -192,23 +186,23 @@ export class UsersComponent implements OnInit {
   }
 
   populateEditForm(user: TableData) {
-    this.UserId = user['UserId']; 
+    this.UserId = user['UserId'];
     this.addUserform.patchValue({
-      UserId : user['UserId'] || '',
+      UserId: user['UserId'] || '',
       FirstName: user['FirstName'] || '',
       LastName: user['LastName'] || '',
       Email: user['Email'] || '',
       contactNo: user['ContactNo'] || '',
-      Role: user['Role'] 
+      Role: user['Role']
     });
     this.isEditMode = true;
     const select = user['Role'];
     const selectedRole = this.options.find(option => option.value === select);
     console.log('Selected Role:', selectedRole);
-  
-    if (selectedRole) 
+
+    if (selectedRole)
       this.addUserform.get('Role').setValue(selectedRole.value);
-    else 
+    else
       console.error('Invalid Role:', select);
     this.openModal();
   }
@@ -266,13 +260,13 @@ export class UsersComponent implements OnInit {
       }
     });
   }
-  onPageSizeChange(PageSize:any) {
+  onPageSizeChange(PageSize: any) {
     this.UserDetailform.get('PageSize').setValue(PageSize.pageSize);
     this.PageNo = 1;
     this.UserDetailform.get('PageNo').setValue(1);
     this.GetUserDetail()
   }
-  onPageChange($event:any){
+  onPageChange($event: any) {
     console.log($event.pageNo)
     this.UserDetailform.get('PageSize').setValue($event.pageSize);
     this.PageNo = $event.pageNo;
@@ -283,19 +277,19 @@ export class UsersComponent implements OnInit {
 
 
   onEmailResend(data: any) {
-   console.log("Email resend",data)
-   this.authService.ResendLink(data).subscribe((response: ApiResponse) => {
-    this.spinner.hide();
-    if (response && response.ResponseStatus === 'Success') {
-      this.toastr.success(`Email verifcation link send successfully`);
-      this.GetUserDetail();
-    } else if (response.ResponseStatus === 'Failure') {
-      this.toastr.error(response.ErrorData.Error);
-    }
-  });
+    console.log("Email resend", data)
+    this.authService.ResendLink(data).subscribe((response: ApiResponse) => {
+      this.spinner.hide();
+      if (response && response.ResponseStatus === 'Success') {
+        this.toastr.success(`Email verifcation link send successfully`);
+        this.GetUserDetail();
+      } else if (response.ResponseStatus === 'Failure') {
+        this.toastr.error(response.ErrorData.Error);
+      }
+    });
   }
 
-  UserData : any;
+  UserData: any;
   AddCompany(data: any) {
     console.log(data);
     this.UserData = data;
@@ -314,29 +308,29 @@ export class UsersComponent implements OnInit {
     this.isEditMode = false;
   }
 
-  ConnectCompany(){
+  ConnectCompany() {
     console.log(this.UserData)
-    
+
     const combinedData = {
       ...this.CompanyConnectionform.value,
-      "UserId":this.UserData.UserId,
-      "id":this.UserData.QBO_ID
-      
-     };
+      "UserId": this.UserData.UserId,
+      "id": this.UserData.QBO_ID
+
+    };
     console.log(combinedData);
-    
-    if(this.CompanyConnectionform.valid){
+
+    if (this.CompanyConnectionform.valid) {
       this.spinner.show();
       this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           this.toastr.success("Company Connected Successfully");
-        
+
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);
-        } 
+        }
         this.closeModalForConnection();
       });
       this.GetUserDetail();
@@ -361,10 +355,10 @@ export class UsersComponent implements OnInit {
     this.Service.CompanyDropDown().subscribe(
       (response: any) => {
         this.companies = response.ResponseData;
-       },
+      },
       (error) => {
         console.error('Error fetching companies', error);
-     }
+      }
     );
   }
 
@@ -374,10 +368,10 @@ export class UsersComponent implements OnInit {
   //     "CompanyId":this.UserData.QBO_DetailId,
   //     "UserId":this.UserData.UserId,
   //     "id":this.UserData.QBO_ID
-      
+
   //    };
   //    console.log(combinedData);
-     
+
   //    if(this.CompanyConnectionform.valid){
   //      this.spinner.show();
   //      this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
@@ -403,7 +397,7 @@ export class UsersComponent implements OnInit {
       "UserId": this.UserData.UserId,
       "id": this.UserData.QBO_ID
     };
-  
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'You will remove the connection with this company!',
@@ -428,5 +422,5 @@ export class UsersComponent implements OnInit {
       }
     });
   }
-  
+
 }

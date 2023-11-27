@@ -208,13 +208,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toastr.success('File uploaded successfully');
           this.fileInput.nativeElement.value = '';
         } else if (response.ResponseStatus === 'Failure') {
-          this.toastr.error(response.ErrorData.Error);
-          console.log(
-            'Message',
-            response.Message,
-            'Error',
-            response.ErrorData.Error
-          );
+          this.toastr.error(response.Message);
         }
       });
   }
@@ -238,6 +232,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(res)
       if (res && res.ResponseStatus === 'Success') {
         this.toastr.success("All Account has been Inactivated","Client Has Been Disconnected",);
+        this.clientform.reset();
+        this.IsClientField = true;
       }
       else if (res.ResponseStatus === 'Failure') {
         this.toastr.error(res.ErrorData.Error)
@@ -253,13 +249,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.data.forEach((row, rowIndex) => {
       this.headers.forEach((header, columnIndex) => {
         let initialValue = row[header.field];
+        let validators = [];
+
         if (header.field === 'debit' || header.field === 'credit') {
           initialValue = parseFloat(initialValue).toFixed(2);
           console.log(initialValue)
         }
+        if (header.field !== 'action') {
+          validators.push(Validators.required);
+        }
           formControls[`${rowIndex}_${header.field}`] = [
             initialValue,
-            [Validators.required] 
+            validators
           ];
       });
     });
@@ -315,7 +316,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ClientId: this.ClientId,
       ClientAccountDetail : transformedData
     }
-
+console.log(this.form.controls,this.form.valid)
     if(this.form.valid){
       this.service.SaveClientAccoutn(AccountDetail).subscribe((response: ApiResponse) => {
         this.spinner.hide();
@@ -325,7 +326,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             this.initializeForm();
           }
           if(this.data.length === 0) {
-            this.qbobuttons = true
+            this.qbobuttons = true;
           }
         }
         else if (response.ResponseStatus === 'Failure') {
@@ -353,7 +354,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (errorDetail === 'AccountType not match' && field === 'accounttype') {
       return true;
     }
-
     return false;
   }
   //#endregion

@@ -3,48 +3,50 @@
     <div class="col-md-6">
       <!-- Form for client details -->
       <div class="card-container">
-          <form [formGroup]="clientform">
-              <div class="align-items-center">
-                <div class="row">
-                  <label for="Clientname" class="col-sm-2 mt-1">ClientName:</label>
-                  <div class="col-sm-9">
-                    <input type="text"  class="form-control" placeholder="Client Name" formControlName="Clientname">
-                    <div *ngIf="f['Clientname'].touched ">
-                      <span class="error" *ngIf="f['Clientname'].errors?.['required']"> Clientname is required!</span>
-                    </div>
-                  </div>
+        <form [formGroup]="clientform">
+          <div class="align-items-center">
+            <div class="row">
+              <label for="Clientname" class="col-md-2 mt-1">ClientName:</label>
+              <div class="col-9 ml-2">
+                <input type="text" class="form-control" placeholder="Client Name" formControlName="Clientname">
+                <div *ngIf="f['Clientname'].touched ">
+                  <span class="error" *ngIf="f['Clientname'].errors?.['required']"> Clientname is required!</span>
+                  <span class="invisible-error">{{ f['Clientname'].errors?.['required'] }}</span>
                 </div>
               </div>
-              <div class="align-items-center mt-2">
-                <div class="row">
-                  <label for="Clientname" class="col-sm-2 mt-1">Year:</label>
-                  <div class="col-sm-9">
-                    <input type="text"  class="form-control" placeholder="Enter Year" formControlName="Year" onkeypress="return event.charCode>=48 && event.charCode<=57">
-                    <div *ngIf="f['Year'].touched ">
-                      <span class="error" *ngIf="f['Year'].errors?.['required']"> Year is required!</span>
-                    </div>
-                  </div>
+            </div>
+          </div>
+          <div class="align-items-center mt-2">
+            <div class="row">
+              <label for="Clientname" class="col-sm-2 mt-1">Year:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" placeholder="Enter Year" formControlName="Year" onkeypress="return event.charCode>=48 && event.charCode<=57">
+                <div *ngIf="f['Year'].touched ">
+                  <span class="error" *ngIf="f['Year'].errors?.['required']"> Year is required!</span>
+                  <span class="invisible-error">{{ f['Year'].errors?.['required'] }}</span>
                 </div>
               </div>
-              <div class="align-items-center mt-2">
-                <div class="row">
-                  <label for="Clientname" class="col-sm-2 mt-1">FormType:</label>
-                  <div class="col-sm-9">
-                    <input type="text"  class="form-control" placeholder="Enter Form Type" formControlName="FormType" onkeypress="return event.charCode>=48 && event.charCode<=57">
-                    <span *ngIf="f['FormType'].touched ">
-                      <span class="error" *ngIf="f['FormType'].errors?.['required']"> Form Type is required!</span>
-                    </span>
-                  </div>
-                </div>
+            </div>
+          </div>
+          <div class="align-items-center mt-2">
+            <div class="row">
+              <label for="Clientname" class="col-sm-2 mt-1">FormType:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" placeholder="Enter Form Type" formControlName="FormType" onkeypress="return event.charCode>=48 && event.charCode<=57">
+                <span *ngIf="f['FormType'].touched ">
+                  <span class="error" *ngIf="f['FormType'].errors?.['required']"> Form Type is required!</span>
+                  <span class="invisible-error">{{ f['FormType'].errors?.['required'] }}</span>
+                </span>
               </div>
-              <div class="form-button">
-                <button class="btn btn-primary" *ngIf="IsClientField" (click)="UploadData()">Add Details</button>
-              </div>
-          </form>
+            </div>
+          </div>
+          <div class="form-button">
+            <button class="btn btn-primary" *ngIf="IsClientField" (click)="UploadData()">Add Details</button>
+          </div>
+        </form>
       </div>
     </div>
     <div class="col-md-6">
-      <!-- Download and upload file section -->
       <div *ngIf="ClientId" class="card-container">
         <div class="row">
           <div class="col-12">
@@ -56,8 +58,10 @@
         </div>
         <form>
           <div class="row align-items-center">
-            <div class="col-12">
+            <div class="col-4">
               <label for="file" class="file-input-label">Upload Excel File:</label>
+            </div>
+              <div class="col-7">
               <input class="form-control file-input" type="file" #fileInput (change)="onFileChange($event)" accept=".xlsx, .xls">
             </div>
           </div>
@@ -72,7 +76,6 @@
   </div>
 </div>
 
-<div *ngIf="ClientId"> 
   <div *ngIf="ClientId">
     <div class="table-container">
       <div *ngIf="data.length > 0 ">
@@ -90,12 +93,18 @@
               <ng-container *ngFor="let header of headers">
                 <td *ngIf="header.field !== 'Id' && header.field !== 'ErrorDetail'">
                   <ng-container *ngIf="header.field !== 'action'; else deleteColumn">
-                    <input
+                    <div data-tip="row['ErrorDetail']" class="input-container"> 
+                      <input
                       type="text"
                       [formControl]="getCellControl(rowIndex, header.field)"
                       (input)="onCellChange(rowIndex, header.field, $event)"
                       [ngClass]="{ 'error-border': isFieldWithError(row, header.field) }"
                     />
+                    <div class="error-tooltip" *ngIf="isFieldWithError(row, header.field)">
+                      {{ row['ErrorDetail'] }}
+                    </div>
+                    </div>
+                  
                   </ng-container>
                   <ng-template #deleteColumn>
                     <button (click)="onDeleteRow(rowIndex)">Delete</button>

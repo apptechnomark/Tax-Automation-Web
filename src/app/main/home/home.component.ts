@@ -113,7 +113,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     })
   }
-  UploadData() {
+
+  // Save Client Detail Button Click 
+  SaveClientButton() {
     if (this.clientform.valid) {
       this.spinner.show();
       console.log("data", this.clientform)
@@ -139,9 +141,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return this.clientform.controls;
   }
 
-  ExportExcel() {
+  // Export Excel Button 
+  ExportExcelButton() {
     const fileName = 'Export.xlsx';
-
     this.service.ExportExcel().subscribe(
       (response: HttpResponse<ArrayBuffer>) => {
         this.spinner.hide();
@@ -179,7 +181,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.uploadedFile = file;
   }
 
-  uploadFile() {
+  // Import Excel Button
+  ImportExcelButton() {
     if (!this.uploadedFile) {
       this.toastr.error('Please select a file.');
       return;
@@ -189,6 +192,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     formData.append('file', this.uploadedFile);
     this.client = localStorage.getItem('clientId');
     console.log(this.client);
+    this.spinner.show();
     this.service
       .ImportExcel(formData, this.client)
       .subscribe((response: any) => {

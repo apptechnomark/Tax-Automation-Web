@@ -42,17 +42,18 @@
             </div>
           </div>
           <div class="mt-2" >
-            <button class="btn btn-primary" *ngIf="IsClientField" (click)="UploadData()">Add Details</button>
+            <button class="btn btn-primary" *ngIf="IsClientField" (click)="SaveClientButton()">Add Details</button>
           </div>
         </form>
       </div>
     </div>
     <div class="col-md-6">
+        <!-- Form for Export and Import details -->
       <div *ngIf="ClientId" class="card-container">
         <div class="row">
           <div class="col-12">
             <label class="me-3">Download Sample File:</label>
-            <a class="custom-file-upload" (click)="ExportExcel()">
+            <a class="custom-file-upload" (click)="ExportExcelButton()">
               <i class="bi bi-download" title="Download Excel"></i>
             </a>
           </div>
@@ -68,7 +69,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <button class="btn btn-primary" (click)="uploadFile()">Upload File</button>
+              <button class="btn btn-primary" (click)="ImportExcelButton()">Upload File</button>
             </div>
           </div>
         </form>

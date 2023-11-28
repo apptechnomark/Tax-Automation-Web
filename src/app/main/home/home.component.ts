@@ -8,6 +8,7 @@ import { ApiResponse } from 'src/global';
 import { HttpClient,  HttpResponse } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
+import Swal from 'sweetalert2';
 
 declare var $: any;
 @Component({
@@ -17,6 +18,7 @@ declare var $: any;
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   data: TableData[] = [];
+  deletedRowId: any[] = [];
   IsClientField: boolean = true;
   headers: TableColumn[] = [
     { header: 'Id', field: 'Id' },
@@ -306,25 +308,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (control && control.valid) {
       const inputElement = document.getElementById(`${rowIndex}_${field}`);
-    
       inputElement?.classList.remove('error-border');
     }
     // Update the data array
     this.data[rowIndex][field] = event.target.value;
   }
 
-  onDeleteRow(rowIndex: number): void {
-    console.log(rowIndex);
-    this.data.splice(rowIndex, 1);
-    console.log(this.data);
-    const currentFormValues = this.form.getRawValue();
-    this.headers.forEach((item) => {
-      delete currentFormValues[`${rowIndex}_${item.field}`];
-    });
-    console.log('curruntdata =>', currentFormValues);
-
-    this.initializeForm();
-    console.log(this.form.value);
+  onDeleteRow(rowIndex: number) {
+    Swal.fire({
+      title: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if(result.isConfirmed) {
+        console.log(rowIndex);
+        this.deletedRowId = [...this.deletedRowId,this.data[rowIndex]?.['Id']]
+        console.log("DeletedId:" ,this.deletedRowId)
+        this.data.splice(rowIndex, 1);
+        const currentFormValues = this.form.getRawValue();
+        this.headers.forEach((item) => {
+          delete currentFormValues[`${rowIndex}_${item.field}`];
+        });
+        this.initializeForm();
+      }
+    })
   } 
 
   onSave() {

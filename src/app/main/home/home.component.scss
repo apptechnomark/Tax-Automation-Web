@@ -54,20 +54,46 @@
 
 
 // error table css 
-.table-container ::-webkit-scrollbar {
-  display: none;
-}
+// .table-container ::-webkit-scrollbar {
+//   display: none;
+// }
 
 .table-container {
   margin: 20px;
   font-family: Arial, sans-serif;
 
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 20px;
+  position: relative;
+  overflow: hidden;
 
-    th, td {
+  .table-scroll table {
+    border-collapse: collapse;
+  
+  }
+  
+  .table-scroll th , thead {
+    position: sticky;
+    top: 0 ;
+    z-index: 10;
+  }
+  
+  
+  /* Add styles for the scrollable area */
+  .table-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    // max-height: 500px;
+    height: 270px;
+  }
+  table {
+    // border-collapse: collapse;
+    width: 100%;
+
+    th , thead {
+      border: 1px;
+      text-align: left;
+      padding: 10px;
+    }
+    td {
       border: 1px solid #dddddd;
       text-align: left;
       padding: 8px;
@@ -146,7 +172,3 @@ td .ng-invalid {
   border: 1px solid red;
 }
 
-.invisible-error {
-  color: transparent;
-  visibility: hidden;
-}

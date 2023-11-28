@@ -80,44 +80,47 @@
   <div *ngIf="ClientId">
     <div class="table-container">
       <div *ngIf="data.length > 0 ">
-      <form [formGroup]="form">
-        <table>
-          <thead>
-            <tr>
-              <ng-container *ngFor="let header of headers">
-                <th *ngIf="header.field !== 'Id'&& header.field !== 'ErrorDetail'">{{ header.header }}</th>
-              </ng-container>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of data; let rowIndex = index">
-              <ng-container *ngFor="let header of headers">
-                <td *ngIf="header.field !== 'Id' && header.field !== 'ErrorDetail'">
-                  <ng-container *ngIf="header.field !== 'action'; else deleteColumn">
-                    <div class="input-container"> 
-                      <input
-                      type="text"
-                      [formControl]="getCellControl(rowIndex, header.field)"
-                      (input)="onCellChange(rowIndex, header.field, $event)"
-                      [ngClass]="{ 'error-border': isFieldWithError(row, header.field) }"
-                      id="{{ rowIndex }}_{{ header.field }}"
-                    />
-                    <div id="Erorr_{{ rowIndex }}_{{ header.field }}" class="error-tooltip" *ngIf="isFieldWithError(row, header.field)">
-                      {{ row['ErrorDetail'] }}
-                    </div>
-                    </div>
-                  
+
+          <form [formGroup]="form">
+            <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <ng-container *ngFor="let header of headers">
+                    <th *ngIf="header.field !== 'Id'&& header.field !== 'ErrorDetail'">{{ header.header }}</th>
                   </ng-container>
-                  <ng-template #deleteColumn>
-                    <button (click)="onDeleteRow(rowIndex)">Delete</button>
-                  </ng-template>
-                </td>
-              </ng-container>
-            </tr>
-          </tbody>
-        </table>
-        <button style=" margin-top: 5px;" class=" btn btn-success" (click)="onSave()">Save</button>
-      </form>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of data; let rowIndex = index">
+                  <ng-container *ngFor="let header of headers">
+                    <td *ngIf="header.field !== 'Id' && header.field !== 'ErrorDetail'">
+                      <ng-container *ngIf="header.field !== 'action'; else deleteColumn">
+                        <div class="input-container"> 
+                          <input
+                          type="text"
+                          [formControl]="getCellControl(rowIndex, header.field)"
+                          (input)="onCellChange(rowIndex, header.field, $event)"
+                          [ngClass]="{ 'error-border': isFieldWithError(row, header.field) }"
+                          id="{{ rowIndex }}_{{ header.field }}"
+                        />
+                        <div id="Erorr_{{ rowIndex }}_{{ header.field }}" class="error-tooltip" *ngIf="isFieldWithError(row, header.field)">
+                          {{ row['ErrorDetail'] }}
+                        </div>
+                        </div>
+                      
+                      </ng-container>
+                      <ng-template #deleteColumn>
+                        <button (click)="onDeleteRow(rowIndex)">Delete</button>
+                      </ng-template>
+                    </td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+            <button style=" margin-top: 5px;" class=" btn btn-success" (click)="onSave()">Save</button>
+          </form>
     </div>
     </div>
     <div *ngIf="qbobuttons" class="row width-50">

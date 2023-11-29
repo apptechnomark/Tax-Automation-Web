@@ -202,7 +202,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   UploadExcelButton() {
     this.GetclientDetials();
     if (!this.uploadedFile) {
-      this.toastr.error('Please select a file.');
+      this.toastr.warning('Please select a file.');
       return;
     }
 
@@ -245,14 +245,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toastr.success("Data added successfully");
       }
       else if (res.ResponseStatus === 'Failure') {
-        if (res.ErrorData.ErrorDetail.ReturnValue == -1) {
-          this.toastr.warning("Some Date Have Error")
-          console.log(res.ErrorData.ErrorDetail.ErrorDate)
-          this.data = res.ErrorData.ErrorDetail.ErrorDate
+        if (res.ErrorData.ErrorDetail != null) {
+          this.toastr.warning(res.Message)
+          console.log(res.ErrorData.ErrorDetail)
+          this.data = res.ErrorData.ErrorDetail
           this.initializeForm();
-        }
-        if (res.ErrorData.ErrorDetail.ReturnValue == -2) {
-          this.toastr.error(res.ErrorData.Error)
         }
       }
     })
@@ -423,4 +420,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return false;
   }
   //#endregion
+
+
+  
 }

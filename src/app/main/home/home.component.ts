@@ -16,6 +16,11 @@ declare var $: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+  finalData =   [
+    { id: 1, name: 'John Doe', credit: 100, debit: 50 },
+    { id: 2, name: 'Jane Doe', credit: 200, debit: 75 },
+    { id: 3, name: 'Peter Jones', credit: 300, debit: 100 },
+  ];
   data: TableData[] = [];
   deletedRowId: any[] = [];
   IsClientField: boolean = true;
@@ -73,6 +78,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.GetclientDetials();
 
     $('[data-bs-toggle="tooltip"]').tooltip();
+  }
+
+  getTotal(type: 'debit' | 'credit' | 'difference') {
+    if (type === 'debit') {
+      return this.finalData.reduce((sum, item) => sum + item.debit, 0);
+    } else if (type === 'credit') {
+      return this.finalData.reduce((sum, item) => sum + item.credit, 0);
+    } else if (type === 'difference') {
+      return this.getTotal('debit') - this.getTotal('credit');
+    }
   }
 
   GetclientDetials() {

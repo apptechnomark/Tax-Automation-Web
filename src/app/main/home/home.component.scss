@@ -16,6 +16,7 @@
 .Download {
   margin-top: 8px;
 }
+
 .card-container {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -40,11 +41,6 @@
   font-weight: bold;
 }
 
-
-// .card-container input[type="file"] {
-//   display: none;
-// }
-
 .card-container .custom-file-upload {
   border: 1px solid #ccc;
   // display: inline-block;
@@ -52,89 +48,73 @@
   cursor: pointer;
 }
 
-
-// error table css 
-// .table-container ::-webkit-scrollbar {
-//   display: none;
-// }
-
 .table-container {
   margin: 20px;
   font-family: Arial, sans-serif;
-
   position: relative;
   overflow: hidden;
 
-  .table-scroll table {
-    border-collapse: collapse;
-  
-  }
-  
-  .table-scroll th , thead {
-    position: sticky;
-    top: 0 ;
-    z-index: 10;
-  }
-  
-  
-  /* Add styles for the scrollable area */
   .table-scroll {
     overflow-y: auto;
     overflow-x: hidden;
-    // max-height: 500px;
-    height: 270px;
-  }
-  table {
-    // border-collapse: collapse;
-    width: 100%;
+    max-height: 270px;
+    position: relative;
 
-    th , thead {
-      text-align: left;
-      padding: 10px;
-    }
-    td {
-      border: 1px solid #cdcdcd;
-      text-align: left;
-      padding: 8px;
-    }
-
-    th {
-      background-color: #a9a5a553;
-      border: 1px solid #cdcdcd;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    input {
+    table {
       width: 100%;
-      box-sizing: border-box;
-      padding: 6px;
-    }
+      border-collapse: collapse;
+      // margin-top: 10px;
 
-    button {
-      background-color: #ff6347;
-      color: white;
-      border: none;
-      padding: 8px;
-      cursor: pointer;
-    }
+      th,
+      thead {
+        text-align: left;
+        padding: 10px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        color: #fffdfd;
+        border: 1px solid #dddddd;
+        background-color: rgb(30, 62, 107);
+      }
 
-    button:hover {
-      background-color: #d32f2f;
+
+
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 6px;
+      }
+
+      button {
+        background-color: #ff6347;
+        color: white;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #d32f2f;
+      }
     }
   }
+
   .input-container {
     position: relative;
     display: inline-block;
+
+    &:hover .error-tooltip {
+      display: inline-block !important;
+      z-index: 99;
+    }
   }
 
-  .input-container:hover .error-tooltip {
-    display: inline-block !important;
-    z-index: 99;
-}
-  
   .error-tooltip {
     position: absolute;
     width: 100%;
@@ -149,12 +129,12 @@
     right: 0;
     font-size: 13px;
   }
-  
+
   .error-border {
     border: 1px solid #ff0000;
   }
-  
 }
+
 
 td .ng-invalid {
   border: 1px solid red;
@@ -165,10 +145,10 @@ td .ng-invalid {
   font-size: 12px;
   margin-top: 4px;
   z-index: 15;
-  white-space: pre-wrap; /* Preserve line breaks */
+  white-space: pre-wrap;
+  /* Preserve line breaks */
 }
 
 .error-border {
   border: 1px solid red;
 }
-

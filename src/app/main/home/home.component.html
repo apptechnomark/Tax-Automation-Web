@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-6">
       <!-- Form for client details -->
       <div class="card-container">
         <form [formGroup]="clientform">
@@ -69,7 +69,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <button *ngIf="uploadFilebutton" class="btn btn-primary" (click)="UploadExcelButton()">Upload File</button>
+              <button  class="btn btn-primary" (click)="UploadExcelButton()">Upload File</button>
             </div>
           </div>
         </form>
@@ -85,7 +85,7 @@
           <form [formGroup]="form">
             <div class="table-scroll">
             <table>
-              <thead>
+              <thead >
                 <tr>
                   <ng-container *ngFor="let header of headers">
                     <th *ngIf="header.field !== 'Id'&& header.field !== 'ErrorDetail'">{{ header.header }}</th>

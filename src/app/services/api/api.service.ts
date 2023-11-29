@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
-import { ApiResponse, CompanyFilter, QboParams, TokenInfo, qboDetail } from 'src/global';
+import { CompanyFilter, QboParams, TokenInfo, qboDetail } from 'src/global';
 import { Observable } from 'rxjs';
 
 

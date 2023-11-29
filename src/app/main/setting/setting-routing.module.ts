@@ -4,6 +4,10 @@ import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
+    path: '', loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
     canActivate: [AuthGuard]
   },

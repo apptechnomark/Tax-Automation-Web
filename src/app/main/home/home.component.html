@@ -69,7 +69,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <button class="btn btn-primary" (click)="UploadExcelButton()">Upload File</button>
+              <button *ngIf="uploadFilebutton" class="btn btn-primary" (click)="UploadExcelButton()">Upload File</button>
             </div>
           </div>
         </form>
@@ -120,16 +120,16 @@
               </tbody>
             </table>
           </div>
-            <button style=" margin-top: 5px;" class=" btn btn-success" (click)="onSave()">Save</button>
+            <button style=" margin-top: 5px;" class=" btn btn-success" (click)="onSaveButton()">Save</button>
           </form>
     </div>
     </div>
     <div *ngIf="qbobuttons" class="row width-50">
         <div class="col-2">
-          <button class="btn btn-success text-white" (click)="AddtoQbo()">Transfer Data To Qbo</button>
+          <button class="btn btn-success text-white" (click)="AddtoQboButton()">Transfer Data To Qbo</button>
         </div>
         <div class="col-2">
-        <button class="btn btn-warning" (click)="RevrseEntry()">Inactive Account</button>
+        <button class="btn btn-warning" (click)="RevrseEntryButton()">Inactive Account</button>
       </div>
     </div>
 </div>

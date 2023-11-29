@@ -57,7 +57,6 @@ export class UsersComponent implements OnInit {
   // });
   UserId: number;
   constructor(
-    private router: Router,
     private builder: FormBuilder,
     private authService: AuthService,
     private Service: ApiService,
@@ -277,6 +276,7 @@ export class UsersComponent implements OnInit {
 
 
   onEmailResend(data: any) {
+    this.spinner.show();
     console.log("Email resend", data)
     this.authService.ResendLink(data).subscribe((response: ApiResponse) => {
       this.spinner.hide();

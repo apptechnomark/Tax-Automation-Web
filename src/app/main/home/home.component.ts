@@ -1,11 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ApiResponse } from 'src/global';
-import { HttpClient,  HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
 import Swal from 'sweetalert2';
@@ -20,6 +19,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   data: TableData[] = [];
   deletedRowId: any[] = [];
   IsClientField: boolean = true;
+  form!: FormGroup;
+  client: any;
+  uploadFilebutton: boolean = true;
+  qbobuttons: boolean = false;
+  ClientId: number;
+  currentFormValues: any;
+
   headers: TableColumn[] = [
     { header: 'Id', field: 'Id' },
     { header: 'Name', field: 'name' },
@@ -29,13 +35,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { header: 'Debit', field: 'debit' },
     { header: 'Credit', field: 'credit' },
     { header: 'Error', field: 'ErrorDetail' },
-    { header: 'Action', field: 'action' },
+    //   { header: 'Action', field: 'action' },
   ];
-  form!: FormGroup;
-  client: any;
-  qbobuttons : boolean = false;
-  ClientId: number;
-
   @ViewChild('fileInput') fileInput: ElementRef;
   clientform: FormGroup = new FormGroup({
     Clientname: new FormControl(''),
@@ -43,18 +44,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   });
   constructor(
     private builder: FormBuilder,
-    private router: Router,
     private service: ApiService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     $('[data-bs-toggle="tooltip"]').tooltip();
   }
 
   ngOnInit(): void {
-    
+
     this.clientform = this.builder.group({
       Clientname: [
         '',
@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       Year: ['', [Validators.required]],
       FormType: ['', [Validators.required]],
     });
-    if(this.data.length > 0 ){
+    if (this.data.length > 0) {
       this.initializeForm();
     }
     this.GetclientDetials();
@@ -77,19 +77,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   GetclientDetials() {
     this.spinner.show();
-    this.service.GetClient().subscribe((res:ApiResponse) => {
+    this.service.GetClient().subscribe((res: ApiResponse) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
         console.log(res.ResponseData[0]);
-        
-        if(res.ResponseData[0]?.clientUserMappings != null){
+
+        if (res.ResponseData[0]?.clientUserMappings != null) {
           console.log(res.ResponseData[0]?.clientUserMappings);
           this.IsClientField = false
           this.ClientId = res.ResponseData[0].clientUserMappings?.Id
-          localStorage.setItem("clientId", String (this.ClientId))
+          localStorage.setItem("clientId", String(this.ClientId))
           this.clientform.patchValue({
             Clientname: res.ResponseData[0].clientUserMappings?.ClientName,
-            Year : res.ResponseData[0].clientUserMappings?.Year,
+            Year: res.ResponseData[0].clientUserMappings?.Year,
             FormType: res.ResponseData[0].clientUserMappings?.Formtype
           })
           console.log(this.clientform.value);
@@ -97,14 +97,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
         }
-        if(res.ResponseData[0]?.clientAccountDetail){
-          console.log(res.ResponseData[0]?.clientAccountDetail);
-          
+        if (res.ResponseData[0]?.clientAccountDetail) {
+          console.log();
+          if(res.ResponseData[0]?.clientAccountDetail.length != 0){
+            this.uploadFilebutton = false
+          }
+          else {
+            this.uploadFilebutton = true
+          }
           this.data = res.ResponseData[0]?.clientAccountDetail
-          if(this.data.length > 0 ) {
+          if (this.data.length > 0) {
             this.initializeForm();
           }
-          if(this.data.length === 0) {
+          if (this.data.length === 0) {
             this.qbobuttons = true
           }
         }
@@ -118,9 +123,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // Save Client Detail Button Click 
   SaveClientButton() {
+    this.spinner.show();
     if (this.clientform.valid) {
-      this.spinner.show();
-      console.log("data", this.clientform)
       this.service.updateImportData(this.clientform.value).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
@@ -128,13 +132,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
           localStorage.setItem('clientId', response.ResponseData.Id)
           this.clientform.patchValue({
             Clientname: response.ResponseData.ClientName,
-            Year : response.ResponseData.Year,
+            Year: response.ResponseData.Year,
             FormType: response.ResponseData.Formtype
           })
           this.clientform.controls?.['Clientname'].disable();
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
           console.log(response);
+          this.uploadFilebutton = true
           this.toastr.success("Client Detail Added");
         }
         else if (response.ResponseStatus === 'Failure') {
@@ -154,6 +159,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Export Excel Button 
   ExportExcelButton() {
     const fileName = 'Export.xlsx';
+    this.spinner.show();
     this.service.ExportExcel().subscribe(
       (response: HttpResponse<ArrayBuffer>) => {
         this.spinner.hide();
@@ -211,15 +217,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           console.log(response.Message);
-          this.data = response.ResponseData 
-          if(this.data.length > 0 ) {
+          this.data = response.ResponseData
+          if (this.data.length > 0) {
             this.initializeForm();
           }
-          if(this.data.length === 0) {
+          if (this.data.length === 0) {
             this.qbobuttons = true
           }
           console.log(response.ResponseData);
-          
+          this.GetclientDetials()
           this.toastr.success('File uploaded successfully');
           this.fileInput.nativeElement.value = '';
         } else if (response.ResponseStatus === 'Failure') {
@@ -229,9 +235,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
 
-  //#region Qbo Process
-  AddtoQbo(){
-    this.service.AddDataToQbo().subscribe((res:any) => {
+  //Add Qbo Process button 
+  AddtoQboButton() {
+    this.spinner.show();
+    this.service.AddDataToQbo().subscribe((res: any) => {
+      this.spinner.hide();
       console.log(res)
       if (res && res.ResponseStatus === 'Success') {
         this.toastr.success("Data added successfully");
@@ -243,18 +251,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.data = res.ErrorData.ErrorDetail.ErrorDate
           this.initializeForm();
         }
-        if(res.ErrorData.ErrorDetail.ReturnValue == -2 ){
+        if (res.ErrorData.ErrorDetail.ReturnValue == -2) {
           this.toastr.error(res.ErrorData.Error)
         }
       }
     })
   }
 
-  RevrseEntry(){
-    this.service.ReversalEntry().subscribe((res:any) => {
+  // Reversal Entry Button
+  RevrseEntryButton() {
+    this.spinner.show();
+    this.service.ReversalEntry().subscribe((res: any) => {
+      this.spinner.hide();
       console.log(res)
       if (res && res.ResponseStatus === 'Success') {
-        this.toastr.success("All Account has been Inactivated","Client Has Been Disconnected",);
+        this.toastr.success("All Account has been Inactivated", "Client Has Been Disconnected",);
         this.clientform.reset();
         this.IsClientField = true;
         this.clientform.controls?.['Clientname'].enable();
@@ -286,10 +297,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (header.field !== 'action') {
           validators.push(Validators.required);
         }
-          formControls[`${rowIndex}_${header.field}`] = [
-            initialValue,
-            validators
-          ];
+        formControls[`${rowIndex}_${header.field}`] = [
+          initialValue,
+          validators
+        ];
       });
     });
 
@@ -303,7 +314,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   onCellChange(rowIndex: number, field: string, event: any): void {
     const control = this.form.get(`${rowIndex}_${field}`);
     const currentValue = control?.value;
-    
+
     control?.setValue(event.target.value);
 
     if (control && control.valid) {
@@ -322,21 +333,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
-      if(result.isConfirmed) {
+      if (result.isConfirmed) {
         console.log(rowIndex);
-        this.deletedRowId = [...this.deletedRowId,this.data[rowIndex]?.['Id']]
-        console.log("DeletedId:" ,this.deletedRowId)
+        this.deletedRowId = [...this.deletedRowId, this.data[rowIndex]?.['Id']]
+        console.log("DeletedId:", this.deletedRowId)
         this.data.splice(rowIndex, 1);
         const currentFormValues = this.form.getRawValue();
-        this.headers.forEach((item) => {
-          delete currentFormValues[`${rowIndex}_${item.field}`];
-        });
+        console.log(currentFormValues);
+        // this.headers.forEach((item) => {
+        //   delete currentFormValues[`${rowIndex}_${item.field}`];
+        // });
+
+
         this.initializeForm();
       }
     })
-  } 
+  }
 
-  onSave() {
+  onSaveButton() {
     const transformedData: TableData[] = [];
     this.spinner.show();
     for (let i = 0; i < this.data.length; i++) {
@@ -351,12 +365,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       transformedData.push(transformedRow);
     }
+    const currentFormValues = this.form.getRawValue();
+    console.log(currentFormValues);
 
     const AccountDetail = {
       ClientId: this.ClientId,
       ClientAccountDetail: transformedData,
+      DeletedId: this.deletedRowId
     };
-    console.log(this.form.controls, this.form.valid);
+    console.log(AccountDetail);
     if (this.form.valid) {
       this.service
         .SaveClientAccoutn(AccountDetail)
@@ -385,7 +402,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toastr.warning('Please Fill All Field');
     }
     console.log(transformedData);
-    
+
   }
 
   isFieldWithError(row: TableData, field: string) {
@@ -400,7 +417,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (errorDetail === 'AccountType not match' && field === 'accounttype') {
       return true;
     }
-    if (errorDetail === 'Duplicate Name Exists Error' && field == 'name'){
+    if (errorDetail === 'Duplicate Name Exists Error' && field == 'name') {
       return true;
     }
     return false;

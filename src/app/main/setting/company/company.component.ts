@@ -19,13 +19,13 @@ export class CompanyComponent implements OnInit {
   TotalCount: number;
   
 
-  constructor(private _service: ApiService,private toastr:ToastrService,  private spinner: NgxSpinnerService,) {
+  constructor(private service: ApiService,private toastr:ToastrService,  private spinner: NgxSpinnerService,) {
   }
   ngOnInit(): void {
     this.companyList();
   }
   QboConnect(){
-    this._service.QboConnection();
+    this.service.QboConnection();
   }
 
   companyList(){
@@ -38,7 +38,7 @@ export class CompanyComponent implements OnInit {
       IsActive: null
     } 
     this.spinner.show();
-    this._service.GetCompanyList(Filter).subscribe((res:ApiResponse) => {
+    this.service.GetCompanyList(Filter).subscribe((res:ApiResponse) => {
       this.spinner.hide();
       console.log(res);
       if(res && res.ResponseStatus === "Success"){

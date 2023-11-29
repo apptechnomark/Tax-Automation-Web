@@ -89,18 +89,18 @@
     width: 100%;
 
     th , thead {
-      border: 1px;
       text-align: left;
       padding: 10px;
     }
     td {
-      border: 1px solid #dddddd;
+      border: 1px solid #cdcdcd;
       text-align: left;
       padding: 8px;
     }
 
     th {
-      background-color: #f2f2f2;
+      background-color: #a9a5a553;
+      border: 1px solid #cdcdcd;
     }
 
     tr:nth-child(even) {

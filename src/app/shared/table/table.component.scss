@@ -126,6 +126,7 @@ button.inactive:hover {
 /* Add styles for the scrollable area */
 .table-scroll {
   max-height: 450px;
+  height: 300px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -136,8 +137,8 @@ button.inactive:hover {
 }
 
 .dropdown-menu button {
-  margin: 3px;
-  margin-left: 10px !important;
+  margin: 1px;
+  margin-left: 6px !important;
 }
 .IsConfirmed {
   width: 50px;
@@ -159,6 +160,9 @@ button.inactive:hover {
 cursor: pointer;
 }
 
+.dropdown-menu {
+  --bs-dropdown-min-width: 8rem !important;
+}
 @media only screen and (max-width: 600px) {
 
   th,

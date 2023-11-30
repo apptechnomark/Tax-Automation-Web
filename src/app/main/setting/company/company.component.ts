@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api/api.service';
-import { TableColumn, TableData } from 'src/app/shared/table/table.component';
+import { ActionButton, TableColumn, TableData } from 'src/app/shared/table/table.component';
 import { ApiResponse, CompanyFilter} from 'src/global';
 
 @Component({
@@ -18,6 +18,10 @@ export class CompanyComponent implements OnInit {
   ];
   TotalCount: number;
   
+  ActionButtons: ActionButton[] = [
+    { lable: "Customer", Action: 'AddCustomer' },
+    { lable: "Vendor", Action: 'AddVendor' },
+  ]
 
   constructor(private service: ApiService,private toastr:ToastrService,  private spinner: NgxSpinnerService,) {
   }
@@ -50,7 +54,9 @@ export class CompanyComponent implements OnInit {
     })
   }
 
-  Test(event: { pageNo: number, pageSize: number }){
-    console.log("event =>",event);
+  handleActionClick(event: { action: string, data: any }) {
+    const { action, data } = event;
+    // Add more conditions for other actions if needed
   }
+
 }

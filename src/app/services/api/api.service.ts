@@ -88,6 +88,7 @@ export class ApiService {
     return this.http.post(`${environment.automation_api}Import/Excel`, formData, { headers });
   }
 
+  // Add Conenction to Company
   AddConnection(data:any){
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
@@ -96,6 +97,7 @@ export class ApiService {
     return this.http.post(`${environment.automation_api + "Qbo/AssignCompany"}`,data,{headers});
   }
 
+  // Company DropDown 
   CompanyDropDown(){
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
@@ -104,6 +106,7 @@ export class ApiService {
     return this.http.get(`${environment.automation_api + "Qbo/GetCompanyDropdown"}`,{headers});
   }
 
+  // Add data To QBO 
   AddDataToQbo(){
     const token = localStorage.getItem("token");
     const clientId = localStorage.getItem("clientId");
@@ -114,6 +117,7 @@ export class ApiService {
     return this.http.post(`${environment.automation_api + "Qbo/AddtoQbo"}`,data,{headers});
   }
 
+  // Reverse Entry to close account
   ReversalEntry(){
     const token = localStorage.getItem("token");
     const clientId = localStorage.getItem("clientId");
@@ -124,8 +128,8 @@ export class ApiService {
     return this.http.post(`${environment.automation_api + "Qbo/ReversalEntry"}`,data,{headers});
   }
   
-
-  SaveClientAccoutn(data:any){
+  // Save Client Account 
+  SaveClientAccount(data:any){
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -133,11 +137,30 @@ export class ApiService {
     return this.http.post(`${environment.automation_api + "SaveClientAccountDetail"}`,data,{headers});
   }
 
+  // Get Client
   GetClient(){
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
     return this.http.get(`${environment.automation_api + "GetClientDetail"}`,{headers});
+  }
+
+  // Create Vendor
+  CreateVendor(data:any){
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.automation_api + "Qbo/CreateVendor"}`,data,{headers});
+  }
+
+   // Create Customer
+   CreateCustomer(data:any){
+    const token = localStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${environment.automation_api + "Qbo/CreateCustomer"}`,data,{headers});
   }
 }

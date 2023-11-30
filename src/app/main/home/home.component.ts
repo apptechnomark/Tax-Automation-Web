@@ -386,7 +386,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(AccountDetail);
     if (this.form.valid) {
       this.service
-        .SaveClientAccoutn(AccountDetail)
+        .SaveClientAccount(AccountDetail)
         .subscribe((response: ApiResponse) => {
           this.spinner.hide();
           if (response && response.ResponseStatus === 'Success') {

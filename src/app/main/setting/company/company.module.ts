@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CompanyRoutingModule } from './company-routing.module';
 import { CompanyComponent } from './company.component';
 import { TableModule } from 'src/app/shared/table/table.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,7 +14,9 @@ import { TableModule } from 'src/app/shared/table/table.module';
   imports: [
     CommonModule,
     CompanyRoutingModule,
-    TableModule
+    TableModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class CompanyModule { }

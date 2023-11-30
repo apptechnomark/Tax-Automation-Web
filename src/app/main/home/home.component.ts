@@ -113,13 +113,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.clientform.controls?.['FormType'].disable();
         }
         if (res.ResponseData[0]?.clientAccountDetail) {
-          console.log();
-          if(res.ResponseData[0]?.clientAccountDetail.length != 0){
+          console.log(res.ResponseData[0]?.clientAccountDetail.length,res.ResponseData[0]?.clientUserMappings.Year);
+
+          if(res.ResponseData)
             this.uploadFilebutton = false
-          }
-          else {
-            this.uploadFilebutton = true
-          }
+    
           this.data = res.ResponseData[0]?.clientAccountDetail
           if (this.data.length > 0) {
             this.initializeForm();
@@ -207,9 +205,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   onFileChange(event: any) {
     console.log('Uploaded file', event.target);
-
     const file = event.target.files[0];
     this.uploadedFile = file;
+    this.uploadFilebutton = true
   }
 
 
@@ -241,10 +239,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
           }
           console.log(response.ResponseData);
           this.GetclientDetials()
+          this.uploadFilebutton = false
           this.toastr.success('File uploaded successfully');
           this.fileInput.nativeElement.value = '';
         } else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.Message);
+          this.fileInput.nativeElement.value = '';
         }
       });
   }

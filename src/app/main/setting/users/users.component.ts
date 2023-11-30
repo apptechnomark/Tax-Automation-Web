@@ -91,7 +91,7 @@ export class UsersComponent implements OnInit {
       },
     );
     this.getCompanies();
-    this.GetUserDetail();
+    this.GetAllUserDetail();
   }
 
 
@@ -103,7 +103,7 @@ export class UsersComponent implements OnInit {
         if (response && response.ResponseStatus === 'Success') {
           this.toastr.success("User created successful");
           this.closeModal();
-          this.GetUserDetail();
+          this.GetAllUserDetail();
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
@@ -122,6 +122,7 @@ export class UsersComponent implements OnInit {
         FirstName: this.addUserform.value.FirstName,
         LastName: this.addUserform.value.LastName,
         ContactNo: this.addUserform.value.contactNo,
+        Role : this.addUserform.value.Role
       };
       console.log(this.userDetails)
       this.authService.saveUser(this.userDetails).subscribe((response: ApiResponse) => {
@@ -131,7 +132,7 @@ export class UsersComponent implements OnInit {
           console.log(response.Message);
           this.toastr.success("User updated successfully");
           this.closeModal();
-          this.GetUserDetail();
+          this.GetAllUserDetail();
         } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
@@ -162,10 +163,10 @@ export class UsersComponent implements OnInit {
     this.isEditMode = false;
   }
 
-  GetUserDetail() {
+  GetAllUserDetail() {
     console.log("data", this.UserDetailform.value)
     this.spinner.show();
-    this.authService.GetUserDetails(this.UserDetailform.value).subscribe((response: ApiResponse) => {
+    this.authService.GetAllUserDetails(this.UserDetailform.value).subscribe((response: ApiResponse) => {
       this.spinner.hide();
       if (response && response.ResponseStatus === 'Success') {
         this.tableData = response.ResponseData.List;
@@ -181,7 +182,7 @@ export class UsersComponent implements OnInit {
 
 
   Search() {
-    this.GetUserDetail()
+    this.GetAllUserDetail()
   }
 
   populateEditForm(user: TableData) {
@@ -221,9 +222,13 @@ export class UsersComponent implements OnInit {
           this.spinner.hide();
           if (response && response.ResponseStatus === 'Success') {
             this.toastr.success('User deleted successfully');
-            this.GetUserDetail();
+            this.GetAllUserDetail();
           } else if (response.ResponseStatus === 'Failure') {
-            this.toastr.error(response.ErrorData.Error);
+            if(response.Message=="User connect with company So User can't Delete")
+              this.toastr.warning(response.ErrorData.Error);
+            else
+              this.toastr.error(response.ErrorData.Error);
+            
           }
         });
       }
@@ -249,9 +254,11 @@ export class UsersComponent implements OnInit {
           if (response && response.ResponseStatus === 'Success') {
             const action = newStatus ? 'Activated' : 'InActivated';
             this.toastr.success(`User ${action} successfully`);
-            this.GetUserDetail();
+            this.GetAllUserDetail();
           } else if (response.ResponseStatus === 'Failure') {
-            this.toastr.error(response.ErrorData.Error);
+            if(response.Message = "User connect with company So User can't Inactive")
+              this.toastr.warning(response.ErrorData.Error);
+            else this.toastr.error(response.ErrorData.Error);
           }
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -263,7 +270,7 @@ export class UsersComponent implements OnInit {
     this.UserDetailform.get('PageSize').setValue(PageSize.pageSize);
     this.PageNo = 1;
     this.UserDetailform.get('PageNo').setValue(1);
-    this.GetUserDetail()
+    this.GetAllUserDetail()
   }
   onPageChange($event: any) {
     console.log($event.pageNo)
@@ -271,7 +278,7 @@ export class UsersComponent implements OnInit {
     this.PageNo = $event.pageNo;
     this.UserDetailform.get('PageNo').setValue($event.pageNo);
     console.log(this.UserDetailform)
-    this.GetUserDetail()
+    this.GetAllUserDetail()
   }
 
 
@@ -282,7 +289,7 @@ export class UsersComponent implements OnInit {
       this.spinner.hide();
       if (response && response.ResponseStatus === 'Success') {
         this.toastr.success(`Email verifcation link send successfully`);
-        this.GetUserDetail();
+        this.GetAllUserDetail();
       } else if (response.ResponseStatus === 'Failure') {
         this.toastr.error(response.ErrorData.Error);
       }
@@ -309,23 +316,18 @@ export class UsersComponent implements OnInit {
   }
 
   ConnectCompany() {
-    console.log(this.UserData)
-
+    this.spinner.show();
     const combinedData = {
       ...this.CompanyConnectionform.value,
       "UserId": this.UserData.UserId,
       "id": this.UserData.QBO_ID
-
     };
-    console.log(combinedData);
-
     if (this.CompanyConnectionform.valid) {
-      this.spinner.show();
       this.Service.AddConnection(combinedData).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           this.toastr.success("Company Connected Successfully");
-          this.GetUserDetail();
+          this.GetAllUserDetail();
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
@@ -333,7 +335,7 @@ export class UsersComponent implements OnInit {
         }
         this.closeModalForConnection();
       });
-      this.GetUserDetail();
+      this.GetAllUserDetail();
     }
   }
 
@@ -412,7 +414,7 @@ export class UsersComponent implements OnInit {
           this.spinner.hide();
           if (response && response.ResponseStatus === 'Success') {
             this.toastr.success("Company Removed Successfully");
-            this.GetUserDetail();
+            this.GetAllUserDetail();
           } else if (response.ResponseStatus === 'Failure') {
             this.toastr.error(response.ErrorData.Error);
             console.log("Message", response.Message, "Error", response.ErrorData.Error);

@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ActiveInActive, SetPassword, UserDetails, UserId, UserVerification, login, requestUserDetails, saveUser } from 'src/global';
+import { SetPassword, UserId, UserVerification, login, requestUserDetails, saveUser } from 'src/global';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,10 +9,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  // Login User 
   login(data: login) {
     return this.http.post(`${environment.user_manager_api + "auth/token"}`, data)
   }
 
+  // Add/Update User Detail 
   saveUser(data: saveUser) {
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
@@ -22,15 +23,18 @@ export class AuthService {
     return this.http.post(`${environment.user_manager_api + "user/save"}`, data, { headers })
   }
 
-  UserVerification(data:UserVerification){
+  // User Verification 
+  UserVerification(data: UserVerification) {
     return this.http.post(`${environment.user_manager_api + "auth/validatetoken"}`, data)
   }
 
-  SetPassword(data: SetPassword){
+  // Set Password
+  SetPassword(data: SetPassword) {
     return this.http.post(`${environment.user_manager_api + "auth/setpassword"}`, data)
   }
 
-  GetUserDetails(data : requestUserDetails){
+  // Get All Users Detail List 
+  GetAllUserDetails(data: requestUserDetails) {
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -38,7 +42,8 @@ export class AuthService {
     return this.http.post(`${environment.user_manager_api + "user/getall"}`, data, { headers })
   }
 
-  Deleteuser(UserId : UserId){
+  // Delete User 
+  Deleteuser(UserId: UserId) {
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -46,7 +51,8 @@ export class AuthService {
     return this.http.post(`${environment.user_manager_api + "user/delete"}`, UserId, { headers })
   }
 
-  ActiveInactiveUser(UserId : any){
+  // Active InActive User  
+  ActiveInactiveUser(UserId: any) {
     const token = localStorage.getItem("token");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -54,12 +60,22 @@ export class AuthService {
     return this.http.post(`${environment.user_manager_api + "user/activeinactive"}`, UserId, { headers })
   }
 
-  ResendLink(data : any ){
+  // Resend Email Confirmation Link
+  ResendLink(data: any) {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({  
+    const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.post(`${environment.user_manager_api + "user/ResendLink"}`,data,{headers});
+    return this.http.post(`${environment.user_manager_api + "user/ResendLink"}`, data, { headers });
   }
-  
+
+  // Get User Detail for a user
+  getUserDetail() {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${environment.user_manager_api + "auth/getuserdetails"}`, { headers });
+  }
+
 }

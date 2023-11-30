@@ -26,25 +26,28 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   this.loginform = this.builder.group(
+    this.loginform = this.builder.group(
       {
         Username: ['', [Validators.required, Validators.email]],
         Password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       },
     );
+   
   }
 
   LoginButton() {
     if (this.loginform.valid) {
       this.spinner.show();
       this.authService.login(this.loginform.value).subscribe((response: ApiResponse) => {
-      this.spinner.hide();
+        console.log(response);
+
+        this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           this.toastr.success("Login successful");
           localStorage.setItem("isAuthenticate", "true");
-          const token = response.ResponseData.Token.Token;
+          const token = response.ResponseData?.Token?.Token;
           localStorage.setItem('token', token);
-          this.router.navigate(['/main']);
+          this.GetUserDetails()
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
@@ -55,5 +58,21 @@ export class LoginComponent implements OnInit {
 
   get abstract(): { [key: string]: AbstractControl } {
     return this.loginform.controls;
+  }
+
+  GetUserDetails() {
+    this.authService.getUserDetail().subscribe((res: any) => {
+      if (res && res.ResponseStatus === 'Success') {
+        localStorage.setItem("Role", res.ResponseData.Role);
+        console.log(res.ResponseData.Role);
+        if(res.ResponseData.Role == 1){
+        console.log("call 1" );
+        
+        this.router.navigateByUrl('/main/setting/users');}
+        else if (res.ResponseData.Role == 2) {
+          this.router.navigateByUrl("/main")
+          console.log("call 2" );}
+      }
+    })
   }
 }

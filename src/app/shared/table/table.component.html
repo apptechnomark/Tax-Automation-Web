@@ -32,10 +32,10 @@
               </ng-container>
               <ng-container *ngIf="column.field === 'action'">
                 <div class="dropdown">
-                  <button class=" bi-three-dots-vertical text-dark btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                  <div  class="dropdown-menu width" aria-labelledby="dropdownMenuButton">
-                    <div *ngFor="let item of actionButtons">
-                      <button style="width: 80%; height: 50%;" class="btn text-dark fw-normal" *ngIf="(!row?.['IsConfirmed'] || item.lable !=='Resend Link') && (!row?.['QBO_AccountName'] || item.lable !=='Connect') "   (click)="performAction(item.Action,row)">{{item.lable}}</button>
+                  <button class=" bi-three-dots-vertical text-dark btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+                  <div class="dropdown-menu dropdown-menu-center" aria-labelledby="dropdownMenuButton">
+                    <div class="" *ngFor="let item of actionButtons">
+                      <li><button style="width: 90%; height: 50%;" class="btn text-dark fw-normal" *ngIf="(!row?.['IsConfirmed'] || item.lable !=='Resend Link') && (!row?.['QBO_AccountName'] || item.lable !=='Connect') "   (click)="performAction(item.Action,row)">{{item.lable}}</button></li>
                     </div>
 
                   </div>

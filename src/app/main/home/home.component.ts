@@ -303,11 +303,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         let validators = [];
 
         if (header.field === 'debit' || header.field === 'credit') {
-          initialValue = parseFloat(initialValue).toFixed(2);
+          let decimalValue  = parseFloat(initialValue).toFixed(2);
+          initialValue = {value: decimalValue, disabled: true}
           console.log(initialValue)
-        }
-        if (header.field !== 'action') {
-          validators.push(Validators.required);
         }
         formControls[`${rowIndex}_${header.field}`] = [
           initialValue,

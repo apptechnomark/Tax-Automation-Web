@@ -54,3 +54,11 @@
   .modal-dialog {
     transition: max-height 0.3s;
   }
+
+  .model-button {
+    float: right;
+    display: flex;
+  }
+  .close {
+    opacity: 1 !important;
+  }

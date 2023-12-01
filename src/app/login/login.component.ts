@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
 
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
-          this.toastr.success("Login successful");
           localStorage.setItem("isAuthenticate", "true");
           const token = response.ResponseData?.Token?.Token;
           localStorage.setItem('token', token);
@@ -64,12 +63,13 @@ export class LoginComponent implements OnInit {
     this.authService.getUserDetail().subscribe((res: any) => {
       if (res && res.ResponseStatus === 'Success') {
         localStorage.setItem("Role", res.ResponseData.Role);
-        console.log(res.ResponseData.Role);
+        console.log(res.ResponseData);
         if(res.ResponseData.Role == 1){
         console.log("call 1" );
-        
+        this.toastr.success("Login successful");
         this.router.navigateByUrl('/main/setting/users');}
         else if (res.ResponseData.Role == 2) {
+          this.toastr.success("Login successful");
           this.router.navigateByUrl("/main")
           console.log("call 2" );}
       }

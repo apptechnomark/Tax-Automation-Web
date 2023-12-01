@@ -27,13 +27,14 @@ export class CompanyComponent implements OnInit {
     { lable: "Vendor", Action: 'AddVendor' },
   ]
   title : string;
-  CutomerName : string;
-  VendorName : string;
+  CutomerName : string | null;
+  VendorName : string | null;
   
   constructor(private service: ApiService, private toastr: ToastrService, private spinner: NgxSpinnerService, public builder: FormBuilder) {
     this.addform = this.builder.group(
       {
         Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+        QboId : ['']
       },
     );
 
@@ -85,12 +86,14 @@ export class CompanyComponent implements OnInit {
   AddVendor(data: any) {
     console.log(data);
     this.title = "Vendor" 
+    this.addform.controls?.['QboId'].patchValue(data?.id)
     this.openModel();
 
   }
   AddCustomer(data: any) {
     console.log(data);
     this.title = "Customer"
+    this.addform.controls?.['QboId'].patchValue(data?.id)
     this.openModel();
   }
 
@@ -105,7 +108,14 @@ export class CompanyComponent implements OnInit {
       this.addform.patchValue({
         Name : this.VendorName 
       })
-      this.addform.controls?.['Name'].disable();
+      if(this.addform.controls?.['Name'].value){
+        console.log(this.addform.controls?.['Name'].value);      
+        this.addform.controls?.['Name'].disable();
+      }
+      else{
+        this.addform.controls?.['Name'].enable();
+      }
+      
     }
 
   closeModal() {
@@ -119,7 +129,7 @@ export class CompanyComponent implements OnInit {
     
     if(this.addform.valid){
       console.log(this.addform)
-      const value = { VendorName : this.addform.value.Name}
+      const value = { VendorName : this.addform.value.Name, QboId : this.addform.value.QboId}
       console.log(value);
       
       this.service.CreateVendor(value).subscribe((response: ApiResponse) => {
@@ -130,6 +140,7 @@ export class CompanyComponent implements OnInit {
           this.toastr.success("Add Vendor successfully");
           this.closeModal();
           this.addform.reset();
+          this.companyList();
           // this.GetAllUserDetail();
         } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
@@ -147,7 +158,7 @@ export class CompanyComponent implements OnInit {
     
     if(this.addform.valid){
       console.log(this.addform)
-      const value = { CustomerName : this.addform.value.Name}
+      const value = { CustomerName : this.addform.value.Name,  QboId : this.addform.value.QboId}
       console.log(value);
       this.service.CreateCustomer(value).subscribe((response: ApiResponse) => {
         this.spinner.show();
@@ -157,7 +168,7 @@ export class CompanyComponent implements OnInit {
           this.toastr.success("Add Customer successfully");
           this.closeModal();
           this.addform.reset();
-         } else if (response.ResponseStatus === 'Failure') {
+          } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
           console.log("Message", response.Message, "Error", response.ErrorData.Error);

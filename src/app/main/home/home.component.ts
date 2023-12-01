@@ -113,7 +113,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.clientform.controls?.['FormType'].disable();
         }
         if (res.ResponseData[0]?.clientAccountDetail) {
-          console.log(res.ResponseData[0]?.clientAccountDetail.length,res.ResponseData[0]?.clientUserMappings.Year);
 
           if(res.ResponseData)
             this.uploadFilebutton = false

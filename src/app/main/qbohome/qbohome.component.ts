@@ -43,7 +43,7 @@ export class QbohomeComponent implements OnInit {
               } 
               localStorage.setItem('qboData', JSON.stringify(QboData));
               this.toastr.success("Company Conected!")
-              this.router.navigate(['/main'])
+              this.router.navigate(['/main/setting/company'])
             } else if(res.ResponseStatus === "Failure"){
               this.toastr.error(res.ErrorData.Message);
             }

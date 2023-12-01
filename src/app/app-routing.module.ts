@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { PagenotFoundComponent } from './pagenot-found/pagenot-found.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
@@ -11,6 +12,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'verification', loadChildren: () => import('./verification/verification.module').then(m => m.VerificationModule) },
+  { path: '**', pathMatch: 'full', component: PagenotFoundComponent }, 
 ];
 
 @NgModule({

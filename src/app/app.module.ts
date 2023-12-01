@@ -7,10 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
+import { PagenotFoundComponent } from './pagenot-found/pagenot-found.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PagenotFoundComponent
   ],
   imports: [
     BrowserModule,

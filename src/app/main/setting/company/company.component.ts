@@ -27,7 +27,8 @@ export class CompanyComponent implements OnInit {
     { lable: "Vendor", Action: 'AddVendor' },
   ]
   title : string;
- 
+  CutomerName : string;
+  VendorName : string;
   
   constructor(private service: ApiService, private toastr: ToastrService, private spinner: NgxSpinnerService, public builder: FormBuilder) {
     this.addform = this.builder.group(
@@ -65,6 +66,8 @@ export class CompanyComponent implements OnInit {
       if (res && res.ResponseStatus === "Success") {
         this.tableData = res.ResponseData.List;
         this.TotalCount = res.ResponseData.TotalCount;
+          this.CutomerName= res.ResponseData.List[0].CustomerName
+          this.VendorName = res.ResponseData.List[0].vendorName
       } else if (res.ResponseStatus === "Failure") {
         this.toastr.error(res.ErrorData.Message);
       }
@@ -94,7 +97,16 @@ export class CompanyComponent implements OnInit {
   openModel(){
     const modal: any = this.AddVendorModal.nativeElement;
     $(modal).modal('show');
-  }
+    if(this.title == "Customer")
+      this.addform.patchValue({
+        Name : this.CutomerName 
+      })
+    else 
+      this.addform.patchValue({
+        Name : this.VendorName 
+      })
+      this.addform.controls?.['Name'].disable();
+    }
 
   closeModal() {
     const modal: any = this.AddVendorModal.nativeElement;

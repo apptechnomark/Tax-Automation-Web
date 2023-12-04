@@ -64,6 +64,7 @@ export class HomeComponent implements OnInit {
     if (this.data.length > 0) {
       this.initializeForm();
     }
+    this.ButtonHideShow()
     this.GetclientDetials();
   }
 
@@ -120,6 +121,7 @@ export class HomeComponent implements OnInit {
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
           localStorage.setItem('showUploadButton', 'true');
+          this.ButtonHideShow()
           this.toastr.success("Client Detail Added");
         }
         else if (response.ResponseStatus === 'Failure') {
@@ -198,7 +200,8 @@ export class HomeComponent implements OnInit {
             this.qbobuttons = true
           }
           this.GetclientDetials()
-
+          localStorage.setItem('showUploadButton', 'false');
+          this.ButtonHideShow();
           this.toastr.success('File uploaded successfully');
           this.fileInput.nativeElement.value = '';
         } else if (response.ResponseStatus === 'Failure') {

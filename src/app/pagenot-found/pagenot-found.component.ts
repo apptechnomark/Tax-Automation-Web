@@ -19,9 +19,9 @@ export class PagenotFoundComponent implements OnInit {
   }
 
   HomeButton(){
-    if(this.role == "1" && this.token)
+    if(this.role == "2" && this.token)
       this.router.navigateByUrl('/main');
-    else if (this.role == "2" && this.token)
+    else if (this.role == "1" && this.token)
       this.router.navigateByUrl('/main/setting');
     else 
       this.router.navigateByUrl('/login');

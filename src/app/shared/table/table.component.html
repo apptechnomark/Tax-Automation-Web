@@ -48,29 +48,29 @@
       </table>
     </div>
 
-    <div class="pagination">
-      <div>
+    <div class="pagination-container">
+      <div class="page-size-container">
         <label for="pageSize">Page Size:</label>
         <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
           <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
         </select>
       </div>
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"  [class.disabled]="PageNo === 1" (click)="priviousPageChanage()" ><i class="bi bi-caret-left-fill page-link" style="font-size: 1rem; color:  rgb(30, 62, 107);"></i></li>
-          <ng-container *ngFor="let page of getPages()">
-            <li class="page-item" style="color: rgb(30, 62, 107);" [class.active]="page === PageNo" (click)="goToPage(page)"><a class="page-link"> {{ page }} </a></li>
-          </ng-container>
-          <li class="page-item" [class.disabled]="PageNo * pageSize >= TotalCount " (click)="nextPageChanage()" ><i class="bi bi-caret-right-fill page-link" style="font-size: 1rem; color:  rgb(30, 62, 107);"></i></li>
-        </ul>
-      </nav>
-  <!-- <button class="pagination-button" [disabled]="PageNo == 1" (click)="priviousPageChanage()"></button>
-  <ng-container *ngFor="let page of getPages()">
-    <button class="pagination-button" [class.active-page]="page === PageNo" (click)="goToPage(page)">{{ page }}</button>
-  </ng-container>
-  <button class="pagination-button" [disabled]="PageNo * pageSize >= TotalCount" (click)="nextPageChanage()"></button> -->
-
-
+    
+      <div class="pagination-controls">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="PageNo === 1" (click)="priviousPageChanage()">
+              <i class="bi bi-caret-left-fill page-link" style="font-size: 1rem; color: rgb(30, 62, 107);"></i>
+            </li>
+            <ng-container *ngFor="let page of getPages()">
+              <li class="page-item" style="color: rgb(30, 62, 107);" [class.active]="page === PageNo" (click)="goToPage(page)">
+                <a class="page-link">{{ page }}</a>
+              </li>
+            </ng-container>
+            <li class="page-item" [class.disabled]="PageNo * pageSize >= TotalCount" (click)="nextPageChanage()">
+              <i class="bi bi-caret-right-fill page-link" style="font-size: 1rem; color: rgb(30, 62, 107);"></i>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
-  <!-- </div> -->
-

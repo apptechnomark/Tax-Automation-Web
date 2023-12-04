@@ -63,7 +63,6 @@ export class CompanyComponent implements OnInit {
     this.spinner.show();
     this.service.GetCompanyList(Filter).subscribe((res: ApiResponse) => {
       this.spinner.hide();
-      console.log(res);
       if (res && res.ResponseStatus === "Success") {
         this.tableData = res.ResponseData.List;
         this.TotalCount = res.ResponseData.TotalCount;
@@ -84,14 +83,12 @@ export class CompanyComponent implements OnInit {
   }
 
   AddVendor(data: any) {
-    console.log(data);
     this.title = "Vendor" 
     this.addform.controls?.['QboId'].patchValue(data?.id)
     this.openModel();
 
   }
   AddCustomer(data: any) {
-    console.log(data);
     this.title = "Customer"
     this.addform.controls?.['QboId'].patchValue(data?.id)
     this.openModel();
@@ -108,8 +105,7 @@ export class CompanyComponent implements OnInit {
       this.addform.patchValue({
         Name : this.VendorName 
       })
-      if(this.addform.controls?.['Name'].value){
-        console.log(this.addform.controls?.['Name'].value);      
+      if(this.addform.controls?.['Name'].value){   
         this.addform.controls?.['Name'].disable();
       }
       else{
@@ -125,18 +121,12 @@ export class CompanyComponent implements OnInit {
   }
   
   AddVendorButton() {
-    console.log("Vendor");
-    
     if(this.addform.valid){
-      console.log(this.addform)
       const value = { VendorName : this.addform.value.Name, QboId : this.addform.value.QboId}
-      console.log(value);
-      
       this.service.CreateVendor(value).subscribe((response: ApiResponse) => {
         this.spinner.show();
         if (response && response.ResponseStatus === 'Success') {
           this.spinner.hide();
-          console.log(response.Message);
           this.toastr.success("Add Vendor successfully");
           this.closeModal();
           this.addform.reset();
@@ -145,7 +135,6 @@ export class CompanyComponent implements OnInit {
         } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       });
     }
@@ -154,24 +143,18 @@ export class CompanyComponent implements OnInit {
   }
 
   AddCustomerButton() {
-    console.log("Customer");
-    
     if(this.addform.valid){
-      console.log(this.addform)
       const value = { CustomerName : this.addform.value.Name,  QboId : this.addform.value.QboId}
-      console.log(value);
       this.service.CreateCustomer(value).subscribe((response: ApiResponse) => {
         this.spinner.show();
         if (response && response.ResponseStatus === 'Success') {
           this.spinner.hide();
-          console.log(response.Message);
           this.toastr.success("Add Customer successfully");
           this.closeModal();
           this.addform.reset();
           } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       });
     }

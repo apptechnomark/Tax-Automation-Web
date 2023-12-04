@@ -47,11 +47,9 @@ export class VerificationComponent implements OnInit, OnChanges {
       this.token = params.token;
       this.tokenType = 3;
       if (this.token) {
-        // console.log(this.token);
         const userVerificationData = new UserVerification();
         userVerificationData.Token = this.token;
         userVerificationData.TokenType = this.tokenType;
-        // console.log("data call",userVerificationData)
         this.spinner.show();
         this.authService.UserVerification(userVerificationData).subscribe((response: ApiResponse) => {
           this.spinner.hide();
@@ -59,9 +57,7 @@ export class VerificationComponent implements OnInit, OnChanges {
             this.spinner.hide();
           }
           else if (response.ResponseStatus === 'Failure') {
-            // console.log("Error");
             this.toastr.error(response.ErrorData.Error);
-            console.log("Message", response.Message, "Error", response.ErrorData.Error);
           }
         });
       }
@@ -85,21 +81,16 @@ export class VerificationComponent implements OnInit, OnChanges {
       setPassworddata.Token = this.token;
       setPassworddata.TokenType = this.tokenType;
       setPassworddata.Password = this.SetPasswordform.value.Password
-      console.log("data call", setPassworddata)
       this.spinner.show();
       this.authService.SetPassword(setPassworddata).subscribe((response: ApiResponse) => {
-       
-      console.log(this.SetPasswordform.value);
       if (response && response.ResponseStatus === 'Success') {
         this.spinner.hide();
-        console.log(response.Message);
         this.toastr.success("Set Password successful");
         this.router.navigate(['/login']);
       }
       else if (response.ResponseStatus === 'Failure') {
         this.spinner.hide();
         this.toastr.error(response.ErrorData.Error);
-        console.log("Message", response.Message, "Error", response.ErrorData.Error);
       }
       })
     }

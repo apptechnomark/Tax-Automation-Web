@@ -124,19 +124,16 @@ export class UsersComponent implements OnInit {
         ContactNo: this.addUserform.value.contactNo,
         Role : this.addUserform.value.Role
       };
-      console.log(this.userDetails)
       this.authService.saveUser(this.userDetails).subscribe((response: ApiResponse) => {
         this.spinner.show();
         if (response && response.ResponseStatus === 'Success') {
           this.spinner.hide();
-          console.log(response.Message);
           this.toastr.success("User updated successfully");
           this.closeModal();
           this.GetAllUserDetail();
         } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       });
     }
@@ -164,18 +161,15 @@ export class UsersComponent implements OnInit {
   }
 
   GetAllUserDetail() {
-    console.log("data", this.UserDetailform.value)
     this.spinner.show();
     this.authService.GetAllUserDetails(this.UserDetailform.value).subscribe((response: ApiResponse) => {
       this.spinner.hide();
       if (response && response.ResponseStatus === 'Success') {
         this.tableData = response.ResponseData.List;
         this.TotalCount = response.ResponseData.TotalCount;
-        console.log(this.tableData, this.TotalCount)
       }
       else if (response.ResponseStatus === 'Failure') {
         this.toastr.error(response.ErrorData.Error);
-        console.log("Message", response.Message, "Error", response.ErrorData.Error);
       }
     });
   }
@@ -198,8 +192,6 @@ export class UsersComponent implements OnInit {
     this.isEditMode = true;
     const select = user['Role'];
     const selectedRole = this.options.find(option => option.value === select);
-    console.log('Selected Role:', selectedRole);
-
     if (selectedRole)
       this.addUserform.get('Role').setValue(selectedRole.value);
     else
@@ -273,18 +265,15 @@ export class UsersComponent implements OnInit {
     this.GetAllUserDetail()
   }
   onPageChange($event: any) {
-    console.log($event.pageNo)
     this.UserDetailform.get('PageSize').setValue($event.pageSize);
     this.PageNo = $event.pageNo;
     this.UserDetailform.get('PageNo').setValue($event.pageNo);
-    console.log(this.UserDetailform)
     this.GetAllUserDetail()
   }
 
 
   onEmailResend(data: any) {
     this.spinner.show();
-    console.log("Email resend", data)
     this.authService.ResendLink(data).subscribe((response: ApiResponse) => {
       this.spinner.hide();
       if (response && response.ResponseStatus === 'Success') {
@@ -298,7 +287,6 @@ export class UsersComponent implements OnInit {
 
   UserData: any;
   AddCompany(data: any) {
-    console.log(data);
     this.UserData = data;
     this.openModalForConnection();
   }
@@ -331,7 +319,6 @@ export class UsersComponent implements OnInit {
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
         this.closeModalForConnection();
       });
@@ -389,7 +376,6 @@ export class UsersComponent implements OnInit {
             this.GetAllUserDetail();
           } else if (response.ResponseStatus === 'Failure') {
             this.toastr.error(response.ErrorData.Error);
-            console.log("Message", response.Message, "Error", response.ErrorData.Error);
           }
           this.closeModalForConnection();
         });

@@ -39,8 +39,6 @@ export class LoginComponent implements OnInit {
     if (this.loginform.valid) {
       this.spinner.show();
       this.authService.login(this.loginform.value).subscribe((response: ApiResponse) => {
-        console.log(response);
-
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           localStorage.setItem("isAuthenticate", "true");
@@ -63,15 +61,12 @@ export class LoginComponent implements OnInit {
     this.authService.getUserDetail().subscribe((res: any) => {
       if (res && res.ResponseStatus === 'Success') {
         localStorage.setItem("Role", res.ResponseData.Role);
-        console.log(res.ResponseData);
         if(res.ResponseData.Role == 1){
-        console.log("call 1" );
         this.toastr.success("Login successful");
         this.router.navigateByUrl('/main/setting/users');}
         else if (res.ResponseData.Role == 2) {
           this.toastr.success("Login successful");
-          this.router.navigateByUrl("/main")
-          console.log("call 2" );}
+          this.router.navigateByUrl("/main")}
       }
     })
   }

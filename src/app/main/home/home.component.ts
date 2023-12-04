@@ -95,10 +95,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.service.GetClient().subscribe((res: ApiResponse) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
-        console.log(res.ResponseData[0]);
-
         if (res.ResponseData[0]?.clientUserMappings != null) {
-          console.log(res.ResponseData[0]?.clientUserMappings);
           this.IsClientField = false
           this.ClientId = res.ResponseData[0].clientUserMappings?.Id
           localStorage.setItem("clientId", String(this.ClientId))
@@ -107,7 +104,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
             Year: res.ResponseData[0].clientUserMappings?.Year,
             FormType: res.ResponseData[0].clientUserMappings?.Formtype
           })
-          console.log(this.clientform.value);
           this.clientform.controls?.['Clientname'].disable();
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
@@ -128,7 +124,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       else if (res.ResponseStatus === 'Failure') {
         this.toastr.error(res.ErrorData.Error);
-        console.log("Message", res.Message, "Error", res.ErrorData.Error);
       }
     })
   }
@@ -150,13 +145,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.clientform.controls?.['Clientname'].disable();
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
-          console.log(response);
           this.uploadFilebutton = true
           this.toastr.success("Client Detail Added");
         }
         else if (response.ResponseStatus === 'Failure') {
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       })
     }
@@ -182,7 +175,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         const sheetName = workbook.SheetNames[0];
         const excelData: XLSX.WorkSheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(excelData, { header: 1 });
-        console.log(jsonData);
         const blob = new Blob([arrayBuffer], {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         });
@@ -203,7 +195,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   uploadedFile: any;
 
   onFileChange(event: any) {
-    console.log('Uploaded file', event.target);
     const file = event.target.files[0];
     this.uploadedFile = file;
     this.uploadFilebutton = true
@@ -221,14 +212,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const formData = new FormData();
     formData.append('file', this.uploadedFile);
     this.client = localStorage.getItem('clientId');
-    console.log(this.client);
     this.spinner.show();
     this.service
       .ImportExcel(formData, this.client)
       .subscribe((response: any) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
-          console.log(response.Message);
           this.data = response.ResponseData
           if (this.data.length > 0) {
             this.initializeForm();
@@ -236,7 +225,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           if (this.data.length === 0) {
             this.qbobuttons = true
           }
-          console.log(response.ResponseData);
           this.GetclientDetials()
           this.uploadFilebutton = false
           this.toastr.success('File uploaded successfully');
@@ -254,14 +242,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.service.AddDataToQbo().subscribe((res: any) => {
       this.spinner.hide();
-      console.log(res)
       if (res && res.ResponseStatus === 'Success') {
         this.toastr.success("Data added successfully");
       }
       else if (res.ResponseStatus === 'Failure') {
         if (res.ErrorData.ErrorDetail != null) {
           this.toastr.warning(res.Message)
-          console.log(res.ErrorData.ErrorDetail)
           this.data = res.ErrorData.ErrorDetail
           this.initializeForm();
         }
@@ -274,7 +260,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.service.ReversalEntry().subscribe((res: any) => {
       this.spinner.hide();
-      console.log(res)
       if (res && res.ResponseStatus === 'Success') {
         this.toastr.success("All Account has been Inactivated", "Client Has Been Disconnected",);
         this.clientform.reset();
@@ -304,7 +289,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (header.field === 'debit' || header.field === 'credit') {
           let decimalValue  = parseFloat(initialValue).toFixed(2);
           initialValue = {value: decimalValue, disabled: true}
-          console.log(initialValue)
         }
         formControls[`${rowIndex}_${header.field}`] = [
           initialValue,
@@ -343,12 +327,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(rowIndex);
         this.deletedRowId = [...this.deletedRowId, this.data[rowIndex]?.['Id']]
-        console.log("DeletedId:", this.deletedRowId)
         this.data.splice(rowIndex, 1);
         const currentFormValues = this.form.getRawValue();
-        console.log(currentFormValues);
         // this.headers.forEach((item) => {
         //   delete currentFormValues[`${rowIndex}_${item.field}`];
         // });
@@ -374,15 +355,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       transformedData.push(transformedRow);
     }
-    const currentFormValues = this.form.getRawValue();
-    console.log(currentFormValues);
-
     const AccountDetail = {
       ClientId: this.ClientId,
       ClientAccountDetail: transformedData,
       DeletedId: this.deletedRowId
     };
-    console.log(AccountDetail);
     if (this.form.valid) {
       this.service
         .SaveClientAccount(AccountDetail)
@@ -398,20 +375,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
             }
           } else if (response.ResponseStatus === 'Failure') {
             this.toastr.error(response.ErrorData.Error);
-            console.log(
-              'Message',
-              response.Message,
-              'Error',
-              response.ErrorData.Error
-            );
           }
         });
     } else {
       this.spinner.hide();
       this.toastr.warning('Please Fill All Field');
     }
-    console.log(transformedData);
-
   }
 
   isFieldWithError(row: TableData, field: string) {

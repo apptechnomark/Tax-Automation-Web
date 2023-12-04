@@ -23,11 +23,7 @@ export class ApiService {
     .set('scope', QboParams.Scope)
     .set('redirect_uri', QboParams.redirectUri)
     .set('state', QboParams.State);
-    console.log(params.toString());
-    console.log("Connection: ","test");
-
     const finalUrl = `${this.QboconnectionUrl}${params.toString()}`
-    console.log("URL",finalUrl);
     window.location.href = finalUrl;
   }
 

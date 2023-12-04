@@ -12,7 +12,7 @@ import { ApiResponse, QboDataModel, qboDetail } from 'src/global';
 export class QbohomeComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private _service: ApiService, private toastr: ToastrService, private router: Router){
-   this.GetqboDeatils();
+    this.GetqboDeatils();
   }
   ngOnInit(): void {
     
@@ -29,11 +29,9 @@ export class QbohomeComponent implements OnInit {
           state : state,
           realmId : realmId 
         }
-        console.log(qboDetail);
         localStorage.setItem('qboDetail', JSON.stringify(qboDetail));
         if(code != "" || code != null){
           this._service.GetQboToken(qboDetail).subscribe((res : ApiResponse) =>{
-            console.log (res);
             if(res && res.ResponseStatus === "Success"){
               let QboData : QboDataModel = {
                 id : res.ResponseData.id,

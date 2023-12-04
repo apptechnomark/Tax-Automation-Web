@@ -68,9 +68,9 @@ export class LoginComponent implements OnInit {
 
   private handleRoleBasedRedirect(role: number) {
     this.toastr.success("Login successful");
-    if (role === 2) {
+    if (role === 1) {
       this.router.navigateByUrl('/main/setting/users');
-    } else if (role === 1) {
+    } else if (role === 2) {
       this.router.navigateByUrl('/main');
     } else {
       console.log("Unknown role");

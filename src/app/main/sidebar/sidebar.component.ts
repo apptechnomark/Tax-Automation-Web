@@ -8,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class SidebarComponent implements OnInit {
 
   constructor() { }
-
+  role :any;
   ngOnInit(): void {
+    this.role = localStorage.getItem('Role');
   }
 
 }

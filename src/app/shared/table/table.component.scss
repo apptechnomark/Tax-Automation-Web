@@ -81,10 +81,12 @@ button.active {
   padding: 5px 10px;
   margin: 5px;
   cursor: pointer;
+  width: 80px;
 }
 
 button.active:hover {
   background-color: #218838;
+  
 }
 
 /* Style the "Inactive" button */
@@ -95,6 +97,7 @@ button.inactive {
   padding: 5px 10px;
   margin: 5px;
   cursor: pointer;
+  width: 80px;
 }
 
 button.inactive:hover {

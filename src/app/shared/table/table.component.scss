@@ -190,10 +190,27 @@ cursor: pointer;
   }
 }
 
-
 .page-item.active .page-link {
   z-index: 3;
   color: #fff;
   background-color: rgb(30, 62, 107) !important;
   border-color: rgb(30, 62, 107) !important;
+}
+
+.page-item:last-child .page-link {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.page-item:first-child .page-link {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.page-item.disabled {
+  pointer-events: none;
+}
+
+.page-item.disabled i {
+  opacity: 0.5;
 }

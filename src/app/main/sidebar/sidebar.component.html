@@ -9,12 +9,12 @@
     </div>
     <div class="sidebar-menu" style="margin-top: 35px;">
         <ul style="list-style: none;">
-            <li style="width: 100%;padding: 10px 0px;">
+            <li *ngIf="role == '1' && role != '2'" style="width: 100%;padding: 10px 0px;">
                 <a routerLink="home" style="text-decoration: none;font-size: 20px;">
                     Home
                 </a>
             </li>
-            <li style="width: 100%;padding: 10px 0px;">
+            <li *ngIf="role == '2' && role != '1'" style="width: 100%;padding: 10px 0px;">
                 <a routerLink="setting" style="text-decoration: none;font-size: 20px;">
                     setting
                 </a>

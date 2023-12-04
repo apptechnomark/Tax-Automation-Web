@@ -16,7 +16,7 @@ declare var $: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-  finalData =   [
+  finalData = [
     { id: 1, name: 'John Doe', credit: 100, debit: 50 },
     { id: 2, name: 'Jane Doe', credit: 200, debit: 75 },
     { id: 3, name: 'Peter Jones', credit: 300, debit: 100 },
@@ -26,10 +26,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   IsClientField: boolean = true;
   form!: FormGroup;
   client: any;
-  uploadFilebutton: boolean = true;
   qbobuttons: boolean = false;
   ClientId: number;
   currentFormValues: any;
+  showUploadButton: boolean;
 
   headers: TableColumn[] = [
     { header: 'Id', field: 'Id' },
@@ -40,7 +40,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { header: 'Debit', field: 'debit' },
     { header: 'Credit', field: 'credit' },
     { header: 'Error', field: 'ErrorDetail' },
-    //   { header: 'Action', field: 'action' },
   ];
   @ViewChild('fileInput') fileInput: ElementRef;
   clientform: FormGroup = new FormGroup({
@@ -59,7 +58,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
     this.clientform = this.builder.group({
       Clientname: [
         '',
@@ -76,7 +74,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.initializeForm();
     }
     this.GetclientDetials();
-
     $('[data-bs-toggle="tooltip"]').tooltip();
   }
 
@@ -88,6 +85,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (type === 'difference') {
       return this.getTotal('debit') - this.getTotal('credit');
     }
+    this.ButtonHideShow()
   }
 
   GetclientDetials() {
@@ -96,7 +94,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
         console.log(res.ResponseData[0]);
-
         if (res.ResponseData[0]?.clientUserMappings != null) {
           console.log(res.ResponseData[0]?.clientUserMappings);
           this.IsClientField = false
@@ -113,12 +110,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.clientform.controls?.['FormType'].disable();
         }
         if (res.ResponseData[0]?.clientAccountDetail) {
-          console.log(res.ResponseData[0]?.clientAccountDetail.length,res.ResponseData[0]?.clientUserMappings.Year);
-
-          if(res.ResponseData)
-            this.uploadFilebutton = false
-    
-          this.data = res.ResponseData[0]?.clientAccountDetail
+          console.log(res.ResponseData[0]?.clientAccountDetail.length, res.ResponseData[0]?.clientUserMappings.Year);
+          if (res.ResponseData)
+            this.data = res.ResponseData[0]?.clientAccountDetail
           if (this.data.length > 0) {
             this.initializeForm();
           }
@@ -152,7 +146,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
           console.log(response);
-          this.uploadFilebutton = true
+          localStorage.setItem('showUploadButton', 'true');
           this.toastr.success("Client Detail Added");
         }
         else if (response.ResponseStatus === 'Failure') {
@@ -165,7 +159,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toastr.error("Invalid Form's Value")
   }
 
-  get f(): { [key: string]: AbstractControl } {
+  get abstract(): { [key: string]: AbstractControl } {
     return this.clientform.controls;
   }
 
@@ -207,9 +201,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('Uploaded file', event.target);
     const file = event.target.files[0];
     this.uploadedFile = file;
-    this.uploadFilebutton = true
   }
-
 
   // Import Excel Button
   UploadExcelButton() {
@@ -231,6 +223,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (response && response.ResponseStatus === 'Success') {
           console.log(response.Message);
           this.data = response.ResponseData
+          localStorage.setItem('showUploadButton', 'false');
           if (this.data.length > 0) {
             this.initializeForm();
           }
@@ -239,7 +232,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           }
           console.log(response.ResponseData);
           this.GetclientDetials()
-          this.uploadFilebutton = false
+
           this.toastr.success('File uploaded successfully');
           this.fileInput.nativeElement.value = '';
         } else if (response.ResponseStatus === 'Failure') {
@@ -303,8 +296,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         let validators = [];
 
         if (header.field === 'debit' || header.field === 'credit') {
-          let decimalValue  = parseFloat(initialValue).toFixed(2);
-          initialValue = {value: decimalValue, disabled: true}
+          let decimalValue = parseFloat(initialValue).toFixed(2);
+          initialValue = { value: decimalValue, disabled: true }
           console.log(initialValue)
         }
         formControls[`${rowIndex}_${header.field}`] = [
@@ -434,6 +427,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   //#endregion
 
+  ButtonHideShow() {
+    this.showUploadButton = JSON.parse(localStorage.getItem('showUploadButton') || 'false');
+  }
 
-  
 }

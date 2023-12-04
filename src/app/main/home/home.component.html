@@ -9,8 +9,8 @@
               <label for="Clientname" class="col-md-1 mt-1">Client:</label>
               <div class="col-9 ml-2">
                 <input type="text" class="form-control" placeholder="Client Name" formControlName="Clientname">
-                <div *ngIf="f['Clientname'].touched ">
-                  <span class="error" *ngIf="f['Clientname'].errors?.['required']"> Clientname is required!</span>
+                <div *ngIf="abstract['Clientname'].touched ">
+                  <span class="error" *ngIf="abstract['Clientname'].errors?.['required']"> Clientname is required!</span>
                 </div>
               </div>
             </div>
@@ -21,9 +21,10 @@
                 <div class="row">
                   <label for="Clientname" class="col-sm-3 mt-1">Year:</label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="Enter Year" formControlName="Year" onkeypress="return event.charCode>=48 && event.charCode<=57">
-                    <div *ngIf="f['Year'].touched ">
-                      <span class="error" *ngIf="f['Year'].errors?.['required']"> Year is required!</span>
+                    <input type="text" class="form-control" placeholder="Enter Year" formControlName="Year"
+                      onkeypress="return event.charCode>=48 && event.charCode<=57">
+                    <div *ngIf="abstract['Year'].touched ">
+                      <span class="error" *ngIf="abstract['Year'].errors?.['required']"> Year is required!</span>
                     </div>
                   </div>
                 </div>
@@ -32,23 +33,24 @@
                 <div class="row">
                   <label for="Clientname" class="col-sm-4 mt-1">FormType:</label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="Enter Form Type" formControlName="FormType" onkeypress="return event.charCode>=48 && event.charCode<=57">
-                    <span *ngIf="f['FormType'].touched ">
-                      <span class="error" *ngIf="f['FormType'].errors?.['required']"> Form Type is required!</span>
+                    <input type="text" class="form-control" placeholder="Enter Form Type" formControlName="FormType"
+                      onkeypress="return event.charCode>=48 && event.charCode<=57">
+                    <span *ngIf="abstract['FormType'].touched ">
+                      <span class="error" *ngIf="abstract['FormType'].errors?.['required']"> Form Type is required!</span>
                     </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="mt-2" >
+          <div class="mt-2">
             <button class="btn btn-primary" *ngIf="IsClientField" (click)="SaveClientButton()">Add Details</button>
           </div>
         </form>
       </div>
     </div>
     <div class="col-md-6">
-        <!-- Form for Export and Import details -->
+      <!-- Form for Export and Import details -->
       <div *ngIf="ClientId" class="card-container">
         <div class="row">
           <div class="col-12">
@@ -63,13 +65,15 @@
             <div class="col-4">
               <label for="file" class="file-input-label">Upload Excel File:</label>
             </div>
-              <div class="col-7">
-              <input class="form-control file-input" type="file" #fileInput (change)="onFileChange($event)" accept=".xlsx, .xls">
+            <div class="col-7">
+              <input class="form-control file-input" type="file" #fileInput (change)="onFileChange($event)"
+                accept=".xlsx, .xls">
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <button  class="btn btn-primary" *ngIf="uploadFilebutton" (click)="UploadExcelButton()">Upload File</button>
+              <button *ngIf="showUploadButton" class="btn btn-primary" (click)="UploadExcelButton()">Upload
+                File</button>
             </div>
           </div>
         </form>
@@ -78,58 +82,55 @@
   </div>
 </div>
 
-  <div *ngIf="ClientId">
-    <div class="table-container">
-      <div *ngIf="data.length > 0 ">
-
-          <form [formGroup]="form">
-            <div class="table-scroll">
-            <table>
-              <thead >
-                <tr>
-                  <ng-container *ngFor="let header of headers">
-                    <th *ngIf="header.field !== 'Id'&& header.field !== 'ErrorDetail'">{{ header.header }}</th>
-                  </ng-container>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let row of data; let rowIndex = index">
-                  <ng-container *ngFor="let header of headers">
-                    <td *ngIf="header.field !== 'Id' && header.field !== 'ErrorDetail'">
-                      <ng-container *ngIf="header.field !== 'action'; else deleteColumn">
-                        <div class="input-container"> 
-                          <input
-                          type="text"
-                          [formControl]="getCellControl(rowIndex, header.field)"
+<div *ngIf="ClientId">
+  <div class="table-container">
+    <div *ngIf="data.length > 0 ">
+      <form [formGroup]="form">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <ng-container *ngFor="let header of headers">
+                  <th *ngIf="header.field !== 'Id'&& header.field !== 'ErrorDetail'">{{ header.header }}</th>
+                </ng-container>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of data; let rowIndex = index">
+                <ng-container *ngFor="let header of headers">
+                  <td *ngIf="header.field !== 'Id' && header.field !== 'ErrorDetail'">
+                    <ng-container *ngIf="header.field !== 'action'; else deleteColumn">
+                      <div class="input-container">
+                        <input type="text" [formControl]="getCellControl(rowIndex, header.field)"
                           (input)="onCellChange(rowIndex, header.field, $event)"
                           [ngClass]="{ 'error-border': isFieldWithError(row, header.field) }"
-                          id="{{ rowIndex }}_{{ header.field }}"
-                        />
-                        <div id="Erorr_{{ rowIndex }}_{{ header.field }}" class="error-tooltip" *ngIf="isFieldWithError(row, header.field)">
+                          id="{{ rowIndex }}_{{ header.field }}" />
+                        <div id="Erorr_{{ rowIndex }}_{{ header.field }}" class="error-tooltip"
+                          *ngIf="isFieldWithError(row, header.field)">
                           {{ row['ErrorDetail'] }}
                         </div>
-                        </div>
-                      
-                      </ng-container>
-                      <ng-template #deleteColumn>
-                        <button (click)="onDeleteRow(rowIndex)">Delete</button>
-                      </ng-template>
-                    </td>
-                  </ng-container>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-            <button style=" margin-top: 5px;" class=" btn btn-success" (click)="onSaveButton()">Save</button>
-          </form>
-    </div>
-    </div>
-    <div *ngIf="qbobuttons" class="row button-row">
-        <div class="col-2">
-          <button class="btn btn-success text-white" (click)="AddtoQboButton()">Transfer Data To Qbo</button>
+                      </div>
+
+                    </ng-container>
+                    <ng-template #deleteColumn>
+                      <button (click)="onDeleteRow(rowIndex)">Delete</button>
+                    </ng-template>
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="col-2">
-        <button class="btn btn-warning" (click)="RevrseEntryButton()">Inactive Account</button>
-      </div>
+        <button style=" margin-top: 5px;" class=" btn btn-success" (click)="onSaveButton()">Save</button>
+      </form>
     </div>
+  </div>
+  <div *ngIf="qbobuttons" class="row button-row">
+    <div class="col-2">
+      <button class="btn btn-success text-white" (click)="AddtoQboButton()">Transfer Data To Qbo</button>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-warning" (click)="RevrseEntryButton()">Inactive Account</button>
+    </div>
+  </div>
 </div>

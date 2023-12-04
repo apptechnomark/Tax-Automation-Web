@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ApiResponse } from 'src/global';
+import { ApiResponse, Role } from 'src/global';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
         Password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       },
     );
-   
+
   }
 
   LoginButton() {
@@ -63,16 +63,19 @@ export class LoginComponent implements OnInit {
     this.authService.getUserDetail().subscribe((res: any) => {
       if (res && res.ResponseStatus === 'Success') {
         localStorage.setItem("Role", res.ResponseData.Role);
-        console.log(res.ResponseData);
-        if(res.ResponseData.Role == 1){
-        console.log("call 1" );
-        this.toastr.success("Login successful");
-        this.router.navigateByUrl('/main/setting/users');}
-        else if (res.ResponseData.Role == 2) {
-          this.toastr.success("Login successful");
-          this.router.navigateByUrl("/main")
-          console.log("call 2" );}
+        this.handleRoleBasedRedirect(res.ResponseData.Role);
       }
     })
+  }
+
+  private handleRoleBasedRedirect(role: number) {
+    this.toastr.success("Login successful");
+    if (role === 2) {
+      this.router.navigateByUrl('/main/setting/users');
+    } else if (role === 1) {
+      this.router.navigateByUrl('/main');
+    } else {
+      console.log("Unknown role");
+    }
   }
 }

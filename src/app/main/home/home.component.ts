@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -15,12 +15,8 @@ declare var $: any;
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, AfterViewInit {
-  finalData = [
-    { id: 1, name: 'John Doe', credit: 100, debit: 50 },
-    { id: 2, name: 'Jane Doe', credit: 200, debit: 75 },
-    { id: 3, name: 'Peter Jones', credit: 300, debit: 100 },
-  ];
+export class HomeComponent implements OnInit {
+  finalData = [];
   data: TableData[] = [];
   deletedRowId: any[] = [];
   IsClientField: boolean = true;
@@ -28,7 +24,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   client: any;
   qbobuttons: boolean = false;
   ClientId: number;
-  currentFormValues: any;
   showUploadButton: boolean;
 
   headers: TableColumn[] = [
@@ -53,10 +48,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private toastr: ToastrService
   ) { }
 
-  ngAfterViewInit(): void {
-    $('[data-bs-toggle="tooltip"]').tooltip();
-  }
-
   ngOnInit(): void {
     this.clientform = this.builder.group({
       Clientname: [
@@ -74,18 +65,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.initializeForm();
     }
     this.GetclientDetials();
-    $('[data-bs-toggle="tooltip"]').tooltip();
-  }
-
-  getTotal(type: 'debit' | 'credit' | 'difference') {
-    if (type === 'debit') {
-      return this.finalData.reduce((sum, item) => sum + item.debit, 0);
-    } else if (type === 'credit') {
-      return this.finalData.reduce((sum, item) => sum + item.credit, 0);
-    } else if (type === 'difference') {
-      return this.getTotal('debit') - this.getTotal('credit');
-    }
-    this.ButtonHideShow()
   }
 
   GetclientDetials() {
@@ -93,22 +72,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.service.GetClient().subscribe((res: ApiResponse) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
-        if (res.ResponseData[0]?.clientUserMappings != null) {
+        if (res.ResponseData?.clientUserMappings != null) {
           this.IsClientField = false
-          this.ClientId = res.ResponseData[0].clientUserMappings?.Id
+          this.ClientId = res.ResponseData.clientUserMappings?.Id
           localStorage.setItem("clientId", String(this.ClientId))
           this.clientform.patchValue({
-            Clientname: res.ResponseData[0].clientUserMappings?.ClientName,
-            Year: res.ResponseData[0].clientUserMappings?.Year,
-            FormType: res.ResponseData[0].clientUserMappings?.Formtype
+            Clientname: res.ResponseData.clientUserMappings?.ClientName,
+            Year: res.ResponseData.clientUserMappings?.Year,
+            FormType: res.ResponseData.clientUserMappings?.Formtype
           })
           this.clientform.controls?.['Clientname'].disable();
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
         }
-        if (res.ResponseData[0]?.clientAccountDetail) {
+        if (res.ResponseData?.clientAccountDetail) {
           if (res.ResponseData)
-            this.data = res.ResponseData[0]?.clientAccountDetail
+            this.data = res.ResponseData?.clientAccountDetail
           if (this.data.length > 0) {
             this.initializeForm();
           }
@@ -193,7 +172,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const file = event.target.files[0];
     this.uploadedFile = file;
   }
-
   // Import Excel Button
   UploadExcelButton() {
     this.GetclientDetials();
@@ -327,8 +305,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // this.headers.forEach((item) => {
         //   delete currentFormValues[`${rowIndex}_${item.field}`];
         // });
-
-
         this.initializeForm();
       }
     })

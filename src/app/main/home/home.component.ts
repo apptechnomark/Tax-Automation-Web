@@ -265,9 +265,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.clientform.controls?.['FormType'].enable();
         this.ClientId = null
         this.qbobuttons = false
-        localStorage.setItem('showUploadButton', 'true');
-        this.ButtonHideShow();
-
       }
       else if (res.ResponseStatus === 'Failure') {
         this.toastr.error(res.ErrorData.Error)

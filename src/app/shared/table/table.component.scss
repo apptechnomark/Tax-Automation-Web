@@ -1,3 +1,5 @@
+$--bs-pagination-color :  rgb(30, 62, 107) !important;
+
 .table-container {
   display: flex;
   flex-direction: column;
@@ -43,36 +45,36 @@ button:hover {
   background-color: #c3c6cc;
 }
 
-.pagination {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
+// .pagination {
+//   display: flex;
+//   flex-wrap: wrap;
+//   align-items: center;
+//   justify-content: center;
+//   margin-top: 10px;
+// }
 
-.pagination-button {
-  padding: 5px 10px;
-  margin: 0 5px;
-  color: black;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  background-color: #fff;
-}
+// .pagination-button {
+//   padding: 5px 10px;
+//   margin: 0 5px;
+//   color: black;
+//   border: 1px solid #ccc;
+//   cursor: pointer;
+//   background-color: #fff;
+// }
 
-.pagination-button:hover {
-  background-color: #f0f0f0;
-}
+// .pagination-button:hover {
+//   background-color: #f0f0f0;
+// }
 
-.pagination-button[disabled] {
-  cursor: not-allowed;
-  color: #ccc;
-}
+// .pagination-button[disabled] {
+//   cursor: not-allowed;
+//   color: #ccc;
+// }
 
-.active-page {
-  font-weight: bold;
-  color: #333;
-}
+// .active-page {
+//   font-weight: bold;
+//   color: #333;
+// }
 
 button.active {
   background-color: #28a745;
@@ -151,13 +153,13 @@ button.inactive:hover {
   width: 80%;
 }
 
-.pagination {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  float: right;
-  // margin: 10px;
-}
+// .pagination {
+//   position: relative;
+//   display: flex;
+//   flex-direction: row;
+//   float: right;
+//   // margin: 10px;
+// }
 
 .QBO_AccountName i:hover{
 cursor: pointer;
@@ -186,4 +188,12 @@ cursor: pointer;
   button {
     width: 100%;
   }
+}
+
+
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: rgb(30, 62, 107) !important;
+  border-color: rgb(30, 62, 107) !important;
 }

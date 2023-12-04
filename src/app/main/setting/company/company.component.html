@@ -1,11 +1,13 @@
 <div class="b-container">
     <button class="btn btn-outline-primary" (click)="QboConnect()">+ Company</button>
 </div>
-
+<div *ngIf="data != null">
 <div style="margin-top: 10px;">
     <app-table [data]="tableData" [columns]="tableColumns" [TotalCount]="TotalCount" ></app-table>
-        <!-- [actionButtons]="ActionButtons"
-        (actionClick)="handleActionClick($event)" -->
+</div> 
+</div>
+<div class="error-message" *ngIf="data == null">
+    Company Not Found. Please add a company 
 </div>
 
 

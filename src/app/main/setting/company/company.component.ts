@@ -12,6 +12,7 @@ declare var $: any;
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
+  data: any;
   @ViewChild('AddVendorModal') AddVendorModal: ElementRef;
   @ViewChild('AddVendorModal') AddCustomerModal: ElementRef;
   tableData: TableData[];
@@ -26,15 +27,14 @@ export class CompanyComponent implements OnInit {
     { lable: "Customer", Action: 'AddCustomer' },
     { lable: "Vendor", Action: 'AddVendor' },
   ]
-  title : string;
-  CutomerName : string | null;
-  VendorName : string | null;
-  
+  title: string;
+  CutomerName: string;
+  VendorName: string;
+
   constructor(private service: ApiService, private toastr: ToastrService, private spinner: NgxSpinnerService, public builder: FormBuilder) {
     this.addform = this.builder.group(
       {
         Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-        QboId : ['']
       },
     );
 
@@ -62,12 +62,13 @@ export class CompanyComponent implements OnInit {
     }
     this.spinner.show();
     this.service.GetCompanyList(Filter).subscribe((res: ApiResponse) => {
+      this.data = res;
       this.spinner.hide();
       if (res && res.ResponseStatus === "Success") {
         this.tableData = res.ResponseData.List;
         this.TotalCount = res.ResponseData.TotalCount;
-          this.CutomerName= res.ResponseData.List[0].CustomerName
-          this.VendorName = res.ResponseData.List[0].vendorName
+        this.CutomerName = res.ResponseData.List[0].CustomerName
+        this.VendorName = res.ResponseData.List[0].vendorName
       } else if (res.ResponseStatus === "Failure") {
         this.toastr.error(res.ErrorData.Message);
       }
@@ -83,68 +84,67 @@ export class CompanyComponent implements OnInit {
   }
 
   AddVendor(data: any) {
-    this.title = "Vendor" 
-    this.addform.controls?.['QboId'].patchValue(data?.id)
+    this.title = "Vendor"
     this.openModel();
 
   }
   AddCustomer(data: any) {
+    console.log(data);
     this.title = "Customer"
-    this.addform.controls?.['QboId'].patchValue(data?.id)
     this.openModel();
   }
 
-  openModel(){
+  openModel() {
     const modal: any = this.AddVendorModal.nativeElement;
     $(modal).modal('show');
-    if(this.title == "Customer")
+    if (this.title == "Customer")
       this.addform.patchValue({
-        Name : this.CutomerName 
+        Name: this.CutomerName
       })
-    else 
+    else
       this.addform.patchValue({
-        Name : this.VendorName 
+        Name: this.VendorName
       })
-      if(this.addform.controls?.['Name'].value){   
-        this.addform.controls?.['Name'].disable();
-      }
-      else{
-        this.addform.controls?.['Name'].enable();
-      }
-      
-    }
+    this.addform.controls?.['Name'].disable();
+  }
 
   closeModal() {
     const modal: any = this.AddVendorModal.nativeElement;
     $(modal).modal('hide');
     this.addform.reset();
   }
-  
+
   AddVendorButton() {
-    if(this.addform.valid){
-      const value = { VendorName : this.addform.value.Name, QboId : this.addform.value.QboId}
+    console.log("Vendor");
+
+    if (this.addform.valid) {
+      console.log(this.addform)
+      const value = { VendorName: this.addform.value.Name }
+      console.log(value);
+
       this.service.CreateVendor(value).subscribe((response: ApiResponse) => {
         this.spinner.show();
         if (response && response.ResponseStatus === 'Success') {
           this.spinner.hide();
+          console.log(response.Message);
           this.toastr.success("Add Vendor successfully");
           this.closeModal();
           this.addform.reset();
-          this.companyList();
           // this.GetAllUserDetail();
         } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
+          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       });
     }
-    else 
+    else
       this.toastr.warning("Invalid Form's Value")
   }
 
   AddCustomerButton() {
-    if(this.addform.valid){
-      const value = { CustomerName : this.addform.value.Name,  QboId : this.addform.value.QboId}
+    if (this.addform.valid) {
+      const value = { CustomerName: this.addform.value.Name }
       this.service.CreateCustomer(value).subscribe((response: ApiResponse) => {
         this.spinner.show();
         if (response && response.ResponseStatus === 'Success') {
@@ -152,19 +152,19 @@ export class CompanyComponent implements OnInit {
           this.toastr.success("Add Customer successfully");
           this.closeModal();
           this.addform.reset();
-          } else if (response.ResponseStatus === 'Failure') {
+        } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
         }
       });
     }
-    else 
+    else
       this.toastr.warning("Invalid Form's Value")
   }
 
 
   get abstract(): { [key: string]: AbstractControl } {
-      return this.addform.controls;
+    return this.addform.controls;
   }
 
 }

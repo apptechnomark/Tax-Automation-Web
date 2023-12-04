@@ -8,6 +8,7 @@ import { HttpResponse } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 declare var $: any;
 @Component({
@@ -45,7 +46,8 @@ export class HomeComponent implements OnInit {
     private builder: FormBuilder,
     private service: ApiService,
     private spinner: NgxSpinnerService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router : Router
   ) { }
 
   ngOnInit(): void {
@@ -73,6 +75,11 @@ export class HomeComponent implements OnInit {
     this.service.GetClient().subscribe((res: ApiResponse) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
+      if(res.ResponseData.companyConnection  === 0)
+      {
+        this.router.navigateByUrl("/companyNotConnectPage");
+      }  
+       
         if (res.ResponseData?.clientUserMappings != null) {
           this.IsClientField = false
           this.ClientId = res.ResponseData.clientUserMappings?.Id
@@ -205,7 +212,7 @@ export class HomeComponent implements OnInit {
           this.toastr.success('File uploaded successfully');
           this.fileInput.nativeElement.value = '';
         } else if (response.ResponseStatus === 'Failure') {
-          this.toastr.error(response.Message);
+          this.toastr.error("Please check your File",response.Message);
           this.fileInput.nativeElement.value = '';
         }
       });

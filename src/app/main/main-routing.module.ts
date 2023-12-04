@@ -20,10 +20,11 @@ const routes: Routes = [
             { 
                 path: 'qbohome', loadChildren: () => import('./qbohome/qbohome.module').then(m => m.QbohomeModule),
                 canActivate: [AuthGuard]
-            }
+            },
+          
             ]
-    }];
-
+    },
+]
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]

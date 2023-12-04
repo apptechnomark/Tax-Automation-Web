@@ -142,6 +142,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.clientform.controls?.['Year'].disable();
           this.clientform.controls?.['FormType'].disable();
           localStorage.setItem('showUploadButton', 'true');
+          this.ButtonHideShow()
           this.toastr.success("Client Detail Added");
         }
         else if (response.ResponseStatus === 'Failure') {

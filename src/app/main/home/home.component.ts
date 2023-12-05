@@ -9,7 +9,7 @@ import * as XLSX from 'xlsx';
 import { TableColumn, TableData } from 'src/app/shared/table/table.component';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-
+import { Location } from '@angular/common';
 declare var $: any;
 @Component({
   selector: 'app-home',
@@ -35,7 +35,6 @@ export class HomeComponent implements OnInit {
     { header: 'Date', field: 'Date' },
     { header: 'Debit', field: 'debit' },
     { header: 'Credit', field: 'credit' },
-    { header: 'Error', field: 'ErrorDetail' },
   ];
   @ViewChild('fileInput') fileInput: ElementRef;
   clientform: FormGroup = new FormGroup({
@@ -47,27 +46,36 @@ export class HomeComponent implements OnInit {
     private service: ApiService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService,
-    private router : Router
-  ) { }
+    private router : Router,
+    private location: Location
+  ) {
+    const role = localStorage.getItem('Role')
+    if (Number(role) === 1) {
+      this.location.back();
+    } else {
+      this.clientform = this.builder.group({
+        Clientname: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(50),
+          ],
+        ],
+        Year: ['', [Validators.required]],
+        FormType: ['', [Validators.required]],
+      });
+      this.GetclientDetials();
+    }
+  }
 
   ngOnInit(): void {
-    this.clientform = this.builder.group({
-      Clientname: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(50),
-        ],
-      ],
-      Year: ['', [Validators.required]],
-      FormType: ['', [Validators.required]],
-    });
+
     if (this.data.length > 0) {
       this.initializeForm();
     }
     this.ButtonHideShow()
-    this.GetclientDetials();
+
   }
 
   GetclientDetials() {
@@ -77,9 +85,9 @@ export class HomeComponent implements OnInit {
       if (res && res.ResponseStatus === 'Success') {
       if(res.ResponseData.companyConnection  === 0)
       {
-        this.router.navigateByUrl("/companyNotConnectPage");
+        this.router.navigateByUrl("/Unconnected");
       }  
-       
+      
         if (res.ResponseData?.clientUserMappings != null) {
           this.IsClientField = false
           this.ClientId = res.ResponseData.clientUserMappings?.Id
@@ -231,7 +239,9 @@ export class HomeComponent implements OnInit {
         if (res.ErrorData.ErrorDetail != null) {
           this.toastr.warning(res.Message)
           this.data = res.ErrorData.ErrorDetail
-          this.initializeForm();
+          if(this.data.length > 0 ) {
+            this.initializeForm();
+          }
         }
       }
     })

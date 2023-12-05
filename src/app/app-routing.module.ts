@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   { path: 'verification', loadChildren: () => import('./verification/verification.module').then(m => m.VerificationModule) },
   { 
-    path: 'companyNotConnectPage', loadChildren: () => import('./company-not-connect-page/company-not-connect-page-routing.module').then(m => m.CompanyNotConnectPageRoutingModule),
+    path: 'Unconnected', loadChildren: () => import('./company-not-connect-page/company-not-connect-page-routing.module').then(m => m.CompanyNotConnectPageRoutingModule),
     canActivate: [AuthGuard]
 },
   { path: '**', pathMatch: 'full', component: PagenotFoundComponent }, 

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ActionButton, TableColumn, TableData } from 'src/app/shared/table/table.component';
 import { ApiResponse, CompanyFilter } from 'src/global';
+import { Location } from '@angular/common';
 declare var $: any;
 @Component({
   selector: 'app-company',
@@ -31,21 +32,19 @@ export class CompanyComponent implements OnInit {
   CutomerName: string;
   VendorName: string;
 
-  constructor(private service: ApiService, private toastr: ToastrService, private spinner: NgxSpinnerService, public builder: FormBuilder) {
+  constructor(private service: ApiService, private toastr: ToastrService, private spinner: NgxSpinnerService, public builder: FormBuilder, private location: Location) {
+    const role = localStorage.getItem('Role')
+    if (Number(role) === 2) {
+      this.location.back();
+    }
+  }
+  ngOnInit(): void {
+    this.companyList();
     this.addform = this.builder.group(
       {
         Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       },
     );
-
-    // this.addCutomerform = this.builder.group(
-    //   {
-    //     CustomerName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-    //   }
-    // );
-  }
-  ngOnInit(): void {
-    this.companyList();
   }
   QboConnect() {
     this.service.QboConnection();

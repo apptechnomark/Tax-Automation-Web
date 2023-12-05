@@ -86,20 +86,12 @@ export class ApiService {
 
   // Add Conenction to Company
   AddConnection(data:any){
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post(`${environment.automation_api + "Qbo/AssignCompany"}`,data,{headers});
+    return this.http.post(`${environment.automation_api + "Qbo/AssignCompany"}`,data);
   }
 
   // Company DropDown 
   CompanyDropDown(){
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.get(`${environment.automation_api + "Qbo/GetCompanyDropdown"}`,{headers});
+    return this.http.get(`${environment.automation_api + "Qbo/GetCompanyDropdown"}`);
   }
 
   // Add data To QBO 
@@ -126,20 +118,12 @@ export class ApiService {
   
   // Save Client Account 
   SaveClientAccount(data:any){
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post(`${environment.automation_api + "SaveClientAccountDetail"}`,data,{headers});
+    return this.http.post(`${environment.automation_api + "SaveClientAccountDetail"}`,data);
   }
 
   // Get Client
   GetClient(){
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.get(`${environment.automation_api + "GetClientDetail"}`,{headers});
+    return this.http.get(`${environment.automation_api + "GetClientDetail"}`);
   }
 
   // Create Vendor

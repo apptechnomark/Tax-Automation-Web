@@ -299,7 +299,6 @@ export class UsersComponent implements OnInit {
   closeModalForConnection() {
     const modal: any = this.connectionModal.nativeElement;
     $(modal).modal('hide');
-    this.CompanyConnectionform.reset();
     this.isEditMode = false;
   }
 
@@ -337,7 +336,6 @@ export class UsersComponent implements OnInit {
     } else if (action === 'Connect') {
       this.AddCompany(data)
     }
-    // Add more conditions for other actions if needed
   }
 
   getCompanies() {

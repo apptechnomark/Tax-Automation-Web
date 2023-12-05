@@ -87,7 +87,11 @@ export class HomeComponent implements OnInit {
       {
         this.router.navigateByUrl("/Unconnected");
       }  
-      
+      if(res.ResponseData.clientUserMappings.IsHasRecord == false)
+      {
+        localStorage.setItem('showUploadButton', 'true');   
+        this.ButtonHideShow()
+      }
         if (res.ResponseData?.clientUserMappings != null) {
           this.IsClientField = false
           this.ClientId = res.ResponseData.clientUserMappings?.Id

@@ -90,7 +90,6 @@ export class UsersComponent implements OnInit {
         IsActive: [true]
       },
     );
-    this.getCompanies();
     this.GetAllUserDetail();
   }
 
@@ -288,6 +287,7 @@ export class UsersComponent implements OnInit {
   UserData: any;
   AddCompany(data: any) {
     this.UserData = data;
+    this.getCompanies();
     this.openModalForConnection();
   }
 

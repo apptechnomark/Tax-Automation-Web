@@ -35,47 +35,39 @@ export class AuthService {
 
   // Get All Users Detail List 
   GetAllUserDetails(data: requestUserDetails) {
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post(`${environment.user_manager_api + "user/getall"}`, data, { headers })
+    // const token = localStorage.getItem("token");
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${token}`
+    // });
+    return this.http.post(`${environment.user_manager_api + "user/getall"}`, data)
   }
 
   // Delete User 
   Deleteuser(UserId: UserId) {
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post(`${environment.user_manager_api + "user/delete"}`, UserId, { headers })
+    // const token = localStorage.getItem("token");
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${token}`
+    // });
+    return this.http.post(`${environment.user_manager_api + "user/delete"}`, UserId)
   }
 
   // Active InActive User  
   ActiveInactiveUser(UserId: any) {
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post(`${environment.user_manager_api + "user/activeinactive"}`, UserId, { headers })
+    // const token = localStorage.getItem("token");
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${token}`
+    // });
+    return this.http.post(`${environment.user_manager_api + "user/activeinactive"}`, UserId)
   }
 
   // Resend Email Confirmation Link
   ResendLink(data: any) {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post(`${environment.user_manager_api + "user/ResendLink"}`, data, { headers });
+    return this.http.post(`${environment.user_manager_api + "user/ResendLink"}`, data);
   }
 
   // Get User Detail for a user
   getUserDetail() {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.get(`${environment.user_manager_api + "auth/getuserdetails"}`, { headers });
+    return this.http.get(`${environment.user_manager_api + "auth/getuserdetails"}`);
   }
 
 }

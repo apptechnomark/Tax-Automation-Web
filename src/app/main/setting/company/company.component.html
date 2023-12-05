@@ -1,14 +1,14 @@
 <div class="b-container">
     <button class="btn btn-outline-primary" (click)="QboConnect()">+ Company</button>
 </div>
-<div *ngIf="data != null">
+<!-- <div *ngIf="data != null"> -->
 <div style="margin-top: 10px;">
     <app-table [data]="tableData" [columns]="tableColumns" [TotalCount]="TotalCount" ></app-table>
 </div> 
-</div>
-<div class="error-message" *ngIf="data == null">
+<!-- </div> -->
+<!-- <div class="error-message" *ngIf="data == null">
     Company Not Found. Please add a company 
-</div>
+</div> -->
 
 
 <!-- <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"

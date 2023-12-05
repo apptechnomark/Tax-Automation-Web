@@ -240,13 +240,11 @@ export class HomeComponent implements OnInit {
         this.toastr.success("Data added successfully");
       }
       else if (res.ResponseStatus === 'Failure') {
-        if (res.ErrorData.ErrorDetail != null) {
           this.toastr.warning(res.Message)
-          this.data = res.ErrorData.ErrorDetail
+          this.data = res.ErrorData.ErrorDetail != null ? res.ErrorData.ErrorDetail : [];
           if(this.data.length > 0 ) {
             this.initializeForm();
           }
-        }
       }
     })
   }

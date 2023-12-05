@@ -79,7 +79,15 @@ export class HomeComponent implements OnInit {
       {
         this.router.navigateByUrl("/companyNotConnectPage");
       }  
-       
+      if(res.ResponseData.clientUserMappings.IsHasRecord == false)
+      {
+        console.log("false");
+        
+        localStorage.setItem('showUploadButton', 'true');
+        console.log(res.ResponseData.clientUserMappings.IsHasRecord);
+        
+        this.ButtonHideShow()
+      }
         if (res.ResponseData?.clientUserMappings != null) {
           this.IsClientField = false
           this.ClientId = res.ResponseData.clientUserMappings?.Id

@@ -2,17 +2,18 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin: 20px;
 }
+
 .table-scroll::-webkit-scrollbar {
   display: none;
 }
-/* Style the table */
+
 table {
   width: 1100px;
   border-collapse: collapse;
 }
 
-/* Style the table header row */
 thead {
   background-color: #007BFF;
   color: #fff;
@@ -23,7 +24,6 @@ th {
   text-align: left;
 }
 
-/* Style the table data rows */
 tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -35,9 +35,6 @@ tbody tr:nth-child(odd) {
 td {
   padding: 10px;
 }
-
-/* Style the "Edit" button */
-
 
 button:hover {
   background-color: #c3c6cc;
@@ -55,10 +52,9 @@ button.active {
 
 button.active:hover {
   background-color: #218838;
-  
+
 }
 
-/* Style the "Inactive" button */
 button.inactive {
   background-color: #dc3545;
   color: #fff;
@@ -95,7 +91,6 @@ button.inactive:hover {
   text-align: left;
 }
 
-/* Add styles for the scrollable area */
 .table-scroll {
   max-height: 700px;
   height: 370px;
@@ -112,6 +107,7 @@ button.inactive:hover {
   margin: 1px;
   margin-left: 6px !important;
 }
+
 .IsConfirmed {
   width: 50px;
 }
@@ -120,21 +116,14 @@ button.inactive:hover {
   width: 80%;
 }
 
-// .pagination {
-//   position: relative;
-//   display: flex;
-//   flex-direction: row;
-//   float: right;
-//   // margin: 10px;
-// }
-
-.QBO_AccountName i:hover{
-cursor: pointer;
+.QBO_AccountName i:hover {
+  cursor: pointer;
 }
 
 .dropdown-menu {
   --bs-dropdown-min-width: 8rem !important;
 }
+
 @media only screen and (max-width: 600px) {
 
   th,
@@ -174,16 +163,18 @@ cursor: pointer;
 
 
 .pagination-container {
-  width:  1100px;
+  width: 1100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
 }
 
 .page-size-container {
-  margin-right: auto; 
+  margin-right: auto;
+  display: flex;
 }
 
 .pagination-controls {
-  margin-left: 10px; 
+  margin-left: 10px;
 }

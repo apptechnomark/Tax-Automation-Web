@@ -13,14 +13,14 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'verification', loadChildren: () => import('./verification/verification.module').then(m => m.VerificationModule) },
-  { 
-    path: 'unconnected', loadChildren: () => import('./company-not-connect-page/company-not-connect-page-routing.module').then(m => m.CompanyNotConnectPageRoutingModule),
+  {
+    path: 'Unconnected', loadChildren: () => import('./company-not-connect-page/company-not-connect-page-routing.module').then(m => m.CompanyNotConnectPageRoutingModule),
     canActivate: [AuthGuard]
   },
-  { 
-    path: 'QboDisconnection', component : QboDisconnextionComponent,
+  {
+    path: 'QboDisconnection', component: QboDisconnextionComponent,
   },
-  { path: '**', pathMatch: 'full', component: PagenotFoundComponent }, 
+  { path: '**', pathMatch: 'full', component: PagenotFoundComponent },
 ];
 
 @NgModule({

@@ -257,6 +257,7 @@ export class UsersComponent implements OnInit {
       }
     });
   }
+  
   onPageSizeChange(PageSize: any) {
     this.UserDetailform.get('PageSize').setValue(PageSize.pageSize);
     this.PageNo = 1;

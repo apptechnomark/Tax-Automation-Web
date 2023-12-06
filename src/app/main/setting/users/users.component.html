@@ -5,7 +5,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Add User</h5>
-        <button type="button" (click)="closeModal()" style="color: aliceblue;" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" (click)="closeModal()" style="color: aliceblue;" class="close" data-dismiss="modal"
+          aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -88,14 +89,18 @@
 </div>
 
 <div class="action-container">
-  <form [formGroup]="UserDetailform">
-    <div *ngIf="tableData.length > 0" class="search-container">
-      <input type="text" placeholder="Search" formControlName="GlobalSearch" class="search-input">
-      <button class="btn btn-primary search-button" type="button" (click)="Search()">Search</button>
+  <form class="form-inline" [formGroup]="UserDetailform">
+    <div *ngIf="tableData.length > 0"  class="input-group md-form form-sm form-1 pl-0" style="margin-right: 2rem;">
+      <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search"
+        formControlName="GlobalSearch">
+      <div class="input-group-prepend">
+        <a class="input-group-text purple lighten-3" id="basic-text1" (click)="Search()"><i class="bi bi-search"></i>
+        </a>
+      </div>
     </div>
   </form>
-  <button type="button" class="btn btn-primary btn-sm" style=" padding: 0.4rem; margin-right: 1rem;" (click)="openModal()">
-    + Add User
+  <button type="button" class="btn btn-primary add-user-button" (click)="openModal()">
+    <i class="bi bi-plus-circle"></i> Add User
   </button>
 </div>
 
@@ -115,7 +120,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Company connection</h5>
-        <button type="button" style="color: aliceblue;" (click)="closeModalForConnection()" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" style="color: aliceblue;" (click)="closeModalForConnection()" class="close"
+          data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -126,12 +132,12 @@
             <option selected disabled>Select company</option>
             <option *ngFor="let company of companies" [value]="company.value">{{ company.label }}</option>
           </select>
-         
+
         </form>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary text-white"  (click)="ConnectCompany()">
+        <button type="button" class="btn btn-primary text-white" (click)="ConnectCompany()">
           Add Company
         </button>
         <button type="button" (click)="closeModalForConnection()" #closebutton class="btn btn-secondary"

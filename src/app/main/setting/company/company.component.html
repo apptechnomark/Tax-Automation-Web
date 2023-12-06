@@ -1,8 +1,12 @@
 <div class="b-container">
     <button class="btn btn-outline-primary" style="margin-right: 32px; padding: 0.8rem;" (click)="QboConnect()">+ Company</button>
 </div>
+
+<div *ngIf="tableData.length === 0" class="alert alert-danger" style="margin: 20px;" role="alert">
+    Cuurently there no Record, You may <a (click)="QboConnect()">Connect Company</a> To Continue.
+  </div>
 <!-- <div *ngIf="data != null"> -->
-<div style="margin-top: 10px;">
+<div *ngIf="tableData.length > 0" style="margin-top: 10px;">
     <app-table [data]="tableData" [columns]="tableColumns" [TotalCount]="TotalCount" ></app-table>
 </div> 
 <!-- </div> -->

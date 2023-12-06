@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true" #addUserModal>
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -88,7 +89,7 @@
 
 <div class="action-container">
   <form [formGroup]="UserDetailform">
-    <div class="search-container">
+    <div *ngIf="tableData.length > 0" class="search-container">
       <input type="text" placeholder="Search" formControlName="GlobalSearch" class="search-input">
       <button class="btn btn-primary search-button" type="button" (click)="Search()">Search</button>
     </div>
@@ -98,7 +99,11 @@
   </button>
 </div>
 
-<app-table [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns" [actionButtons]="ActionButtons"
+<div *ngIf="tableData.length === 0" class="alert alert-danger" style="margin: 20px;" role="alert">
+  Cuurently there no Record, You may <a (click)="openModal()">Create User</a> To Continue.
+</div>
+
+<app-table *ngIf="tableData.length > 0" [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns" [actionButtons]="ActionButtons"
   [PageNo]="PageNo" (isActiveClick)="ActiveInActive($event)" (actionClick)="handleActionClick($event)"
   (pageSizeChnage)="onPageSizeChange($event)" (RemoveCompany)="RemoveCompany($event)"
   (PriviousPage)="onPageChange($event)" (nextpage)="onPageChange($event)" (GotoPage)="onPageChange($event)"

@@ -13,7 +13,6 @@ declare var $: any;
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
-  data: any;
   @ViewChild('AddVendorModal') AddVendorModal: ElementRef;
   @ViewChild('AddVendorModal') AddCustomerModal: ElementRef;
   tableData: TableData[];
@@ -61,7 +60,6 @@ export class CompanyComponent implements OnInit {
     }
     this.spinner.show();
     this.service.GetCompanyList(Filter).subscribe((res: ApiResponse) => {
-      this.data = res;
       this.spinner.hide();
       if (res && res.ResponseStatus === "Success") {
         this.tableData = res.ResponseData.List;

@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   qbobuttons: boolean = false;
   ClientId: number;
   showUploadButton: boolean;
-
+  transferButton : boolean = true;
   headers: TableColumn[] = [
     { header: 'Id', field: 'Id' },
     { header: 'Name', field: 'name' },
@@ -214,6 +214,7 @@ export class HomeComponent implements OnInit {
           localStorage.setItem('showUploadButton', 'false');
           if (this.data.length > 0) {
             this.initializeForm();
+            this.transferButton = false
           }
           if (this.data.length === 0) {
             this.qbobuttons = true
@@ -238,13 +239,18 @@ export class HomeComponent implements OnInit {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
         this.toastr.success("Data added successfully");
+        this.transferButton = false
       }
       else if (res.ResponseStatus === 'Failure') {
           this.toastr.warning(res.Message)
           this.data = res.ErrorData.ErrorDetail != null ? res.ErrorData.ErrorDetail : [];
           if(this.data.length > 0 ) {
             this.initializeForm();
+            this.transferButton = false
+          }else {
+            this.transferButton = true
           }
+
       }
     })
   }
@@ -364,6 +370,7 @@ export class HomeComponent implements OnInit {
             }
             if (this.data.length === 0) {
               this.qbobuttons = true;
+              this.transferButton = true;
             }
           } else if (response.ResponseStatus === 'Failure') {
             this.toastr.error(response.ErrorData.Error);

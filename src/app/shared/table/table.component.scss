@@ -1,0 +1,189 @@
+.table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.table-scroll::-webkit-scrollbar {
+  display: none;
+}
+/* Style the table */
+table {
+  width: 1100px;
+  border-collapse: collapse;
+}
+
+/* Style the table header row */
+thead {
+  background-color: #007BFF;
+  color: #fff;
+}
+
+th {
+  padding: 10px;
+  text-align: left;
+}
+
+/* Style the table data rows */
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+td {
+  padding: 10px;
+}
+
+/* Style the "Edit" button */
+
+
+button:hover {
+  background-color: #c3c6cc;
+}
+
+button.active {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+  width: 80px;
+}
+
+button.active:hover {
+  background-color: #218838;
+  
+}
+
+/* Style the "Inactive" button */
+button.inactive {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+  width: 80px;
+}
+
+button.inactive:hover {
+  background-color: #c82333;
+}
+
+.table-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.table-scroll table {
+  border-collapse: collapse;
+}
+
+.table-scroll thead {
+  background-color: rgb(30, 62, 107);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-scroll th {
+  padding: 10px;
+  text-align: left;
+}
+
+/* Add styles for the scrollable area */
+.table-scroll {
+  max-height: 700px;
+  height: 370px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dropdown-menu {
+  margin: auto;
+
+}
+
+.dropdown-menu button {
+  margin: 1px;
+  margin-left: 6px !important;
+}
+.IsConfirmed {
+  width: 50px;
+}
+
+.IsConfirmed button {
+  width: 80%;
+}
+
+// .pagination {
+//   position: relative;
+//   display: flex;
+//   flex-direction: row;
+//   float: right;
+//   // margin: 10px;
+// }
+
+.QBO_AccountName i:hover{
+cursor: pointer;
+}
+
+.dropdown-menu {
+  --bs-dropdown-min-width: 8rem !important;
+}
+@media only screen and (max-width: 600px) {
+
+  th,
+  td {
+    width: auto;
+    display: block;
+  }
+
+  th {
+    text-align: center;
+  }
+
+  tbody tr {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: rgb(30, 62, 107) !important;
+  border-color: rgb(30, 62, 107) !important;
+}
+
+.page-item.disabled {
+  pointer-events: none;
+}
+
+.page-item.disabled i {
+  opacity: 0.5;
+}
+
+
+.pagination-container {
+  width:  1100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-size-container {
+  margin-right: auto; 
+}
+
+.pagination-controls {
+  margin-left: 10px; 
+}

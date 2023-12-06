@@ -1,0 +1,28 @@
+<form [formGroup]="SetPasswordform">
+  <div class="login-container">
+    <h2>Set Password</h2>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" placeholder="Enter password" formControlName="Password">
+      <div *ngIf="f['Password'].touched ">
+        <span class="error" *ngIf="f['Password'].errors?.['required'] ">Password is required!</span>
+        <span class="error" *ngIf="f['Password'].errors?.['minlength'] ">Password must be 6 characters!</span>
+        <span class="error" *ngIf="f['Password'].errors?.['maxlength'] ">Password must be under 50 characters!</span>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="ConfirmPassword">Confirm Password:</label>
+      <input type="password" placeholder="Enter confirm password" formControlName="ConfirmPassword">
+      <div *ngIf="f['ConfirmPassword'].touched">
+        <span class="error" *ngIf="f['ConfirmPassword'].errors?.['required']">Confirm Password is required!</span>
+        <!-- <span class="error" *ngIf="f['ConfirmPassword']?.hasError('mismatch')">Passwords do not match!</span> -->
+      </div>
+    </div>
+
+    <div class="login-button">
+      <button class="btn btn-primary" (click)="setPassword()">Set Password</button>
+    </div>
+  </div>
+</form>

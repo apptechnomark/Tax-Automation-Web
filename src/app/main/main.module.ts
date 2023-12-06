@@ -8,8 +8,8 @@ import { FooterModule } from './footer/footer.module';
 
 @NgModule({
   declarations: [
-    MainComponent
-  ],
+    MainComponent,
+    ],
   imports: [
     CommonModule,
     MainRoutingModule,

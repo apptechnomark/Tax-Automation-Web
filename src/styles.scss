@@ -2,3 +2,14 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
+
+.btn-primary {
+    background-color: rgb(30, 62, 107) !important;
+    border: none !important;
+}
+
+.btn-outline-primary{
+    background-color: rgb(30, 62, 107) !important;
+    border: none !important;
+    color: white !important;
+}

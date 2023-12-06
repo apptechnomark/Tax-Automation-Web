@@ -1,0 +1,74 @@
+.b-container {
+    display: flex;
+    justify-content: end;
+    margin-right: 2%;
+    margin-top: 5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  
+  .error {
+    color: red;
+  }
+
+  .modal-content {
+    border-radius: 10px;
+  }
+  
+  .modal-header {
+    background-color: rgb(30, 62, 107);
+    color: #fff;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .modal-title {
+    margin-bottom: 0;
+  }
+  
+  .modal-body {
+    padding: 10px;
+  }
+  
+  .modal-body .row {
+    margin-bottom: 20px; /* Add some spacing between rows to accommodate error messages */
+  }
+
+  .modal-body .error {
+    display: block; /* Show error messages */
+  }
+
+  .modal-dialog {
+    transition: max-height 0.3s;
+  }
+
+  .model-button {
+    float: right;
+    display: flex;
+  }
+  .close {
+    opacity: 1 !important;
+  }
+
+  .error-message {
+    background-color: #f8d7da; /* Light red background color */
+    color: #721c24; /* Dark red text color */
+    padding: 10px; /* Padding around the content */
+    margin: 10px 0; /* Margin to separate from other elements */
+    border: 1px solid #f5c6cb; /* Border color */
+    border-radius: 4px; /* Rounded corners */
+  }
+  

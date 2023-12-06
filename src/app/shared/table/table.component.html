@@ -1,113 +1,76 @@
-<table style="width: 100%;border-style: 1px solid;" border="1">
-    <thead>
-        <tr>
-            <th colspan="5">
-                Shared Table
-            </th>
-        </tr>
-        <tr>
-            <th>
-                Sr #
-            </th>
-            <th>
-                Header 1
-            </th>
-            <th>
-                Header 2
-            </th>
-            <th>
-                Header 3
-            </th>
-            <th>
-                Header 4
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                1
+
+  <div class="table-container">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th *ngFor="let column of columns">{{ column.header }}</th>
+          </tr>
+        </thead>
+        <tbody >
+          <tr *ngFor="let row of data">
+            <td *ngFor="let column of columns">
+              <ng-container *ngIf="column.field !== 'action'">
+                <!-- Check if column is 'IsActive' and display buttons accordingly -->
+                <ng-container *ngIf="column.field === 'IsActive'">
+                  <button *ngIf="row?.['IsActive']; else inactiveButton" class="active" (click)="onIsActiveClick(row)">Active</button>
+                  <ng-template #inactiveButton>
+                    <button class="inactive" (click)="onIsActiveClick(row)">Inactive</button>
+                  </ng-template>
+                </ng-container>
+                <ng-container *ngIf="column.field !== 'IsActive' && column.field !=='IsConfirmed'  ">
+                  {{ row[column.field] }}
+                </ng-container>
+              </ng-container>
+              <ng-container class="QBO_AccountName" *ngIf="column.field === 'QBO_AccountName'">
+                <a *ngIf="row?.['QBO_AccountName']" (click)="onRemoveCompany(row)"><i class="bi bi-x-circle"></i></a>
+                
+              </ng-container>
+              <ng-container class="QBO_AccountName" *ngIf="column.field === 'QBO_AccountName'">
+               <a *ngIf="!row?.['QBO_AccountName']" (click)="onAddCompany(row)">Not Connected</a>
+                <!-- <button *ngIf="!row?.['QBO_AccountName']" (click)="onAddCompany(row)">Connect Company</button> -->
+              </ng-container>
+              <ng-container *ngIf="column.field === 'action'">
+                <div class="dropdown">
+                  <button class=" bi-three-dots-vertical text-dark btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+                  <div class="dropdown-menu dropdown-menu-center" aria-labelledby="dropdownMenuButton">
+                    <div class="" *ngFor="let item of actionButtons">
+                      <li><button style="width: 90%; height: 50%;" class="btn text-dark fw-normal" *ngIf="(!row?.['IsConfirmed'] || item.lable !=='Resend Link') && (!row?.['QBO_AccountName'] || item.lable !=='Connect') "   (click)="performAction(item.Action,row)">{{item.lable}}</button></li>
+                    </div>
+
+                  </div>
+                </div>
+              </ng-container> 
+
             </td>
-            <td>
-                Col 1
-            </td>
-            <td>
-                Col 2
-            </td>
-            <td>
-                Col 3
-            </td>
-            <td>
-                Col 4
-            </td>
-        </tr>
-        <tr>
-            <td>
-                2
-            </td>
-            <td>
-                Col 1
-            </td>
-            <td>
-                Col 2
-            </td>
-            <td>
-                Col 3
-            </td>
-            <td>
-                Col 4
-            </td>
-        </tr>
-        <tr>
-            <td>
-                3
-            </td>
-            <td>
-                Col 1
-            </td>
-            <td>
-                Col 2
-            </td>
-            <td>
-                Col 3
-            </td>
-            <td>
-                Col 4
-            </td>
-        </tr>
-        <tr>
-            <td>
-                4
-            </td>
-            <td>
-                Col 1
-            </td>
-            <td>
-                Col 2
-            </td>
-            <td>
-                Col 3
-            </td>
-            <td>
-                Col 4
-            </td>
-        </tr>
-        <tr>
-            <td>
-                5
-            </td>
-            <td>
-                Col 1
-            </td>
-            <td>
-                Col 2
-            </td>
-            <td>
-                Col 3
-            </td>
-            <td>
-                Col 4
-            </td>
-        </tr>
-    </tbody>
-</table>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-container">
+      <div class="page-size-container">
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+          <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+    
+      <div class="pagination-controls">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="PageNo === 1" (click)="priviousPageChanage()">
+              <i class="bi bi-caret-left-fill page-link" style="font-size: 1rem; color: rgb(30, 62, 107);"></i>
+            </li>
+            <ng-container *ngFor="let page of getPages()">
+              <li class="page-item" style="color: rgb(30, 62, 107);" [class.active]="page === PageNo" (click)="goToPage(page)">
+                <a class="page-link">{{ page }}</a>
+              </li>
+            </ng-container>
+            <li class="page-item" [class.disabled]="PageNo * pageSize >= TotalCount" (click)="nextPageChanage()">
+              <i class="bi bi-caret-right-fill page-link" style="font-size: 1rem; color: rgb(30, 62, 107);"></i>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>

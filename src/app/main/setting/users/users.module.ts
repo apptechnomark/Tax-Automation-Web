@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersComponent } from './users.component';
 import { TableModule } from '../../../shared/table/table.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,9 @@ import { TableModule } from '../../../shared/table/table.module';
   imports: [
     CommonModule,
     UsersRoutingModule,
-    TableModule
+    TableModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class UsersModule { }

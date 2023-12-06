@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-setting',
@@ -6,10 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./setting.component.scss']
 })
 export class SettingComponent implements OnInit {
-
-  constructor() { }
+  role :any;
+  constructor(
+    private router:Router,
+  ) {
+    this.routingMethos()
+   }
 
   ngOnInit(): void {
+  }
+  routingMethos(){
+    this.role = localStorage.getItem('Role');
+    // if(this.role == "1")
+    //   this.router.navigateByUrl[('**')]
   }
 
 }

@@ -15,7 +15,7 @@ declare var $: any;
 export class CompanyComponent implements OnInit {
   @ViewChild('AddVendorModal') AddVendorModal: ElementRef;
   @ViewChild('AddVendorModal') AddCustomerModal: ElementRef;
-  tableData: TableData[];
+  tableData: TableData[] = [];
   tableColumns: TableColumn[] = [
     { header: 'Company', field: 'CompanyName' },
     { header: 'Status', field: 'IsActive' }
@@ -81,8 +81,8 @@ export class CompanyComponent implements OnInit {
       if (res && res.ResponseStatus === "Success") {
         this.tableData = res.ResponseData.List;
         this.TotalCount = res.ResponseData.TotalCount;
-        this.CutomerName = res.ResponseData.List[0].CustomerName
-        this.VendorName = res.ResponseData.List[0].vendorName
+        this.CutomerName = res.ResponseData.List[0]?.CustomerName
+        this.VendorName = res.ResponseData.List[0]?.vendorName
       } else if (res.ResponseStatus === "Failure") {
         this.toastr.error(res.ErrorData.Message);
       }

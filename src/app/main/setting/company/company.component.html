@@ -15,64 +15,12 @@
     </button>
   </div>
 
-<!-- <div class="b-container">
-    <button class="btn btn-outline-primary" style="margin-right: 32px; padding: 0.8rem;" (click)="QboConnect()">+ Company</button>
-</div> -->
-<!-- <div *ngIf="data != null"> -->
+  <div *ngIf="tableData.length === 0" class="alert alert-danger" style="margin: 20px;" role="alert">
+    Cuurently there no Record, You may <a (click)="QboConnect()">Connect Company</a> To Continue.
+  </div>
+
 <div *ngIf="tableData.length > 0" style="margin-top: 10px;">
     <app-table [data]="tableData" [columns]="tableColumns" [TotalCount]="TotalCount" [PageNo]="PageNo" 
     (pageSizeChnage)="onPageSizeChange($event)" (PriviousPage)="onPageChange($event)" 
     (nextpage)="onPageChange($event)" (GotoPage)="onPageChange($event)" ></app-table>
 </div> 
-<!-- </div> -->
-<!-- <div class="error-message" *ngIf="data == null">
-    Company Not Found. Please add a company 
-</div> -->
-
-
-<!-- <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true" #AddVendorModal>
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">{{title}} Detail</h5>
-                <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
-                    <i style="color: white; font-size: 1.2rem;" class="bi bi-x-lg"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form [formGroup]="addform">
-                    <div class="row">
-                        <div class="col-4">
-                            <label class="mt-2" for="VendorName">{{title}}:</label>
-                        </div>
-                        <div class="col-8">
-                            <input type="text" formControlName="Name">
-                            <div *ngIf="abstract['Name'].touched ">
-                                <span class="error" *ngIf="abstract['Name'].errors?.['required'] ">{{title}} Name is
-                                    required!</span>
-                                <span class="error" *ngIf="abstract['Name'].errors?.['minlength'] ">{{title}} Name must
-                                    be 3
-                                    characters!</span>
-                                <span class="error" *ngIf="abstract['Name'].errors?.['maxlength'] ">{{title}} Name must
-                                    be under
-                                    20
-                                    characters!</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-                <div class="mt-2 model-button">
-                    <button style="margin-right: 8px;" type="button" class="btn btn-primary text-white" id="Button"
-                        (click)="title === 'Vendor' ? AddVendorButton() : AddCustomerButton()">
-                        Add {{title}}
-                    </button>
-                    <button type="button" (click)="closeModal()" #closebutton class="btn btn-secondary"
-                        data-dismiss="modal">Close</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div> -->

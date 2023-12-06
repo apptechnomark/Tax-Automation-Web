@@ -214,6 +214,7 @@ export class HomeComponent implements OnInit {
           localStorage.setItem('showUploadButton', 'false');
           if (this.data.length > 0) {
             this.initializeForm();
+            this.transferButton = false
           }
           if (this.data.length === 0) {
             this.qbobuttons = true

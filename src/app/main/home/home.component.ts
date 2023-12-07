@@ -17,7 +17,6 @@ declare var $: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  finalData = [];
   data: TableData[] = [];
   deletedRowId: any[] = [];
   IsClientField: boolean = true;
@@ -243,7 +242,7 @@ export class HomeComponent implements OnInit {
       }
       else if (res.ResponseStatus === 'Failure') {
           this.toastr.warning(res.Message)
-          this.data = res.ErrorData.ErrorDetail != null ? res.ErrorData.ErrorDetail : [];
+          this.data = res.ErrorData.ErrorDetail != null &&  Array.isArray(res.ErrorData.ErrorDetail) ? res.ErrorData.ErrorDetail : [];
           if(this.data.length > 0 ) {
             this.initializeForm();
             this.transferButton = false

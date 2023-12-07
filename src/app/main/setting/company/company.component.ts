@@ -13,10 +13,9 @@ declare var $: any;
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
-  data: any;
   @ViewChild('AddVendorModal') AddVendorModal: ElementRef;
   @ViewChild('AddVendorModal') AddCustomerModal: ElementRef;
-  tableData: TableData[];
+  tableData: TableData[] = [];
   tableColumns: TableColumn[] = [
     { header: 'Company', field: 'CompanyName' },
     { header: 'Status', field: 'IsActive' }
@@ -24,6 +23,8 @@ export class CompanyComponent implements OnInit {
   TotalCount: number;
   isEditMode: boolean = false;
   addform: FormGroup;
+  PageNo: number=1;
+  CompanyDetailForm:FormGroup;
   ActionButtons: ActionButton[] = [
     { lable: "Customer", Action: 'AddCustomer' },
     { lable: "Vendor", Action: 'AddVendor' },
@@ -39,18 +40,31 @@ export class CompanyComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.companyList();
     this.addform = this.builder.group(
       {
         Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       },
     );
+
+    this.CompanyDetailForm = this.builder.group(
+      {
+        PageNo: [this.PageNo],
+        PageSize: ['5'],
+        GlobalSearch: [''],
+        SortColumn: [''],
+        IsDesc: [false],
+        IsActive: [true]
+      },
+    );
+    this.companyList();
+
   }
   QboConnect() {
     this.service.QboConnection();
   }
 
   companyList() {
+    
     const Filter: CompanyFilter = {
       PageNo: 1,
       PageSize: 100,
@@ -60,14 +74,15 @@ export class CompanyComponent implements OnInit {
       IsActive: null
     }
     this.spinner.show();
-    this.service.GetCompanyList(Filter).subscribe((res: ApiResponse) => {
-      this.data = res;
+    console.log(this.CompanyDetailForm.value);
+    
+    this.service.GetCompanyList(this.CompanyDetailForm.value).subscribe((res: ApiResponse) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === "Success") {
         this.tableData = res.ResponseData.List;
         this.TotalCount = res.ResponseData.TotalCount;
-        this.CutomerName = res.ResponseData.List[0].CustomerName
-        this.VendorName = res.ResponseData.List[0].vendorName
+        this.CutomerName = res.ResponseData.List[0]?.CustomerName
+        this.VendorName = res.ResponseData.List[0]?.vendorName
       } else if (res.ResponseStatus === "Failure") {
         this.toastr.error(res.ErrorData.Message);
       }
@@ -166,4 +181,21 @@ export class CompanyComponent implements OnInit {
     return this.addform.controls;
   }
 
+  Search() {
+    this.companyList()
+  }
+
+  onPageSizeChange(PageSize: any) {
+    this.CompanyDetailForm.get('PageSize').setValue(PageSize.pageSize);
+    this.PageNo = 1;
+    this.CompanyDetailForm.get('PageNo').setValue(1);
+    this.companyList()
+  }
+
+  onPageChange($event: any) {
+    this.CompanyDetailForm.get('PageSize').setValue($event.pageSize);
+    this.PageNo = $event.pageNo;
+    this.CompanyDetailForm.get('PageNo').setValue($event.pageNo);
+    this.companyList()
+  }
 }

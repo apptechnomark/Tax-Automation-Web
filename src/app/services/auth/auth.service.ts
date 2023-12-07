@@ -16,11 +16,7 @@ export class AuthService {
 
   // Add/Update User Detail 
   saveUser(data: saveUser) {
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post(`${environment.user_manager_api + "user/save"}`, data, { headers })
+    return this.http.post(`${environment.user_manager_api + "user/save"}`, data)
   }
 
   // User Verification 
@@ -35,28 +31,16 @@ export class AuthService {
 
   // Get All Users Detail List 
   GetAllUserDetails(data: requestUserDetails) {
-    // const token = localStorage.getItem("token");
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${token}`
-    // });
     return this.http.post(`${environment.user_manager_api + "user/getall"}`, data)
   }
 
   // Delete User 
   Deleteuser(UserId: UserId) {
-    // const token = localStorage.getItem("token");
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${token}`
-    // });
     return this.http.post(`${environment.user_manager_api + "user/delete"}`, UserId)
   }
 
   // Active InActive User  
   ActiveInactiveUser(UserId: any) {
-    // const token = localStorage.getItem("token");
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${token}`
-    // });
     return this.http.post(`${environment.user_manager_api + "user/activeinactive"}`, UserId)
   }
 
@@ -69,5 +53,4 @@ export class AuthService {
   getUserDetail() {
     return this.http.get(`${environment.user_manager_api + "auth/getuserdetails"}`);
   }
-
 }

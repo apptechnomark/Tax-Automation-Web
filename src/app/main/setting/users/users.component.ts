@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit {
     { lable: "Connect", Action: 'Connect' },
     { lable: "Resend Link", Action: 'onEmailResend' }
   ]
-  tableData: TableData[];
+  tableData: TableData[] = [];
   tableColumns: TableColumn[] = [
     { header: 'Name', field: 'FullName' },
     { header: 'Email', field: 'Email' },
@@ -90,7 +90,7 @@ export class UsersComponent implements OnInit {
         IsActive: [true]
       },
     );
-    this.GetAllUserDetail();
+    this.GetAllUserDetail();    
   }
 
 
@@ -257,6 +257,7 @@ export class UsersComponent implements OnInit {
       }
     });
   }
+  
   onPageSizeChange(PageSize: any) {
     this.UserDetailform.get('PageSize').setValue(PageSize.pageSize);
     this.PageNo = 1;

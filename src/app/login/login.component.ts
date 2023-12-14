@@ -12,9 +12,6 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  Username!: string;
-  Password!: string;
   loginform: FormGroup;
 
   constructor(

@@ -8,10 +8,7 @@ import { Router } from '@angular/router';
 })
 export class CompanyNotConnectPageComponent {
 
-  constructor(
-    private router : Router,
-  ){
-  }
+  constructor(private router: Router) { }
   logoutUser() {
     localStorage.removeItem("isAuthenticate");
     localStorage.removeItem("token");

@@ -1,6 +1,6 @@
 export const QboParams = {
   ResponseType: "code",
-  Scope: "com.intuit.quickbooks.accounting",
+  Scope: "com.intuit.quickbooks.accounting openid profile email phone address",
   redirectUri: "http://localhost:4200/main/qbohome",
   State: "Home",
   GrantType: "authorization_code",

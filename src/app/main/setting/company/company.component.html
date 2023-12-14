@@ -1,26 +1,78 @@
-
 <div class="action-container">
     <form class="form-inline" [formGroup]="CompanyDetailForm">
-      <div class="input-group md-form form-sm form-1 pl-0" style="margin-right: 2rem;">
-        <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search"
-          formControlName="GlobalSearch">
-        <div class="input-group-prepend">
-          <a class="input-group-text purple lighten-3" id="basic-text1" (click)="Search()"><i class="bi bi-search"></i>
-          </a>
+        <div class="input-group md-form form-sm form-1 pl-0" style="margin-right: 2rem;">
+            <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search"
+                formControlName="GlobalSearch">
+            <div class="input-group-prepend">
+                <a class="input-group-text purple lighten-3" id="basic-text1" (click)="Search()"><i
+                        class="bi bi-search"></i>
+                </a>
+            </div>
         </div>
-      </div>
     </form>
     <button type="button" class="btn btn-primary add-user-button" (click)="QboConnect()">
-      <i class="bi bi-plus-circle"></i> Company
+        <i class="bi bi-plus-circle"></i> Company
     </button>
-  </div>
+</div>
 
-  <div *ngIf="tableData.length === 0" class="alert alert-danger" style="margin: 20px;" role="alert">
-    Cuurently there no Record, You may <a (click)="QboConnect()">Connect Company</a> To Continue.
-  </div>
+    <div *ngIf="tableData.length === 0" class="alert alert-danger" style="margin: 20px;" role="alert">
+        Cuurently there no Record, You may <a (click)="QboConnect()">Connect Company</a> To Continue.
+    </div>
 
 <div *ngIf="tableData.length > 0" style="margin-top: 10px;">
-    <app-table [data]="tableData" [columns]="tableColumns" [TotalCount]="TotalCount" [PageNo]="PageNo" 
-    (pageSizeChnage)="onPageSizeChange($event)" (PriviousPage)="onPageChange($event)" 
-    (nextpage)="onPageChange($event)" (GotoPage)="onPageChange($event)" ></app-table>
-</div> 
+    <app-table [data]="tableData" [columns]="tableColumns" [TotalCount]="TotalCount" [PageNo]="PageNo"
+        (pageSizeChnage)="onPageSizeChange($event)" (PriviousPage)="onPageChange($event)"
+        (nextpage)="onPageChange($event)" (GotoPage)="onPageChange($event)"></app-table>
+</div>
+<!-- </div> -->
+<!-- <div class="error-message" *ngIf="data == null">
+    Company Not Found. Please add a company 
+</div> -->
+
+
+<!-- <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true" #AddVendorModal>
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{title}} Detail</h5>
+                <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+                    <i style="color: white; font-size: 1.2rem;" class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addform">
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="mt-2" for="VendorName">{{title}}:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="text" formControlName="Name">
+                            <div *ngIf="abstract['Name'].touched ">
+                                <span class="error" *ngIf="abstract['Name'].errors?.['required'] ">{{title}} Name is
+                                    required!</span>
+                                <span class="error" *ngIf="abstract['Name'].errors?.['minlength'] ">{{title}} Name must
+                                    be 3
+                                    characters!</span>
+                                <span class="error" *ngIf="abstract['Name'].errors?.['maxlength'] ">{{title}} Name must
+                                    be under
+                                    20
+                                    characters!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="mt-2 model-button">
+                    <button style="margin-right: 8px;" type="button" class="btn btn-primary text-white" id="Button"
+                        (click)="title === 'Vendor' ? AddVendorButton() : AddCustomerButton()">
+                        Add {{title}}
+                    </button>
+                    <button type="button" (click)="closeModal()" #closebutton class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div> -->

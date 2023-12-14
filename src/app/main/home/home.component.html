@@ -10,7 +10,8 @@
               <div class="col-9 ml-2">
                 <input type="text" class="form-control" placeholder="Client Name" formControlName="Clientname">
                 <div *ngIf="abstract['Clientname'].touched ">
-                  <span class="error" *ngIf="abstract['Clientname'].errors?.['required']"> Clientname is required!</span>
+                  <span class="error" *ngIf="abstract['Clientname'].errors?.['required']"> Clientname is
+                    required!</span>
                 </div>
               </div>
             </div>
@@ -36,7 +37,8 @@
                     <input type="text" class="form-control" placeholder="Enter Form Type" formControlName="FormType"
                       onkeypress="return event.charCode>=48 && event.charCode<=57">
                     <span *ngIf="abstract['FormType'].touched ">
-                      <span class="error" *ngIf="abstract['FormType'].errors?.['required']"> Form Type is required!</span>
+                      <span class="error" *ngIf="abstract['FormType'].errors?.['required']"> Form Type is
+                        required!</span>
                     </span>
                   </div>
                 </div>

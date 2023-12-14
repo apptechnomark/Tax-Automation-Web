@@ -23,8 +23,8 @@ export class CompanyComponent implements OnInit {
   TotalCount: number;
   isEditMode: boolean = false;
   addform: FormGroup;
-  PageNo: number=1;
-  CompanyDetailForm:FormGroup;
+  PageNo: number = 1;
+  CompanyDetailForm: FormGroup;
   ActionButtons: ActionButton[] = [
     { lable: "Customer", Action: 'AddCustomer' },
     { lable: "Vendor", Action: 'AddVendor' },
@@ -64,7 +64,7 @@ export class CompanyComponent implements OnInit {
   }
 
   companyList() {
-    
+
     const Filter: CompanyFilter = {
       PageNo: 1,
       PageSize: 100,
@@ -74,8 +74,6 @@ export class CompanyComponent implements OnInit {
       IsActive: null
     }
     this.spinner.show();
-    console.log(this.CompanyDetailForm.value);
-    
     this.service.GetCompanyList(this.CompanyDetailForm.value).subscribe((res: ApiResponse) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === "Success") {
@@ -103,8 +101,7 @@ export class CompanyComponent implements OnInit {
 
   }
   AddCustomer(data: any) {
-    console.log(data);
-    this.title = "Customer"
+   this.title = "Customer"
     this.openModel();
   }
 
@@ -129,26 +126,18 @@ export class CompanyComponent implements OnInit {
   }
 
   AddVendorButton() {
-    console.log("Vendor");
-
-    if (this.addform.valid) {
-      console.log(this.addform)
+      if (this.addform.valid) {
       const value = { VendorName: this.addform.value.Name }
-      console.log(value);
-
-      this.service.CreateVendor(value).subscribe((response: ApiResponse) => {
+        this.service.CreateVendor(value).subscribe((response: ApiResponse) => {
         this.spinner.show();
         if (response && response.ResponseStatus === 'Success') {
           this.spinner.hide();
-          console.log(response.Message);
           this.toastr.success("Add Vendor successfully");
           this.closeModal();
           this.addform.reset();
-          // this.GetAllUserDetail();
         } else if (response.ResponseStatus === 'Failure') {
           this.spinner.hide();
           this.toastr.error(response.ErrorData.Error);
-          console.log("Message", response.Message, "Error", response.ErrorData.Error);
         }
       });
     }

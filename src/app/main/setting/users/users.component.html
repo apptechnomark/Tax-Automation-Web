@@ -102,7 +102,7 @@
 </div>
 
 <div *ngIf="tableData.length === 0" class="alert alert-danger" style="margin: 20px;" role="alert">
-  Cuurently there no Record, You may <a (click)="openModal()">Create User</a> To Continue.
+  Currently there no record, You may <a (click)="openModal()">Create User</a> To Continue.
 </div>
 
 <app-table *ngIf="tableData.length > 0" [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns"

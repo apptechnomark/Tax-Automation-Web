@@ -1,7 +1,7 @@
 export const QboParams = {
   ResponseType: "code",
-  Scope: "com.intuit.quickbooks.accounting",
-  redirectUri: "http://localhost:4200/main/qbohome",
+  Scope: "com.intuit.quickbooks.accounting openid profile email phone address",
+  redirectUri: "https://tax.pathquest.com/main/qbohome",
   State: "Home",
   GrantType: "authorization_code",
   GrantTypeForrefreshToken: "refresh_token"

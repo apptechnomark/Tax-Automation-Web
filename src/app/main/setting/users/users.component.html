@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true" #addUserModal>
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -73,7 +72,6 @@
             </div>
           </div>
         </form>
-
       </div>
       <div class="modal-footer">
         <button type="button" (click)="closeModal()" #closebutton class="btn btn-secondary"
@@ -82,7 +80,6 @@
           class="btn btn-primary">
           {{ isEditMode ? 'Update User' : 'Add User' }}
         </button>
-
       </div>
     </div>
   </div>
@@ -90,7 +87,7 @@
 
 <div class="action-container">
   <form class="form-inline" [formGroup]="UserDetailform">
-    <div *ngIf="tableData.length > 0"  class="input-group md-form form-sm form-1 pl-0" style="margin-right: 2rem;">
+    <div *ngIf="tableData.length > 0" class="input-group md-form form-sm form-1 pl-0" style="margin-right: 2rem;">
       <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search"
         formControlName="GlobalSearch">
       <div class="input-group-prepend">
@@ -105,14 +102,14 @@
 </div>
 
 <div *ngIf="tableData.length === 0" class="alert alert-danger" style="margin: 20px;" role="alert">
-  Cuurently there no Record, You may <a (click)="openModal()">Create User</a> To Continue.
+  Currently there no record, You may <a (click)="openModal()">Create User</a> To Continue.
 </div>
 
-<app-table *ngIf="tableData.length > 0" [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns" [actionButtons]="ActionButtons"
-  [PageNo]="PageNo" (isActiveClick)="ActiveInActive($event)" (actionClick)="handleActionClick($event)"
-  (pageSizeChnage)="onPageSizeChange($event)" (RemoveCompany)="RemoveCompany($event)"
-  (PriviousPage)="onPageChange($event)" (nextpage)="onPageChange($event)" (GotoPage)="onPageChange($event)"
-  [ActionEdit]="true" [ActionDelete]="true"></app-table>
+<app-table *ngIf="tableData.length > 0" [data]="tableData" [TotalCount]="TotalCount" [columns]="tableColumns"
+  [actionButtons]="ActionButtons" [PageNo]="PageNo" (isActiveClick)="ActiveInActive($event)"
+  (actionClick)="handleActionClick($event)" (pageSizeChnage)="onPageSizeChange($event)"
+  (RemoveCompany)="RemoveCompany($event)" (PriviousPage)="onPageChange($event)" (nextpage)="onPageChange($event)"
+  (GotoPage)="onPageChange($event)" [ActionEdit]="true" [ActionDelete]="true"></app-table>
 
 <div class="modal fade" id="AddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true" #connectionModal>
@@ -132,9 +129,7 @@
             <option selected disabled>Select company</option>
             <option *ngFor="let company of companies" [value]="company.value">{{ company.label }}</option>
           </select>
-
         </form>
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary text-white" (click)="ConnectCompany()">
@@ -142,7 +137,6 @@
         </button>
         <button type="button" (click)="closeModalForConnection()" #closebutton class="btn btn-secondary"
           data-dismiss="modal">Close</button>
-
       </div>
     </div>
   </div>

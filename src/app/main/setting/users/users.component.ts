@@ -15,14 +15,11 @@ declare var $: any;
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-
-
   @ViewChild('addUserModal') addUserModal: ElementRef;
   @ViewChild('connectionModal') connectionModal: ElementRef;
   userDetails: any;
   isEditMode: boolean = false;
   TotalCount: number = 1;
-  isAddCompanyModalOpen: boolean = false;
   ActionButtons: ActionButton[] = [
     { lable: "Edit", Action: 'Edit' },
     { lable: "Delete", Action: 'DeleteUser' },
@@ -38,9 +35,6 @@ export class UsersComponent implements OnInit {
     { header: 'Status', field: 'IsActive' },
   ];
   PageNo: number=1;
-  select: any;
-
-
   options = [
     { label: "Admin", value: Role.Admin },
     { label: "Employee", value: Role.Employee }
@@ -52,9 +46,6 @@ export class UsersComponent implements OnInit {
 
   CompanyConnectionform: FormGroup;
   companies: any[] = [];
-  // CompanyConnectionform : FormGroup = new FormGroup({
-  //   CompanyId: new FormControl()
-  // });
   UserId: number;
   constructor(
     private builder: FormBuilder,

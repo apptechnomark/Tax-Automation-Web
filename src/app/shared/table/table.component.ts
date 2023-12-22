@@ -48,7 +48,7 @@ export class TableComponent implements OnInit {
   pageSize: number = this.pageSizes[0];
 
   ngOnInit() {
-    if (this.ActionDelete || this.ActionEdit || this.AddCompany || this.RemoveCompany) {
+    if (this.ActionDelete || this.ActionEdit) {
       this.columns = [...this.columns, actionColumn];
     }
   }

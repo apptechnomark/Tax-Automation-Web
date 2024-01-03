@@ -17,6 +17,7 @@ declare var $: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  submited: boolean = false;
   data: TableData[] = [];
   deletedRowId: any[] = [];
   IsClientField: boolean = true;
@@ -121,8 +122,8 @@ export class HomeComponent implements OnInit {
 
   // Save Client Detail Button Click 
   SaveClientButton() {
-    this.spinner.show();
     if (this.clientform.valid) {
+      this.spinner.show();
       this.service.updateImportData(this.clientform.value).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
@@ -144,9 +145,9 @@ export class HomeComponent implements OnInit {
           this.toastr.error(response.ErrorData.Error);
         }
       })
+    } else {
+      this.submited = true
     }
-    else
-      this.toastr.error("Invalid Form's Value")
   }
 
   get abstract(): { [key: string]: AbstractControl } {
@@ -230,6 +231,7 @@ export class HomeComponent implements OnInit {
   //Add Qbo Process button 
   AddtoQboButton() {
     this.spinner.show();
+    this.toastr.info( "This mat take Some Time","Transferring data to qbo,")
     this.service.AddDataToQbo().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
@@ -238,7 +240,8 @@ export class HomeComponent implements OnInit {
       }
       else if (res.ResponseStatus === 'Failure') {
         this.toastr.warning(res.Message)
-        this.data = res.ErrorData.ErrorDetail != null ? res.ErrorData.ErrorDetail : [];
+        this.data = res.ErrorData.ErrorDetail != null  && res.ErrorData?.ErrorDetail.length > 0 ? res.ErrorData.ErrorDetail : [];
+        console.log(this.data)
         if (this.data.length > 0) {
           this.initializeForm();
           this.transferButton = false

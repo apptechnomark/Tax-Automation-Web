@@ -9,8 +9,8 @@
               <label for="Clientname" class="col-md-1 mt-1">Client:</label>
               <div class="col-9 ml-2">
                 <input type="text" class="form-control" placeholder="Client Name" formControlName="Clientname">
-                <div *ngIf="abstract['Clientname'].touched ">
-                  <span class="error" *ngIf="abstract['Clientname'].errors?.['required']"> Clientname is
+                <div *ngIf="abstract['Clientname']?.touched || submited">
+                  <span class="error" *ngIf="abstract['Clientname']?.errors?.['required']"> Clientname is
                     required!</span>
                 </div>
               </div>
@@ -24,7 +24,7 @@
                   <div class="col-sm-8">
                     <input type="text" class="form-control" placeholder="Enter Year" formControlName="Year"
                       onkeypress="return event.charCode>=48 && event.charCode<=57">
-                    <div *ngIf="abstract['Year'].touched ">
+                    <div *ngIf="abstract['Year'].touched || submited">
                       <span class="error" *ngIf="abstract['Year'].errors?.['required']"> Year is required!</span>
                     </div>
                   </div>
@@ -36,7 +36,7 @@
                   <div class="col-sm-8">
                     <input type="text" class="form-control" placeholder="Enter Form Type" formControlName="FormType"
                       onkeypress="return event.charCode>=48 && event.charCode<=57">
-                    <span *ngIf="abstract['FormType'].touched ">
+                    <span *ngIf="abstract['FormType'].touched || submited">
                       <span class="error" *ngIf="abstract['FormType'].errors?.['required']"> Form Type is
                         required!</span>
                     </span>

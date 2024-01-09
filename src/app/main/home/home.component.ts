@@ -17,6 +17,7 @@ declare var $: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  submited: boolean = false;
   data: TableData[] = [];
   deletedRowId: any[] = [];
   IsClientField: boolean = true;
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit {
   qbobuttons: boolean = false;
   ClientId: number;
   showUploadButton: boolean;
-  transferButton : boolean = true;
+  transferButton: boolean = true;
   headers: TableColumn[] = [
     { header: 'Id', field: 'Id' },
     { header: 'Name', field: 'name' },
@@ -45,7 +46,7 @@ export class HomeComponent implements OnInit {
     private service: ApiService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService,
-    private router : Router,
+    private router: Router,
     private location: Location
   ) {
     const role = localStorage.getItem('Role')
@@ -82,15 +83,13 @@ export class HomeComponent implements OnInit {
     this.service.GetClient().subscribe((res: ApiResponse) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
-      if(res.ResponseData.companyConnection  === 0)
-      {
-        this.router.navigateByUrl("/Unconnected");
-      }  
-      if(res.ResponseData.clientUserMappings.IsHasRecord == false)
-      {
-        localStorage.setItem('showUploadButton', 'true');   
-        this.ButtonHideShow()
-      }
+        if (res.ResponseData.companyConnection === 0) {
+          this.router.navigateByUrl("/Unconnected");
+        }
+        if (res.ResponseData.clientUserMappings?.IsHasRecord == false) {
+          localStorage.setItem('showUploadButton', 'true');
+          this.ButtonHideShow()
+        }
         if (res.ResponseData?.clientUserMappings != null) {
           this.IsClientField = false
           this.ClientId = res.ResponseData.clientUserMappings?.Id
@@ -123,8 +122,8 @@ export class HomeComponent implements OnInit {
 
   // Save Client Detail Button Click 
   SaveClientButton() {
-    this.spinner.show();
     if (this.clientform.valid) {
+      this.spinner.show();
       this.service.updateImportData(this.clientform.value).subscribe((response: ApiResponse) => {
         this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
@@ -146,9 +145,9 @@ export class HomeComponent implements OnInit {
           this.toastr.error(response.ErrorData.Error);
         }
       })
+    } else {
+      this.submited = true
     }
-    else
-      this.toastr.error("Invalid Form's Value")
   }
 
   get abstract(): { [key: string]: AbstractControl } {
@@ -194,7 +193,6 @@ export class HomeComponent implements OnInit {
   }
   // Import Excel Button
   UploadExcelButton() {
-    this.GetclientDetials();
     if (!this.uploadedFile) {
       this.toastr.warning('Please select a file.');
       return;
@@ -207,7 +205,6 @@ export class HomeComponent implements OnInit {
     this.service
       .ImportExcel(formData, this.client)
       .subscribe((response: any) => {
-        this.spinner.hide();
         if (response && response.ResponseStatus === 'Success') {
           this.data = response.ResponseData
           localStorage.setItem('showUploadButton', 'false');
@@ -218,15 +215,15 @@ export class HomeComponent implements OnInit {
           if (this.data.length === 0) {
             this.qbobuttons = true
           }
-          this.GetclientDetials()
           localStorage.setItem('showUploadButton', 'false');
           this.ButtonHideShow();
           this.toastr.success('File uploaded successfully');
           this.fileInput.nativeElement.value = '';
         } else if (response.ResponseStatus === 'Failure') {
-          this.toastr.error("Please check your File",response.Message);
+          this.toastr.error("Please check your File", response.Message);
           this.fileInput.nativeElement.value = '';
         }
+        this.spinner.hide();
       });
   }
 
@@ -234,6 +231,7 @@ export class HomeComponent implements OnInit {
   //Add Qbo Process button 
   AddtoQboButton() {
     this.spinner.show();
+    this.toastr.info( "This mat take Some Time","Transferring data to qbo,")
     this.service.AddDataToQbo().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.ResponseStatus === 'Success') {
@@ -241,14 +239,15 @@ export class HomeComponent implements OnInit {
         this.transferButton = false
       }
       else if (res.ResponseStatus === 'Failure') {
-          this.toastr.warning(res.Message)
-          this.data = res.ErrorData.ErrorDetail != null &&  Array.isArray(res.ErrorData.ErrorDetail) ? res.ErrorData.ErrorDetail : [];
-          if(this.data.length > 0 ) {
-            this.initializeForm();
-            this.transferButton = false
-          }else {
-            this.transferButton = true
-          }
+        this.toastr.warning(res.Message)
+        this.data = res.ErrorData.ErrorDetail != null  && res.ErrorData?.ErrorDetail.length > 0 ? res.ErrorData.ErrorDetail : [];
+        console.log(this.data)
+        if (this.data.length > 0) {
+          this.initializeForm();
+          this.transferButton = false
+        } else {
+          this.transferButton = true
+        }
 
       }
     })
@@ -286,8 +285,8 @@ export class HomeComponent implements OnInit {
         let validators = [];
 
         if (header.field === 'debit' || header.field === 'credit') {
-          let decimalValue  = parseFloat(initialValue).toFixed(2);
-          initialValue = {value: decimalValue, disabled: true}
+          let decimalValue = parseFloat(initialValue).toFixed(2);
+          initialValue = { value: decimalValue, disabled: true }
         }
         formControls[`${rowIndex}_${header.field}`] = [
           initialValue,

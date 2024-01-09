@@ -16,5 +16,4 @@ export class MainComponent implements OnInit {
   routingMethos() {
     this.role = localStorage.getItem('Role');
   }
-
 }

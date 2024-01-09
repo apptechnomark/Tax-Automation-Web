@@ -7,19 +7,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./setting.component.scss']
 })
 export class SettingComponent implements OnInit {
-  role :any;
+  role: any;
   constructor(
-    private router:Router,
-  ) {
-    this.routingMethos()
-   }
+    private router: Router) { this.routingMethos() }
 
   ngOnInit(): void {
   }
-  routingMethos(){
+  routingMethos() {
     this.role = localStorage.getItem('Role');
-    // if(this.role == "1")
-    //   this.router.navigateByUrl[('**')]
   }
 
 }
